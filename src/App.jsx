@@ -1,11 +1,15 @@
 import React from "react";
-import "./css/App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header" />
       <body />
+      <button className="btn btn-primary">p</button>
+      <div className="footer">
+        {"Pics belongs to "}
+        <a href="https://www.wyrd-games.net/">WYRD MINIATURES, LLC</a>
+      </div>
     </div>
   );
 }
