@@ -198,5 +198,37 @@ const schemesBeta_22_03_19 = [
   }
 ];
 
+const deploymentsBeta_22_03_19 = [
+  {
+    name: "Standard Deployment",
+    suite: suites.ram,
+    picture: "pictures/d-1.png",
+    desc:
+      'A player will deploy within 8" of a chosen table edge, with the opponent deploying within 8" of the opposite table edge.'
+  },
+  {
+    name: "Corner Deployment",
+    suite: suites.crow,
+    picture: "pictures/d-2.png",
+    desc:
+      'A player will deploy within 12" of a chosen table corner, with the opponent deploying within 12" of the opposite table corner.'
+  },
+  {
+    name: "Flank Deployment",
+    suite: suites.tome,
+    picture: "pictures/d-3.png",
+    desc:
+      'The table is divided into four quarters. A player will deploy within 9" of the table edges within one quarter, with the opponent deploying in the opposite quarter.'
+  },
+  {
+    name: "Wedge Deployment",
+    suite: suites.mask,
+    picture: "pictures/d-4.png",
+    desc:
+      'A player will deploy in a wedge starting 12" from the edge and sweeping back to the corners, with the opponent deploying opposite.'
+  }
+];
+
 export const strategies = strategiesBeta_22_03_19;
 export const schemes = schemesBeta_22_03_19;
+export const deployments = deploymentsBeta_22_03_19;
