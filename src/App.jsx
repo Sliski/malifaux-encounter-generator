@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import StrategyDescription from "./StrategyDescription.jsx";
-import SchemeDescription from "./SchemeDescription.jsx";
-import DeploymentDescription from "./DeploymentDescription.jsx";
-import { strategies, schemes, deployments } from "./data.js";
+import Grid from "@material-ui/core/Grid";
+import EncounterElementsList from "./EncounterElementsList.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -14,36 +12,31 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header" />
-        <div>
-          {strategies.map(it => (
-            <StrategyDescription strategy={it} key={it.name} />
-          ))}
-          {schemes.map(it => <SchemeDescription scheme={it} key={it.name} />)}
-          {deployments.map(it => (
-            <DeploymentDescription deployment={it} key={it.name} />
-          ))}
-        </div>
-        <div className="footer">
+      <Grid container justify="center">
+        <EncounterElementsList />
+        {/*<CssBaseline />
+
+        <Row>{"MalifauX 3ed Encounter Generator"}</Row>
+        <Row>
+          <Col>
+            <ListGroup variant="flush">
+              <Deployment details={deployments[0]} />
+              <ListGroup.Item>Strategy Name</ListGroup.Item>
+              <ListGroup.Item>Scheme 1</ListGroup.Item>
+              <ListGroup.Item>Scheme 2</ListGroup.Item>
+              <ListGroup.Item>Scheme 3</ListGroup.Item>
+              <ListGroup.Item>Scheme 4</ListGroup.Item>
+              <ListGroup.Item>Scheme 5</ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+        <Row className="footer">
           {"Pics belongs to "}
-          <a href="https://www.wyrd-games.net/">WYRD MINIATURES, LLC</a>
-        </div>
-        {/* bootstrap scripts */}
-        <script
-          src="https://unpkg.com/react/umd/react.production.js"
-          crossOrigin
-        />
-        <script
-          src="https://unpkg.com/react-dom/umd/react-dom.production.js"
-          crossOrigin
-        />
-        <script
-          src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
-          crossOrigin
-        />
-        <script>var Alert = ReactBootstrap.Alert;</script>
-      </div>
+          <a href="https://www.wyrd-games.net/">WYRD MINIATURES, LLC</a>}
+          {"footer placeholder"}
+        </Row>
+        */}
+      </Grid>
     );
   }
 }

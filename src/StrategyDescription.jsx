@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Col } from "react-bootstrap";
 
 class StrategyDescription extends Component {
   constructor(props) {
@@ -11,13 +12,13 @@ class StrategyDescription extends Component {
   render() {
     const { name, suite, desc } = this.props.strategy;
     return (
-      <div className="strategy-description">
+      <Col className="strategy-description">
         <div>
           {name + " "}
           <span>{suite.name}</span>
         </div>
         <div>{desc}</div>
-      </div>
+      </Col>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Col } from "react-bootstrap";
 
 class SchemeDescription extends Component {
   constructor(props) {
@@ -11,13 +12,13 @@ class SchemeDescription extends Component {
   render() {
     const { name, number, desc } = this.props.scheme;
     return (
-      <div className="scheme-description">
+      <Col className="scheme-description">
         <div>{name}</div>
         <div>{number}</div>
         <div>{desc.preparation}</div>
         <div>{desc.reveal}</div>
         <div>{desc.end}</div>
-      </div>
+      </Col>
     );
   }
 }
