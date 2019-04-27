@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
+import NavigationBar from './NavigationBar.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  main: {
+    flexGrow: 1,
+    padding: theme.spacing.unit,
+  },
+  toolbar: theme.mixins.toolbar,
+});
 
 class App extends Component {
   constructor(props) {
@@ -12,13 +25,22 @@ class App extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container justify="center">
+      <>
         <CssBaseline />
-        <EncounterElementsList />
-      </Grid>
+        <div className={classes.root}>
+          <NavigationBar />
+          <main className={classes.main}>
+            <div className={classes.toolbar} />
+            <Grid container justify="center">
+              <EncounterElementsList />
+            </Grid>
+          </main>
+        </div>
+      </>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
