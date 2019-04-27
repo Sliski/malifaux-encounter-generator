@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import Paper from "@material-ui/core/Paper";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Modal from "@material-ui/core/Modal";
+import React, { Component } from 'react';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import EnconterElementDetails from './EnconterElementDetails.jsx';
 
 export const eeType = {
-  deployment: "deployment",
-  strategy: "strategy",
-  scheme: "scheme"
+  deployment: 'deployment',
+  strategy: 'strategy',
+  scheme: 'scheme',
 };
 
 class EncounterElement extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDetails: false
+      showDetails: false,
     };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -46,25 +46,9 @@ class EncounterElement extends Component {
             }
           />
         </ListItem>
-        <Modal open={showDetails} onClose={this.handleClose}>
-          <Paper>{JSON.stringify(details.desc)}</Paper>
-        </Modal>
-        {/*
-        <ListGroup.Item action onClick={this.handleShow}>
-          {name}
-        </ListGroup.Item>
-        <Modal show={showDetails} onHide={this.handleHide}>
-          <Modal.Header closeButton>
-            <Modal.Title>{name}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{modalBody}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleHide}>
-              {"Close"}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        */}
+        <Dialog open={showDetails} onClose={this.handleClose}>
+          <EnconterElementDetails details={details} type={type} handleClose={this.handleClose} />
+        </Dialog>
       </>
     );
   }
