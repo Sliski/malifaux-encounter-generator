@@ -31,7 +31,7 @@ class EncounterElementsList extends Component {
   generateEncoutner() {
     const allSchemesIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const choosenSchemes = [];
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < 5; i += 1) {
       choosenSchemes.push(
         allSchemesIds.splice(Math.floor((Math.random() * allSchemesIds.length)), 1)[0],
       );
@@ -50,7 +50,7 @@ class EncounterElementsList extends Component {
 
     return (
       <Paper className={classes.papper}>
-        {(deploymentId && strategyId && schemesIds
+        {(deploymentId !== null && strategyId !== null && schemesIds !== null
           && (
           <List>
             <EncounterElement type={eeType.deployment} details={deployments[deploymentId]} />

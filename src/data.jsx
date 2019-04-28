@@ -96,19 +96,19 @@ const strategiesBeta_22_03_19 = [
           {'After Deployment, starting with the player with Initiative, each player alternates placing Explosives Tokens on their deployed models until each player has placed a total of five Explosives Tokens on their models.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'Minions can have a maximum of one Explosive Token placed on them, while non-Minions can have a maximum of two Explosive Tokens placed on them.\n'}
+          {'Minions can have a maximum of one Explosive Token placed on them, while non-Minions can have a maximum of two Explosive Tokens placed on them.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'A model with one or more Explosives Tokens can take the Interact Action to discard an Explosives Token and Drop a Strategy Marker into base contact with itself. Strategy Markers cannot be Dropped within 6" of another friendly Strategy Marker.\n'}
+          {'A model with one or more Explosives Tokens can take the Interact Action to discard an Explosives Token and Drop a Strategy Marker into base contact with itself. Strategy Markers cannot be Dropped within 6" of another friendly Strategy Marker.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'A model in base contact with a Strategy Marker can take the Interact Action to discard the Strategy Marker and gain an Explosives Token.\n'}
+          {'A model in base contact with a Strategy Marker can take the Interact Action to discard the Strategy Marker and gain an Explosives Token.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'If a model with one or more Explosives Tokens is killed, a model in the opposing Crew that is within 3" of the killed model may gain the killed model’s Explosives Tokens. Otherwise, they are discarded.\n'}
+          {'If a model with one or more Explosives Tokens is killed, a model in the opposing Crew that is within 3" of the killed model may gain the killed model’s Explosives Tokens. Otherwise, they are discarded.'}
         </Typography>
         <Typography align="justify">
-          {'At the end of each Turn, a Crew gains 1 VP if there are more Strategy Markers on the opponent’s table half than this Crew has earned VP from this Strategy. Strategy Markers on the centerline count as being in both table halves.\',\n'}
+          {'At the end of each Turn, a Crew gains 1 VP if there are more Strategy Markers on the opponent’s table half than this Crew has earned VP from this Strategy. Strategy Markers on the centerline count as being in both table halves.'}
         </Typography>
       </>
     ),
@@ -142,13 +142,13 @@ const strategiesBeta_22_03_19 = [
           {'Reflip.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'If the Strategy Marker would be Dropped on top of a Strategy Marker, Impassable terrain, or a model, the player with Initiative instead Drops the Strategy Marker evenly on the centerline, touching but not overlapping that Strategy Marker, Impassable terrain, or model. If this is not possible, the Strategy Marker is not Dropped.\n'}
+          {'If the Strategy Marker would be Dropped on top of a Strategy Marker, Impassable terrain, or a model, the player with Initiative instead Drops the Strategy Marker evenly on the centerline, touching but not overlapping that Strategy Marker, Impassable terrain, or model. If this is not possible, the Strategy Marker is not Dropped.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'A model in base contact with a Strategy Marker can take the Interact Action and suffer up to three irreducible damage, ignoring Hard to Kill. A model may not suffer more damage than its current Health.\n'}
+          {'A model in base contact with a Strategy Marker can take the Interact Action and suffer up to three irreducible damage, ignoring Hard to Kill. A model may not suffer more damage than its current Health.'}
         </Typography>
         <Typography align="justify" gutterBottom>
-          {'Drop the Strategy Marker anywhere within X" of its current location, not into base contact with a model or Impassable Terrain, where X is equal to the amount of damage suffered by the Interacting model (even if it was killed by the damage it suffered).\n'}
+          {'Drop the Strategy Marker anywhere within X" of its current location, not into base contact with a model or Impassable Terrain, where X is equal to the amount of damage suffered by the Interacting model (even if it was killed by the damage it suffered).'}
         </Typography>
         <Typography align="justify">
           {'At the end of each Turn, a Crew gains 1 VP if there are more Strategy Markers completely on the opponent’s table half than it has earned VP from this Strategy.'}

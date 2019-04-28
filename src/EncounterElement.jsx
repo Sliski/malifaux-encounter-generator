@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import EnconterElementDetails from './EnconterElementDetails.jsx';
+
+const styles = theme => ({
+  dialogPaper: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '5px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: '95vh',
+    },
+  },
+});
+
 
 export const eeType = {
   deployment: 'deployment',
@@ -30,7 +43,7 @@ class EncounterElement extends Component {
   }
 
   render() {
-    const { type, details } = this.props;
+    const { type, details, classes } = this.props;
     const { showDetails } = this.state;
     return (
       <>
@@ -46,7 +59,7 @@ class EncounterElement extends Component {
             }
           />
         </ListItem>
-        <Dialog open={showDetails} onClose={this.handleClose}>
+        <Dialog classes={{ paper: classes.dialogPaper }} open={showDetails} onClose={this.handleClose}>
           <EnconterElementDetails details={details} type={type} handleClose={this.handleClose} />
         </Dialog>
       </>
@@ -54,4 +67,4 @@ class EncounterElement extends Component {
   }
 }
 
-export default EncounterElement;
+export default withStyles(styles)(EncounterElement);

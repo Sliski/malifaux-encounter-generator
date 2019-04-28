@@ -25,7 +25,8 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
   },
   img: {
-    width: '95%',
+    width: '200px',
+    height: '200px',
   },
 });
 
@@ -44,7 +45,9 @@ class DeploymentDetails extends Component {
         <DialogContent className={classes.content}>
           <Grid container justify="center">
             <Grid item sm>
-              <img src={picture} alt="deployment" className={classes.img} />
+              <Grid container justify="center">
+                <img src={picture} alt="deployment" className={classes.img} />
+              </Grid>
             </Grid>
             <Grid item sm>
               <Typography align="justify">
