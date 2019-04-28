@@ -3,17 +3,20 @@ import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dialog from '@material-ui/core/Dialog';
+import Checkbox from '@material-ui/core/Checkbox';
 import EnconterElementDetails from './EnconterElementDetails.jsx';
 
 const styles = theme => ({
   dialogPaper: {
+    maxHeight: '95vh',
     [theme.breakpoints.down('xs')]: {
       margin: '5px',
     },
-    [theme.breakpoints.down('sm')]: {
-      maxHeight: '95vh',
-    },
+    // [theme.breakpoints.down('sm')]: {
+    //   maxHeight: '95vh',
+    // },
   },
 });
 
@@ -43,7 +46,9 @@ class EncounterElement extends Component {
   }
 
   render() {
-    const { type, details, classes } = this.props;
+    const {
+      type, details, classes, handleToggle, checked,
+    } = this.props;
     const { showDetails } = this.state;
     return (
       <>
@@ -58,6 +63,14 @@ class EncounterElement extends Component {
                 : details.name
             }
           />
+          {type === eeType.scheme && (
+            <ListItemSecondaryAction>
+              <Checkbox
+                onChange={handleToggle(this.props.index)}
+                checked={checked}
+              />
+            </ListItemSecondaryAction>
+          )}
         </ListItem>
         <Dialog classes={{ paper: classes.dialogPaper }} open={showDetails} onClose={this.handleClose}>
           <EnconterElementDetails details={details} type={type} handleClose={this.handleClose} />
