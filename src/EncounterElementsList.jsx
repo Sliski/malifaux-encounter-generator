@@ -9,9 +9,15 @@ import EncounterElement, { eeType } from './EncounterElement.jsx';
 import { strategies, deployments, schemes } from './data.jsx';
 
 const styles = theme => ({
-  papper: {
-    width: '100%',
-    maxWidth: 360,
+  paper: {
+    width: '360px',
+    backgroundColor: theme.palette.background.paper,
+  },
+});
+
+const scoreStyles = theme => ({
+  paper: {
+    width: '320px',
     backgroundColor: theme.palette.background.paper,
   },
 });
@@ -20,17 +26,11 @@ class EncounterElementsList extends Component {
   constructor(props) {
     super(props);
 
-    const hashArgs = window.location.hash.split(/#|;/);
-
     this.state = {
-      deploymentId: hashArgs[1],
-      strategyId: hashArgs[2],
-      schemesIds: hashArgs[3] ? hashArgs[3].split(',') : null,
       checked: [],
-      redirectToScore: false,
+      redirect: false,
     };
 
-    this.generateEncoutner = this.generateEncoutner.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.chooseSchemes = this.chooseSchemes.bind(this);
   }
@@ -51,95 +51,66 @@ class EncounterElementsList extends Component {
     });
   };
 
-  generateEncoutner() {
-    const allSchemesIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    const schemesIds = [];
-    for (let i = 0; i < 5; i += 1) {
-      schemesIds.push(
-        allSchemesIds.splice(Math.floor((Math.random() * allSchemesIds.length)), 1)[0],
-      );
-    }
-    schemesIds.sort((a, b) => a - b);
-    const deploymentId = Math.floor((Math.random() * 4));
-    const strategyId = Math.floor((Math.random() * 4));
-
-    this.setState({
-      deploymentId,
-      strategyId,
-      schemesIds,
-    });
-
-    window.location.hash = `${deploymentId};${strategyId};${schemesIds}`;
-
-    this.props.updateAppState({
-      deploymentId,
-      strategyId,
-      schemesIds,
-    });
-  }
-
   chooseSchemes() {
     const { checked } = this.state;
     const { updateAppState } = this.props;
 
     updateAppState({
-      choosenSchemes: checked.map(id => ({
+      chosenSchemes: checked.map(id => ({
         id,
         note: 'note',
         revealed: false,
       })),
     });
     this.setState({
-      redirectToScore: true,
+      redirect: true,
     });
   }
 
   render() {
-    const { classes } = this.props;
     const {
-      deploymentId, strategyId, schemesIds, checked, redirectToScore,
-    } = this.state;
+      classes, deploymentId, strategyId, schemesIds, score,
+    } = this.props;
+    const { checked, redirect } = this.state;
+
+    if (redirect) return <Redirect to="/score" />;
+    if (deploymentId === null || strategyId === null || !schemesIds) return <Redirect to="/generate" />;
 
     return (
-      <>
-        {redirectToScore && <Redirect to="/score" />}
-        <Paper className={classes.papper}>
-          {(deploymentId !== null && strategyId !== null && schemesIds !== null
-          && (
-          <List>
-            <EncounterElement type={eeType.deployment} details={deployments[deploymentId]} />
-            <Divider />
-            <EncounterElement type={eeType.strategy} details={strategies[strategyId]} />
-            <Divider />
-            {schemesIds.map((schemeId, index) => (
-              <EncounterElement
-                key={schemes[schemeId].name}
-                type={eeType.scheme}
-                details={schemes[schemeId]}
-                index={index}
-                handleToggle={this.handleToggle}
-                checked={checked.indexOf(index) !== -1}
-              />
-            ))}
+      <Paper className={classes.paper}>
+        <List>
+          <EncounterElement type={eeType.deployment} details={deployments[deploymentId]} score={score} />
+          <Divider />
+          <EncounterElement type={eeType.strategy} details={strategies[strategyId]} score={score} />
+          <Divider />
+          {schemesIds.map((schemeId, index) => (
+            <EncounterElement
+              key={schemes[schemeId].name}
+              type={eeType.scheme}
+              details={schemes[schemeId]}
+              score={score}
+              index={index}
+              handleToggle={this.handleToggle}
+              checked={checked.indexOf(index) !== -1}
+            />
+          ))}
+          {score ? (
+            <Button fullWidth color="primary">Reveal scheme</Button>
+          ) : (
             <Button
               fullWidth
               onClick={this.chooseSchemes}
               disabled={checked.length !== 2}
+              color="primary"
             >
-              {'Choose schemes'}
+              {'choose schemes'}
             </Button>
-          </List>
-          ))
-        || (
-          <List>
-            <Button fullWidth onClick={this.generateEncoutner}>Generate encounter</Button>
-            <Button fullWidth disabled>Import encounter</Button>
-          </List>
-        )}
-        </Paper>
-      </>
+          )}
+        </List>
+      </Paper>
     );
   }
 }
 
 export default withStyles(styles)(EncounterElementsList);
+export const ScoreList = withStyles(scoreStyles)(EncounterElementsList);

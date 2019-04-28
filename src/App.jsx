@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import NavigationBar from './NavigationBar.jsx';
+import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
 import Score from './Score.jsx';
 
@@ -21,15 +22,20 @@ const styles = theme => ({
 class App extends Component {
   constructor(props) {
     super(props);
+
+    const hashArgs = window.location.hash.split(/[#;]/);
+
     this.state = {
-      deploymentId: null,
-      strategyId: null,
-      schemesIds: null,
-      choosenSchemes: [],
+      deploymentId: hashArgs[1],
+      strategyId: hashArgs[2],
+      schemesIds: hashArgs[3] ? hashArgs[3].split(',') : null,
+      chosenSchemes: [],
     };
 
     this.updateAppState = this.updateAppState.bind(this);
-    this.encounterElementsList = this.encounterElementsList.bind(this);
+
+    this.generate = this.generate.bind(this);
+    this.choose = this.choose.bind(this);
     this.score = this.score.bind(this);
   }
 
@@ -37,21 +43,35 @@ class App extends Component {
     this.setState(state);
   }
 
-  encounterElementsList() {
-    return <EncounterElementsList updateAppState={this.updateAppState} />;
+  generate() {
+    return <Generator updateAppState={this.updateAppState} />;
   }
 
-  div(a) {
-    return <div className="zxc">aaaa</div>;
+  choose() {
+    const { deploymentId, strategyId, schemesIds } = this.state;
+    return (
+      <EncounterElementsList
+        deploymentId={deploymentId}
+        strategyId={strategyId}
+        schemesIds={schemesIds}
+        updateAppState={this.updateAppState}
+        score={false}
+      />
+    );
   }
 
   score() {
-    const { choosenSchemes, strategyId } = this.state;
-    return <Score strategyId={strategyId} choosenSchemes={choosenSchemes} />;
-  }
-
-  notFound() {
-    return <div>404</div>;
+    const {
+      chosenSchemes, deploymentId, strategyId, schemesIds,
+    } = this.state;
+    return (
+      <Score
+        deploymentId={deploymentId}
+        strategyId={strategyId}
+        schemesIds={schemesIds}
+        chosenSchemes={chosenSchemes}
+      />
+    );
   }
 
   render() {
@@ -65,10 +85,10 @@ class App extends Component {
             <div className={classes.toolbar} />
             <Grid container justify="center">
               <Switch>
-                <Route path="/" exact component={this.encounterElementsList} />
-                <Route path="/choose" component={this.div} />
+                <Route path="/generate" component={this.generate} />
+                <Route path="/" exact component={this.generate} />
+                <Route path="/choose" component={this.choose} />
                 <Route path="/score" component={this.score} />
-                <Route component={this.notFound} />
               </Switch>
             </Grid>
           </main>

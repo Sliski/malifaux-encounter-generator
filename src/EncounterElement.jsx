@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import EnconterElementDetails from './EnconterElementDetails.jsx';
+import EncounterElementDetails from './EncounterElementDetails.jsx';
 
 const styles = theme => ({
   dialogPaper: {
@@ -47,33 +47,35 @@ class EncounterElement extends Component {
 
   render() {
     const {
-      type, details, classes, handleToggle, checked,
+      type, details, classes, handleToggle, checked, score, index,
     } = this.props;
     const { showDetails } = this.state;
+
     return (
       <>
         <ListItem button onClick={this.handleOpen}>
-          {type !== eeType.scheme && (
+          {type !== eeType.scheme && !score && (
             <ListItemIcon>{details.suite.icon}</ListItemIcon>
           )}
           <ListItemText
             primary={
-              type === eeType.scheme
+              type === eeType.scheme && !score
                 ? `${details.number}. ${details.name}`
                 : details.name
             }
           />
-          {type === eeType.scheme && (
+          {type === eeType.scheme && !score && (
             <ListItemSecondaryAction>
               <Checkbox
-                onChange={handleToggle(this.props.index)}
+                onChange={handleToggle(index)}
                 checked={checked}
+                color="primary"
               />
             </ListItemSecondaryAction>
           )}
         </ListItem>
         <Dialog classes={{ paper: classes.dialogPaper }} open={showDetails} onClose={this.handleClose}>
-          <EnconterElementDetails details={details} type={type} handleClose={this.handleClose} />
+          <EncounterElementDetails details={details} type={type} handleClose={this.handleClose} />
         </Dialog>
       </>
     );
