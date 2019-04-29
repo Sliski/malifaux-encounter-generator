@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +19,7 @@ import { schemes } from './data.jsx';
 
 const styles = theme => ({
   paper: {
-    width: '46px',
+    width: '40px',
     backgroundColor: theme.palette.background.paper,
   },
   title: {
@@ -37,7 +38,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
   },
   dialogPaper: {
-    width: '360px',
+    width: '340px',
     maxHeight: '95vh',
     [theme.breakpoints.down('xs')]: {
       margin: '5px',
@@ -53,56 +54,72 @@ class Score extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      round: 1,
-      strategyScore: [0, 0],
       log: '',
-      revealSchemeDialog: false,
-      chosenSchemes: props.chosenSchemes,
+      schemeIndex: 0,
+      showSchemeDialog: false,
+      showConfirmationDialog: false,
     };
 
     this.changeStrategyScore = this.changeStrategyScore.bind(this);
     this.openRevealDialog = this.openRevealDialog.bind(this);
     this.closeRevealDialog = this.closeRevealDialog.bind(this);
+    this.openConfirmationDialog = this.openConfirmationDialog.bind(this);
+    this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
     this.revealScheme = this.revealScheme.bind(this);
   }
 
   changeStrategyScore() {
-    this.setState(prevState => ({ strategyScore: [(prevState.strategyScore[0] + 1) % 5, prevState.strategyScore] }));
+    const { strategyScore, updateAppState } = this.props;
+    updateAppState({ strategyScore: [(strategyScore[0] + 1) % 5, strategyScore] });
   }
 
   changeSchemeScore(schemeId) {
-    this.setState(prevState => ({
-      chosenSchemes: prevState.chosenSchemes.map(chosenScheme => (
+    const { chosenSchemes, updateAppState } = this.props;
+    updateAppState({
+      chosenSchemes: chosenSchemes.map(chosenScheme => (
         chosenScheme.id === schemeId ? { ...chosenScheme, score: (chosenScheme.score + 1) % 3 } : chosenScheme
       )),
-    }));
+    });
   }
 
   openRevealDialog() {
-    this.setState({ revealSchemeDialog: true });
+    this.setState({ showSchemeDialog: true });
   }
 
   closeRevealDialog() {
-    this.setState({ revealSchemeDialog: false });
+    this.setState({ showSchemeDialog: false });
   }
 
-  revealScheme(index) {
+  openConfirmationDialog(schemeIndex) {
+    this.setState({ showConfirmationDialog: true, schemeIndex });
+  }
+
+  closeConfirmationDialog() {
+    this.setState({ showConfirmationDialog: false });
+  }
+
+  revealScheme() {
+    const { chosenSchemes, updateAppState } = this.props;
+    const { schemeIndex } = this.state;
+
     this.closeRevealDialog();
-    this.setState(prevState => ({
+    this.closeConfirmationDialog();
+
+    updateAppState({
       chosenSchemes: [
-        { ...prevState.chosenSchemes[index], revealed: true },
-        prevState.chosenSchemes[(index + 1) % 2],
+        { ...chosenSchemes[schemeIndex], revealed: true },
+        chosenSchemes[(schemeIndex + 1) % 2],
       ].sort((a, b) => a.id - b.id),
-    }));
+    });
   }
 
   render() {
     // TODO add round counter
     const {
-      strategyScore, revealSchemeDialog, round, chosenSchemes,
+      showSchemeDialog, showConfirmationDialog, schemeIndex,
     } = this.state;
     const {
-      classes, deploymentId, strategyId, schemesIds,
+      classes, deploymentId, strategyId, schemesIds, strategyScore, chosenSchemes, round,
     } = this.props;
 
     if (deploymentId === null || strategyId === null || !schemesIds || !chosenSchemes) return <Redirect to="/generate" />;
@@ -120,6 +137,7 @@ class Score extends Component {
           updateAppState={null}
           score
           button={revealSchemeButton}
+          chosenSchemes={chosenSchemes}
         />
         <Paper className={classes.paper}>
           <List>
@@ -148,7 +166,7 @@ class Score extends Component {
             })}
           </List>
         </Paper>
-        <Dialog classes={{ paper: classes.dialogPaper }} open={revealSchemeDialog} onClose={this.closeRevealDialog}>
+        <Dialog classes={{ paper: classes.dialogPaper }} open={showSchemeDialog} onClose={this.closeRevealDialog}>
           <DialogTitle onClose={this.closeRevealDialog} className={classes.title} disableTypography>
             <Typography variant="h6">Reveal Scheme</Typography>
             <IconButton className={classes.closeButton} onClick={this.closeRevealDialog}>
@@ -158,7 +176,7 @@ class Score extends Component {
           <DialogContent className={classes.content}>
             <List>
               {chosenSchemes.map((chosenScheme, index) => (
-                <ListItem key={`${chosenScheme.id}-item`} button onClick={() => this.revealScheme(index)} disabled={chosenScheme.revealed}>
+                <ListItem key={`${chosenScheme.id}-item`} button onClick={() => this.openConfirmationDialog(index)} disabled={chosenScheme.revealed}>
                   <ListItemText
                     key={chosenScheme.id}
                     primary={schemes[chosenScheme.id].name}
@@ -168,6 +186,23 @@ class Score extends Component {
               ))}
             </List>
           </DialogContent>
+        </Dialog>
+        <Dialog
+          classes={{ paper: classes.dialogPaper }}
+          open={showConfirmationDialog}
+          onClose={this.closeConfirmationDialog}
+        >
+          <DialogContent className={classes.content}>
+            <Typography>{`Do you want to reveal the ${schemes[chosenSchemes[schemeIndex].id].name} scheme?`}</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeConfirmationDialog} color="secondary">
+              {'Cancel'}
+            </Button>
+            <Button onClick={this.revealScheme} color="primary" autoFocus>
+              {'Reveal'}
+            </Button>
+          </DialogActions>
         </Dialog>
       </>
     );

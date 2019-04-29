@@ -19,6 +19,12 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
+const ENCOUNTER_STEPS = {
+  GENERATE: 0,
+  CHOOSE: 1,
+  SCORE: 2,
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +36,8 @@ class App extends Component {
       strategyId: hashArgs[2],
       schemesIds: hashArgs[3] ? hashArgs[3].split(',') : null,
       chosenSchemes: [],
+      strategyScore: [0, 0],
+      step: hashArgs[3] ? ENCOUNTER_STEPS.CHOOSE : ENCOUNTER_STEPS.GENERATE,
     };
 
     this.updateAppState = this.updateAppState.bind(this);
@@ -62,7 +70,7 @@ class App extends Component {
 
   score() {
     const {
-      chosenSchemes, deploymentId, strategyId, schemesIds,
+      chosenSchemes, deploymentId, strategyId, schemesIds, strategyScore, round,
     } = this.state;
     return (
       <Score
@@ -70,6 +78,9 @@ class App extends Component {
         strategyId={strategyId}
         schemesIds={schemesIds}
         chosenSchemes={chosenSchemes}
+        strategyScore={strategyScore}
+        round={round}
+        updateAppState={this.updateAppState}
       />
     );
   }
