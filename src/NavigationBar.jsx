@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -65,25 +64,7 @@ class NavigationBar extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <Link to="/">
-            <ListItem button>
-              <ListItemText primary="Generate" />
-            </ListItem>
-          </Link>
-          <Link to="/choose">
-            <ListItem button>
-              <ListItemText primary="Choose" />
-            </ListItem>
-          </Link>
-          <Link to="/score">
-            <ListItem button>
-              <ListItemText primary="Score" />
-            </ListItem>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          {['Link 4', 'Link 5', 'Link 6'].map(text => (
+          {['Link 1', 'Link 2', 'Link 3'].map(text => (
             <ListItem button key={text}>
               <ListItemText primary={text} />
             </ListItem>
