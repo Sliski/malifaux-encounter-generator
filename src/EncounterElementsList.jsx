@@ -53,13 +53,14 @@ class EncounterElementsList extends Component {
 
   chooseSchemes() {
     const { checked } = this.state;
-    const { updateAppState } = this.props;
+    const { updateAppState, schemesIds } = this.props;
 
     updateAppState({
-      chosenSchemes: checked.map(id => ({
-        id,
+      chosenSchemes: checked.map(checkId => ({
+        id: schemesIds[checkId],
         note: 'note',
         revealed: false,
+        score: 0,
       })),
     });
     this.setState({
@@ -69,7 +70,7 @@ class EncounterElementsList extends Component {
 
   render() {
     const {
-      classes, deploymentId, strategyId, schemesIds, score,
+      classes, deploymentId, strategyId, schemesIds, score, button,
     } = this.props;
     const { checked, redirect } = this.state;
 
@@ -94,18 +95,17 @@ class EncounterElementsList extends Component {
               checked={checked.indexOf(index) !== -1}
             />
           ))}
-          {score ? (
-            <Button fullWidth color="primary">Reveal scheme</Button>
-          ) : (
-            <Button
-              fullWidth
-              onClick={this.chooseSchemes}
-              disabled={checked.length !== 2}
-              color="primary"
-            >
-              {'choose schemes'}
-            </Button>
-          )}
+          {score ? button
+            : (
+              <Button
+                fullWidth
+                onClick={this.chooseSchemes}
+                disabled={checked.length !== 2}
+                color="primary"
+              >
+                {'choose schemes'}
+              </Button>
+            )}
         </List>
       </Paper>
     );
