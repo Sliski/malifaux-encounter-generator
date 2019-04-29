@@ -97,6 +97,7 @@ class Score extends Component {
   }
 
   render() {
+    // TODO add round counter
     const {
       strategyScore, revealSchemeDialog, round, chosenSchemes,
     } = this.state;
