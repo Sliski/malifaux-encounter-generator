@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
@@ -58,7 +57,6 @@ class EncounterElementsList extends Component {
 
     this.state = {
       checked: [],
-      redirect: false,
       showDialog: false,
       noteA: '',
       noteB: '',
@@ -114,9 +112,7 @@ class EncounterElementsList extends Component {
         revealed: false,
         score: 0,
       })),
-    });
-    this.setState({
-      redirect: true,
+      step: 2,
     });
   }
 
@@ -124,10 +120,7 @@ class EncounterElementsList extends Component {
     const {
       classes, deploymentId, strategyId, schemesIds, score, button, chosenSchemes,
     } = this.props;
-    const { checked, redirect, showDialog } = this.state;
-
-    if (redirect) return <Redirect to="/score" />;
-    if (deploymentId === null || strategyId === null || !schemesIds) return <Redirect to="/generate" />;
+    const { checked, showDialog } = this.state;
 
     return (
       <>

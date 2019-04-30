@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
@@ -17,11 +16,8 @@ class Generator extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      redirect: false,
-    };
-
     this.generateEncounter = this.generateEncounter.bind(this);
+    this.importEncounter = this.importEncounter.bind(this);
   }
 
   generateEncounter() {
@@ -42,24 +38,29 @@ class Generator extends Component {
       deploymentId,
       strategyId,
       schemesIds,
+      step: 1,
     });
+  }
 
-    this.setState({
-      redirect: true,
-      hash: `${deploymentId};${strategyId};${schemesIds}`,
+  importEncounter() {
+    const { updateAppState } = this.props;
+
+    updateAppState({
+      deploymentId: 3,
+      strategyId: 2,
+      schemesIds: [1, 2, 8, 10, 11],
+      step: 1,
     });
   }
 
   render() {
-    const { redirect, hash } = this.state;
-    if (redirect) return <Redirect to={`/choose#${hash}`} />;
     const { classes } = this.props;
 
     return (
       <Paper className={classes.paper}>
         <List>
           <Button fullWidth color="primary" onClick={this.generateEncounter}>Generate encounter</Button>
-          <Button fullWidth color="primary" disabled>Import encounter</Button>
+          <Button fullWidth color="primary" onClick={this.importEncounter}>Import encounter</Button>
         </List>
       </Paper>
     );

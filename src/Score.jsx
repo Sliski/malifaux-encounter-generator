@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -121,8 +120,6 @@ class Score extends Component {
     const {
       classes, deploymentId, strategyId, schemesIds, strategyScore, chosenSchemes, round,
     } = this.props;
-
-    if (deploymentId === null || strategyId === null || !schemesIds || !chosenSchemes) return <Redirect to="/generate" />;
 
     const revealSchemeButton = (
       <Button fullWidth color="primary" onClick={this.openRevealDialog}>Reveal scheme</Button>
