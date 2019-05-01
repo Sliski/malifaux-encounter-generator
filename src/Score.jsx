@@ -15,39 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { ScoreList } from './EncounterElementsList.jsx';
 import { schemes } from './data.jsx';
-
-const styles = theme => ({
-  paper: {
-    width: '40px',
-    backgroundColor: theme.palette.background.paper,
-  },
-  title: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
-    color: theme.palette.grey[500],
-  },
-  content: {
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  dialogPaper: {
-    width: '340px',
-    maxHeight: '95vh',
-    [theme.breakpoints.down('xs')]: {
-      margin: '5px',
-    },
-  },
-  // img: {
-  //   width: '200px',
-  //   height: '200px',
-  // },
-});
+import styles from './styles.jsx';
 
 class Score extends Component {
   constructor(props) {
@@ -76,7 +44,10 @@ class Score extends Component {
     const { chosenSchemes, updateAppState } = this.props;
     updateAppState({
       chosenSchemes: chosenSchemes.map(chosenScheme => (
-        chosenScheme.id === schemeId ? { ...chosenScheme, score: (chosenScheme.score + 1) % 3 } : chosenScheme
+        chosenScheme.id === schemeId ? {
+          ...chosenScheme,
+          score: (chosenScheme.score + 1) % 3,
+        } : chosenScheme
       )),
     });
   }
@@ -136,7 +107,7 @@ class Score extends Component {
           button={revealSchemeButton}
           chosenSchemes={chosenSchemes}
         />
-        <Paper className={classes.paper}>
+        <Paper>
           <List>
             <ListItem>
               <ListItemText primary={chosenSchemes[0].score + chosenSchemes[1].score + strategyScore[0]} />
@@ -150,7 +121,11 @@ class Score extends Component {
               const cs = chosenSchemes.find(it => it.id === schemeId);
               if (cs && cs.revealed) {
                 return (
-                  <ListItem button onClick={() => this.changeSchemeScore(schemeId)} key={`${schemeId}-item`}>
+                  <ListItem
+                    button
+                    onClick={() => this.changeSchemeScore(schemeId)}
+                    key={`${schemeId}-item`}
+                  >
                     <ListItemText key={schemeId} primary={cs.score} />
                   </ListItem>
                 );
@@ -163,17 +138,26 @@ class Score extends Component {
             })}
           </List>
         </Paper>
-        <Dialog classes={{ paper: classes.dialogPaper }} open={showSchemeDialog} onClose={this.closeRevealDialog}>
-          <DialogTitle onClose={this.closeRevealDialog} className={classes.title} disableTypography>
+        <Dialog
+          classes={{ paper: classes.dialogPaper }}
+          open={showSchemeDialog}
+          onClose={this.closeRevealDialog}
+        >
+          <DialogTitle onClose={this.closeRevealDialog} className={classes.dialogTitle} disableTypography>
             <Typography variant="h6">Reveal Scheme</Typography>
-            <IconButton className={classes.closeButton} onClick={this.closeRevealDialog}>
+            <IconButton className={classes.dialogCloseButton} onClick={this.closeRevealDialog}>
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          <DialogContent className={classes.content}>
+          <DialogContent className={classes.dialogContentWoPadding}>
             <List>
               {chosenSchemes.map((chosenScheme, index) => (
-                <ListItem key={`${chosenScheme.id}-item`} button onClick={() => this.openConfirmationDialog(index)} disabled={chosenScheme.revealed}>
+                <ListItem
+                  key={`${chosenScheme.id}-item`}
+                  button
+                  onClick={() => this.openConfirmationDialog(index)}
+                  disabled={chosenScheme.revealed}
+                >
                   <ListItemText
                     key={chosenScheme.id}
                     primary={schemes[chosenScheme.id].name}
@@ -189,7 +173,7 @@ class Score extends Component {
           open={showConfirmationDialog}
           onClose={this.closeConfirmationDialog}
         >
-          <DialogContent className={classes.content}>
+          <DialogContent className={classes.dialogContent}>
             <Typography>{`Do you want to reveal the ${schemes[chosenSchemes[schemeIndex].id].name} scheme?`}</Typography>
           </DialogContent>
           <DialogActions>

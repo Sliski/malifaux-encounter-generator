@@ -6,21 +6,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import EncounterElementDetails from './EncounterElementDetails.jsx';
-
-const styles = theme => ({
-  dialogPaper: {
-    maxHeight: '95vh',
-    [theme.breakpoints.down('xs')]: {
-      margin: '5px',
-    },
-    // [theme.breakpoints.down('sm')]: {
-    //   maxHeight: '95vh',
-    // },
-  },
-});
-
+import styles from './styles.jsx';
 
 export const eeType = {
   deployment: 'deployment',
@@ -64,7 +51,8 @@ class EncounterElement extends Component {
           >
             {chosen && chosen.revealed ? chosen.score : '-'}
           </Button>
-        </ListItemSecondaryAction>    */ }
+        </ListItemSecondaryAction>    */
+    }
     let secondaryAction = null;
     if (type === eeType.scheme) {
       secondaryAction = score ? (
@@ -97,7 +85,11 @@ class EncounterElement extends Component {
           />
           {secondaryAction}
         </ListItem>
-        <Dialog classes={{ paper: classes.dialogPaper }} open={showDetails} onClose={this.handleClose}>
+        <Dialog
+          classes={{ paper: classes.dialogPaper }}
+          open={showDetails}
+          onClose={this.handleClose}
+        >
           <EncounterElementDetails details={details} type={type} handleClose={this.handleClose} />
         </Dialog>
       </>

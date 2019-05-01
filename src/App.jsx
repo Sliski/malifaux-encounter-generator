@@ -2,28 +2,18 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ls from 'local-storage';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Grid from '@material-ui/core/Grid';
 import NavigationBar from './NavigationBar.jsx';
 import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
 import Score from './Score.jsx';
-
-const styles = theme => ({
-  root: {
-    display: 'flex',
-  },
-  main: {
-    flexGrow: 1,
-    padding: theme.spacing.unit,
-  },
-  toolbar: theme.mixins.toolbar,
-});
+import styles from './styles.jsx';
 
 const ENCOUNTER_STEPS = {
   GENERATE: 0,
@@ -133,7 +123,7 @@ class App extends Component {
       <>
         <Router>
           <CssBaseline />
-          <div className={classes.root}>
+          <div className={classes.appContent}>
             <NavigationBar />
             <main className={classes.main}>
               <div className={classes.toolbar} />

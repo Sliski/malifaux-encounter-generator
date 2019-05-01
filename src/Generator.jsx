@@ -3,14 +3,7 @@ import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
-
-const styles = theme => ({
-  paper: {
-    width: '100%',
-    maxWidth: 340,
-    backgroundColor: theme.palette.background.paper,
-  },
-});
+import styles from './styles.jsx';
 
 class Generator extends Component {
   constructor(props) {
@@ -46,9 +39,9 @@ class Generator extends Component {
     const { updateAppState } = this.props;
 
     updateAppState({
-      deploymentId: 3,
-      strategyId: 2,
-      schemesIds: [1, 2, 8, 10, 11],
+      deploymentId: 0,
+      strategyId: 3,
+      schemesIds: [1, 3, 6, 7, 10],
       step: 1,
     });
   }
@@ -59,7 +52,9 @@ class Generator extends Component {
     return (
       <Paper className={classes.paper}>
         <List>
-          <Button fullWidth color="primary" onClick={this.generateEncounter}>Generate encounter</Button>
+          <Button fullWidth color="primary" onClick={this.generateEncounter}>
+            {'Generate ncounter'}
+          </Button>
           <Button fullWidth color="primary" onClick={this.importEncounter}>Import encounter</Button>
         </List>
       </Paper>

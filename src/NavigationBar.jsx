@@ -12,36 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
-  },
-  menuButton: {
-    marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  title: {
-    flexGrow: 1,
-  },
-});
+import styles from './styles.jsx';
 
 class NavigationBar extends Component {
   constructor(props) {
@@ -85,13 +56,13 @@ class NavigationBar extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+            <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
               {'M3E Encounter Generator'}
             </Typography>
             <Button color="inherit" disabled>Login</Button>
           </Toolbar>
         </AppBar>
-        <nav className={classes.drawer}>
+        <nav className={classes.menuDrawer}>
           <Hidden smUp implementation="css">
             <Drawer
               container={this.props.container}

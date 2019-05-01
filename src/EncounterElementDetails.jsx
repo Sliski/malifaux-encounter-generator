@@ -7,28 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { eeType } from './EncounterElement';
+import styles from './styles.jsx';
 
-const styles = theme => ({
-  title: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
-    color: theme.palette.grey[500],
-  },
-  content: {
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  img: {
-    width: '200px',
-    height: '200px',
-  },
-});
 
 class DeploymentDetails extends Component {
   render() {
@@ -42,11 +22,11 @@ class DeploymentDetails extends Component {
     let dialogContent;
     if (type === eeType.deployment) {
       dialogContent = (
-        <DialogContent className={classes.content}>
+        <DialogContent className={classes.dialogContent}>
           <Grid container justify="center">
             <Grid item sm>
               <Grid container justify="center">
-                <img src={picture} alt="deployment" className={classes.img} />
+                <img src={picture} alt="deployment" className={classes.deploymentImg} />
               </Grid>
             </Grid>
             <Grid item sm>
@@ -59,13 +39,13 @@ class DeploymentDetails extends Component {
       );
     } else if (type === eeType.strategy) {
       dialogContent = (
-        <DialogContent className={classes.content}>
+        <DialogContent className={classes.dialogContent}>
           {desc}
         </DialogContent>
       );
     } else {
       dialogContent = (
-        <DialogContent className={classes.content}>
+        <DialogContent className={classes.dialogContent}>
           {desc.preparation && (
             <Typography align="justify" gutterBottom>
               {desc.preparation}
@@ -84,9 +64,9 @@ class DeploymentDetails extends Component {
     }
     return (
       <>
-        <DialogTitle onClose={handleClose} className={classes.title} disableTypography>
+        <DialogTitle onClose={handleClose} className={classes.dialogTitle} disableTypography>
           <Typography variant="h6">{name}</Typography>
-          <IconButton className={classes.closeButton} onClick={handleClose}>
+          <IconButton className={classes.dialogCloseButton} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>

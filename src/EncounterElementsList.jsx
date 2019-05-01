@@ -12,44 +12,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
-import { strategies, deployments, schemes } from './data.jsx';
 import EncounterElement, { eeType } from './EncounterElement.jsx';
-
-const styles = theme => ({
-  paper: {
-    width: '340px',
-    backgroundColor: theme.palette.background.paper,
-  },
-  title: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
-    color: theme.palette.grey[500],
-  },
-  content: {
-    margin: 0,
-    padding: theme.spacing.unit * 2,
-  },
-  dialogPaper: {
-    width: '340px',
-    maxHeight: '95vh',
-    [theme.breakpoints.down('xs')]: {
-      margin: '5px',
-    },
-  },
-});
-
-const scoreStyles = theme => ({
-  paper: {
-    width: '300px',
-    backgroundColor: theme.palette.background.paper,
-  },
-});
+import { deployments, schemes, strategies } from './data.jsx';
+import styles from './styles.jsx';
 
 class EncounterElementsList extends Component {
   constructor(props) {
@@ -126,9 +91,17 @@ class EncounterElementsList extends Component {
       <>
         <Paper className={classes.paper}>
           <List>
-            <EncounterElement type={eeType.deployment} details={deployments[deploymentId]} score={score} />
+            <EncounterElement
+              type={eeType.deployment}
+              details={deployments[deploymentId]}
+              score={score}
+            />
             <Divider />
-            <EncounterElement type={eeType.strategy} details={strategies[strategyId]} score={score} />
+            <EncounterElement
+              type={eeType.strategy}
+              details={strategies[strategyId]}
+              score={score}
+            />
             <Divider />
             {schemesIds.map((schemeId, index) => (
               <EncounterElement
@@ -156,49 +129,49 @@ class EncounterElementsList extends Component {
           </List>
         </Paper>
         {checked.length === 2 && (
-        <Dialog
-          classes={{ paper: classes.dialogPaper }}
-          open={showDialog}
-          onClose={this.closeDialog}
-        >
-          <DialogTitle onClose={this.closeDialog} className={classes.title} disableTypography>
-            <Typography variant="h6">Confirm schemes choice</Typography>
-            <IconButton className={classes.closeButton} onClick={this.closeDialog}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent className={classes.content}>
-            {/* <Typography align="justify">{`${schemes[schemesIds[checked[0]]].name}. ${schemes[schemesIds[checked[0]]].desc.preparation}`}</Typography> */}
-            <Typography align="justify">You can add notes to chosen schemes.</Typography>
-            <TextField
-              margin="dense"
-              id="note-a"
-              label={`${schemes[schemesIds[checked[0]]].name} notes:`}
-              type="text"
-              onChange={event => this.updateNote(event, 'a')}
-              fullWidth
-              autoComplete="off"
-            />
-            {/* <Typography align="justify">{`${schemes[schemesIds[checked[1]]].name}. ${schemes[schemesIds[checked[1]]].desc.preparation}`}</Typography> */}
-            <TextField
-              margin="dense"
-              id="note-b"
-              label={`${schemes[schemesIds[checked[1]]].name} notes:`}
-              type="text"
-              onChange={event => this.updateNote(event, 'b')}
-              fullWidth
-              autoComplete="off"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.closeDialog} color="secondary">
-              {'Cancel'}
-            </Button>
-            <Button onClick={this.chooseSchemes} color="primary" autoFocus>
-              {'Choose'}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          <Dialog
+            classes={{ paper: classes.dialogPaper }}
+            open={showDialog}
+            onClose={this.closeDialog}
+          >
+            <DialogTitle onClose={this.closeDialog} className={classes.dialogTitle} disableTypography>
+              <Typography variant="h6">Confirm schemes choice</Typography>
+              <IconButton className={classes.dialogCloseButton} onClick={this.closeDialog}>
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent className={classes.dialogContent}>
+              {/* <Typography align="justify">{`${schemes[schemesIds[checked[0]]].name}. ${schemes[schemesIds[checked[0]]].desc.preparation}`}</Typography> */}
+              <Typography align="justify">You can add notes to chosen schemes.</Typography>
+              <TextField
+                margin="dense"
+                id="note-a"
+                label={`${schemes[schemesIds[checked[0]]].name} notes:`}
+                type="text"
+                onChange={event => this.updateNote(event, 'a')}
+                fullWidth
+                autoComplete="off"
+              />
+              {/* <Typography align="justify">{`${schemes[schemesIds[checked[1]]].name}. ${schemes[schemesIds[checked[1]]].desc.preparation}`}</Typography> */}
+              <TextField
+                margin="dense"
+                id="note-b"
+                label={`${schemes[schemesIds[checked[1]]].name} notes:`}
+                type="text"
+                onChange={event => this.updateNote(event, 'b')}
+                fullWidth
+                autoComplete="off"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.closeDialog} color="secondary">
+                {'Cancel'}
+              </Button>
+              <Button onClick={this.chooseSchemes} color="primary" autoFocus>
+                {'Choose'}
+              </Button>
+            </DialogActions>
+          </Dialog>
         )}
       </>
     );
@@ -206,4 +179,4 @@ class EncounterElementsList extends Component {
 }
 
 export default withStyles(styles)(EncounterElementsList);
-export const ScoreList = withStyles(scoreStyles)(EncounterElementsList);
+export const ScoreList = withStyles(styles)(EncounterElementsList); // replace with buttons
