@@ -16,8 +16,15 @@ const styles = theme => ({
     maxWidth: '95hv',
     backgroundColor: theme.palette.background.paper,
   },
-  dialogPaper: {
+  paperWithPadding: {
+    padding: theme.spacing.unit * 2,
     width: '340px',
+    maxWidth: '95hv',
+    backgroundColor: theme.palette.background.paper,
+  },
+  dialogPaper: {
+    maxWidth: '95hv',
+    minWidth: '340px',
     maxHeight: '95vh',
     [theme.breakpoints.down('xs')]: {
       margin: '5px',

@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import NavigationBar from './NavigationBar.jsx';
 import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
+import RulesPage from './RulesPage.jsx';
 import Score from './Score.jsx';
 import styles from './styles.jsx';
 
@@ -81,7 +82,9 @@ class App extends Component {
   }
 
   choose() {
-    const { deploymentId, strategyId, schemesIds } = this.state;
+    const {
+      deploymentId, strategyId, schemesIds,
+    } = this.state;
     return (
       <EncounterElementsList
         deploymentId={deploymentId}
@@ -110,22 +113,27 @@ class App extends Component {
     );
   }
 
+  rules({ match }) {
+    return <RulesPage sectionName={match.params.section} />;
+  }
+
   render() {
     ls.set('state', this.state);
 
-    const { lsInfo } = this.state;
+    const { lsInfo, step } = this.state;
     const { classes } = this.props;
     return (
       <>
         <Router>
           <CssBaseline />
           <div className={classes.appContent}>
-            <NavigationBar handleEndEncounter={this.clearAppState} />
+            <NavigationBar handleEndEncounter={this.clearAppState} step={step} />
             <main className={classes.main}>
               <div className={classes.toolbar} />
               <Grid container justify="center">
                 <Switch>
-                  <Route path="/" component={this.encounter()} />
+                  <Route path="/" exact component={this.encounter()} />
+                  <Route path="/rules/:section" component={this.rules} />
                 </Switch>
               </Grid>
             </main>

@@ -12,9 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import rules from './rules.js';
 import styles from './styles.jsx';
 
 class NavigationBar extends Component {
@@ -25,12 +28,19 @@ class NavigationBar extends Component {
       showConfirmationDialog: false,
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
     this.openConfirmationDialog = this.openConfirmationDialog.bind(this);
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
   }
 
   handleDrawerToggle() {
     this.setState(prevState => ({ mobileOpen: !prevState.mobileOpen }));
+  }
+
+  closeDrawer() {
+    if (this.state.mobileOpen) {
+      this.setState({ mobileOpen: false });
+    }
   }
 
   openConfirmationDialog() {
@@ -43,7 +53,7 @@ class NavigationBar extends Component {
 
 
   render() {
-    const { classes, handleEndEncounter } = this.props;
+    const { classes, handleEndEncounter, step } = this.props;
     const { showConfirmationDialog } = this.state;
 
     const drawer = (
@@ -51,9 +61,19 @@ class NavigationBar extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemText primary="End Encounter" onClick={this.openConfirmationDialog} />
+          <ListItem button component={Link} to="/" onClick={this.closeDrawer}>
+            <ListItemText primary="Encounter" />
           </ListItem>
+          <ListItem button onClick={this.openConfirmationDialog} disabled={step === 0}>
+            <ListItemText primary="End Encounter" />
+          </ListItem>
+          <Divider />
+          <ListSubheader>Rules:</ListSubheader>
+          {Object.keys(rules).map(ruleSection => (
+            <ListItem key={ruleSection} button component={Link} to={`/rules/${ruleSection}`} onClick={this.closeDrawer}>
+              <ListItemText primary={rules[ruleSection].sectionName} />
+            </ListItem>
+          ))}
         </List>
       </div>
     );
@@ -120,6 +140,7 @@ class NavigationBar extends Component {
             <Button
               onClick={() => {
                 this.closeConfirmationDialog();
+                this.closeDrawer();
                 handleEndEncounter();
               }}
               color="primary"
