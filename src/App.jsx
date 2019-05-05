@@ -21,36 +21,28 @@ const ENCOUNTER_STEPS = {
   SCORE: 2,
 };
 
+const emptyState = {
+  deploymentId: null,
+  strategyId: null,
+  schemesIds: null,
+  chosenSchemes: [],
+  strategyScore: [0, 0],
+  step: ENCOUNTER_STEPS.GENERATE,
+  lsInfo: ls.get('ls-info'),
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
 
-    if (window.location.hash === '#clear') {
-      window.location.hash = '';
-      this.state = {
-        deploymentId: null,
-        strategyId: null,
-        schemesIds: null,
-        chosenSchemes: [],
-        strategyScore: [0, 0],
-        step: ENCOUNTER_STEPS.GENERATE,
-        lsInfo: ls.get('ls-info'),
-      };
-    } else if (ls.get('state')) {
+    if (ls.get('state')) {
       this.state = ls.get('state');
     } else {
-      this.state = {
-        deploymentId: null,
-        strategyId: null,
-        schemesIds: null,
-        chosenSchemes: [],
-        strategyScore: [0, 0],
-        step: ENCOUNTER_STEPS.GENERATE,
-        lsInfo: ls.get('ls-info'),
-      };
+      this.state = { ...emptyState };
     }
 
     this.updateAppState = this.updateAppState.bind(this);
+    this.clearAppState = this.clearAppState.bind(this);
 
     this.encounter = this.encounter.bind(this);
     this.generate = this.generate.bind(this);
@@ -66,6 +58,10 @@ class App extends Component {
 
   updateAppState(state) {
     this.setState(state);
+  }
+
+  clearAppState() {
+    this.setState({ ...emptyState });
   }
 
   encounter() {
@@ -124,7 +120,7 @@ class App extends Component {
         <Router>
           <CssBaseline />
           <div className={classes.appContent}>
-            <NavigationBar />
+            <NavigationBar handleEndEncounter={this.clearAppState} />
             <main className={classes.main}>
               <div className={classes.toolbar} />
               <Grid container justify="center">

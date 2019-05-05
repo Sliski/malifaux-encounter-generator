@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -81,6 +83,14 @@ class EncounterElementsList extends Component {
     });
   }
 
+  encounterId() {
+    const {
+      deploymentId, strategyId, schemesIds,
+    } = this.props;
+
+    return `${(deploymentId * 4 + strategyId).toString(16)}${schemesIds.reduce((out, current) => out + current.toString(16))}`;
+  }
+
   render() {
     const {
       classes, deploymentId, strategyId, schemesIds, chosenSchemes,
@@ -91,6 +101,10 @@ class EncounterElementsList extends Component {
       <>
         <Paper className={classes.paper}>
           <List>
+            <ListItem>
+              <ListItemText primary={`Encounter ID: ${this.encounterId()}`} />
+            </ListItem>
+            <Divider />
             <EncounterElement
               type={eeType.deployment}
               details={deployments[deploymentId]}

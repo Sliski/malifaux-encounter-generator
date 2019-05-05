@@ -24,17 +24,11 @@ class DeploymentDetails extends Component {
       dialogContent = (
         <DialogContent className={classes.dialogContent}>
           <Grid container justify="center">
-            <Grid item sm>
-              <Grid container justify="center">
-                <img src={picture} alt="deployment" className={classes.deploymentImg} />
-              </Grid>
-            </Grid>
-            <Grid item sm>
-              <Typography align="justify">
-                {desc}
-              </Typography>
-            </Grid>
+            <img src={picture} alt="deployment" className={classes.deploymentImg} />
           </Grid>
+          <Typography align="justify">
+            {desc}
+          </Typography>
         </DialogContent>
       );
     } else if (type === eeType.strategy) {

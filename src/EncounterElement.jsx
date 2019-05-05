@@ -68,7 +68,7 @@ class EncounterElement extends Component {
         </ListItemSecondaryAction>
       );
     }
-    if (type === eeType.strategy) {
+    if (type === eeType.strategy && score) {
       secondaryAction = (
         <ListItemSecondaryAction>
           <Button
