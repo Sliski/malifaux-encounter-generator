@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -35,7 +36,7 @@ class EncounterElement extends Component {
 
   render() {
     const {
-      type, details, classes, handleToggle, checked, score, index, chosenSchemes,
+      type, details, classes, handleToggle, checked, score, index, chosenSchemes, strategyScore, scoreHandler,
     } = this.props;
     const { showDetails } = this.state;
 
@@ -45,26 +46,37 @@ class EncounterElement extends Component {
       chosen = chosenSchemes.find(scheme => scheme.id === details.number - 1);
       secondaryText = chosen && chosen.revealed ? chosen.note : '';
     }
-    { /* <ListItemSecondaryAction>
-          <Button
-            color="primary"
-          >
-            {chosen && chosen.revealed ? chosen.score : '-'}
-          </Button>
-        </ListItemSecondaryAction>    */
-    }
+
     let secondaryAction = null;
     if (type === eeType.scheme) {
       secondaryAction = score ? (
-
-        null
+        <ListItemSecondaryAction>
+          <Button
+            disabled={!chosen || !chosen.revealed}
+            color="default"
+            onClick={scoreHandler}
+          >
+            {chosen && chosen.revealed ? chosen.score : '-'}
+          </Button>
+        </ListItemSecondaryAction>
       ) : (
         <ListItemSecondaryAction>
           <Checkbox
             onChange={handleToggle(index)}
             checked={checked}
-            color="primary"
           />
+        </ListItemSecondaryAction>
+      );
+    }
+    if (type === eeType.strategy) {
+      secondaryAction = (
+        <ListItemSecondaryAction>
+          <Button
+            color="default"
+            onClick={scoreHandler}
+          >
+            {strategyScore}
+          </Button>
         </ListItemSecondaryAction>
       );
     }

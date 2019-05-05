@@ -83,7 +83,7 @@ class EncounterElementsList extends Component {
 
   render() {
     const {
-      classes, deploymentId, strategyId, schemesIds, score, button, chosenSchemes,
+      classes, deploymentId, strategyId, schemesIds, chosenSchemes,
     } = this.props;
     const { checked, showDialog } = this.state;
 
@@ -94,13 +94,11 @@ class EncounterElementsList extends Component {
             <EncounterElement
               type={eeType.deployment}
               details={deployments[deploymentId]}
-              score={score}
             />
             <Divider />
             <EncounterElement
               type={eeType.strategy}
               details={strategies[strategyId]}
-              score={score}
             />
             <Divider />
             {schemesIds.map((schemeId, index) => (
@@ -108,24 +106,20 @@ class EncounterElementsList extends Component {
                 key={schemes[schemeId].name}
                 type={eeType.scheme}
                 details={schemes[schemeId]}
-                score={score}
                 index={index}
                 handleToggle={this.handleToggle}
                 checked={checked.indexOf(index) !== -1}
                 chosenSchemes={chosenSchemes}
               />
             ))}
-            {score ? button
-              : (
-                <Button
-                  fullWidth
-                  onClick={this.openDialog}
-                  disabled={checked.length !== 2}
-                  color="primary"
-                >
-                  {'choose schemes'}
-                </Button>
-              )}
+            <Button
+              fullWidth
+              onClick={this.openDialog}
+              disabled={checked.length !== 2}
+              color="primary"
+            >
+              {'choose schemes'}
+            </Button>
           </List>
         </Paper>
         {checked.length === 2 && (
@@ -141,7 +135,6 @@ class EncounterElementsList extends Component {
               </IconButton>
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>
-              {/* <Typography align="justify">{`${schemes[schemesIds[checked[0]]].name}. ${schemes[schemesIds[checked[0]]].desc.preparation}`}</Typography> */}
               <Typography align="justify">You can add notes to chosen schemes.</Typography>
               <TextField
                 margin="dense"
@@ -152,7 +145,6 @@ class EncounterElementsList extends Component {
                 fullWidth
                 autoComplete="off"
               />
-              {/* <Typography align="justify">{`${schemes[schemesIds[checked[1]]].name}. ${schemes[schemesIds[checked[1]]].desc.preparation}`}</Typography> */}
               <TextField
                 margin="dense"
                 id="note-b"

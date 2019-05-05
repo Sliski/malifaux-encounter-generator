@@ -13,9 +13,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { ScoreList } from './EncounterElementsList.jsx';
-import { schemes } from './data.jsx';
 import styles from './styles.jsx';
+import EncounterElement, { eeType } from './EncounterElement';
+import { deployments, strategies, schemes } from './data';
 
 class Score extends Component {
   constructor(props) {
@@ -92,50 +92,36 @@ class Score extends Component {
       classes, deploymentId, strategyId, schemesIds, strategyScore, chosenSchemes, round,
     } = this.props;
 
-    const revealSchemeButton = (
-      <Button fullWidth color="primary" onClick={this.openRevealDialog}>Reveal scheme</Button>
-    );
-
     return (
       <>
-        <ScoreList
-          deploymentId={deploymentId}
-          strategyId={strategyId}
-          schemesIds={schemesIds}
-          updateAppState={null}
-          score
-          button={revealSchemeButton}
-          chosenSchemes={chosenSchemes}
-        />
-        <Paper>
+        <Paper className={classes.paper}>
           <List>
-            <ListItem>
-              <ListItemText primary={chosenSchemes[0].score + chosenSchemes[1].score + strategyScore[0]} />
-            </ListItem>
+            <EncounterElement
+              type={eeType.deployment}
+              details={deployments[deploymentId]}
+              score
+            />
             <Divider />
-            <ListItem button onClick={this.changeStrategyScore}>
-              <ListItemText primary={strategyScore[0]} />
-            </ListItem>
+            <EncounterElement
+              type={eeType.strategy}
+              details={strategies[strategyId]}
+              strategyScore={strategyScore[0]}
+              scoreHandler={this.changeStrategyScore}
+              score
+            />
             <Divider />
-            {schemesIds.map((schemeId) => {
-              const cs = chosenSchemes.find(it => it.id === schemeId);
-              if (cs && cs.revealed) {
-                return (
-                  <ListItem
-                    button
-                    onClick={() => this.changeSchemeScore(schemeId)}
-                    key={`${schemeId}-item`}
-                  >
-                    <ListItemText key={schemeId} primary={cs.score} />
-                  </ListItem>
-                );
-              }
-              return (
-                <ListItem disabled button key={`${schemeId}-item`}>
-                  <ListItemText key={schemeId} primary="-" />
-                </ListItem>
-              );
-            })}
+            {schemesIds.map((schemeId, index) => (
+              <EncounterElement
+                key={schemes[schemeId].name}
+                type={eeType.scheme}
+                details={schemes[schemeId]}
+                index={index}
+                chosenSchemes={chosenSchemes}
+                scoreHandler={() => this.changeSchemeScore(schemeId)}
+                score
+              />
+            ))}
+            <Button fullWidth color="primary" onClick={this.openRevealDialog}>Reveal scheme</Button>
           </List>
         </Paper>
         <Dialog
