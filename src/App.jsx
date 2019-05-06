@@ -146,7 +146,7 @@ class App extends Component {
         >
           <DialogContent className={classes.content}>
             <DialogContentText>
-              {'This website use local storage and cookies to save data between sessions.'}
+              {'This website use local storage and cookies to save data between sessions. Anonymous data of user behavior is collected to improve the tool usability.'}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
