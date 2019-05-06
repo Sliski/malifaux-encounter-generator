@@ -30,7 +30,6 @@ const emptyState = {
   chosenSchemes: [],
   strategyScore: [0, 0],
   step: ENCOUNTER_STEPS.GENERATE,
-  lsInfo: ls.get('ls-info'),
 };
 
 class App extends Component {
@@ -63,7 +62,7 @@ class App extends Component {
   }
 
   clearAppState() {
-    this.setState({ ...emptyState });
+    this.setState({ ...emptyState, lsInfo: ls.get('ls-info') });
   }
 
   encounter() {
