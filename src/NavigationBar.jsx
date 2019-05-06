@@ -97,7 +97,7 @@ class NavigationBar extends Component {
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
               {'M3E Encounter Generator'}
             </Typography>
-            <Button color="inherit" disabled>Login</Button>
+            {/* <Button color="inherit" disabled>Login</Button> */}
           </Toolbar>
         </AppBar>
         <nav className={classes.menuDrawer}>
