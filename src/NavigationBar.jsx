@@ -74,6 +74,10 @@ class NavigationBar extends Component {
               <ListItemText primary={rules[ruleSection].sectionName} />
             </ListItem>
           ))}
+          <Divider />
+          <ListItem button component={Link} to="/copyrights" onClick={this.closeDrawer}>
+            <ListItemText primary="Copyrights" />
+          </ListItem>
         </List>
       </div>
     );

@@ -14,6 +14,7 @@ import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
 import RulesPage from './RulesPage.jsx';
 import Score from './Score.jsx';
+import Copyrights from './Copyrights.jsx';
 import styles from './styles.jsx';
 
 const ENCOUNTER_STEPS = {
@@ -134,6 +135,7 @@ class App extends Component {
                 <Switch>
                   <Route path="/" exact component={this.encounter()} />
                   <Route path="/rules/:section" component={this.rules} />
+                  <Route path="/copyrights" component={() => <Copyrights />} />
                 </Switch>
               </Grid>
             </main>

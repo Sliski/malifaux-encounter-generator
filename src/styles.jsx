@@ -12,18 +12,18 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   // Encounter Element List
   paper: {
-    width: '340px',
-    maxWidth: '95hv',
+    maxWidth: '680px',
+    minWidth: '340px',
     backgroundColor: theme.palette.background.paper,
   },
   paperWithPadding: {
     padding: theme.spacing.unit * 2,
-    width: '340px',
-    maxWidth: '95hv',
+    maxWidth: '680px',
+    minWidth: '340px',
     backgroundColor: theme.palette.background.paper,
   },
   dialogPaper: {
-    maxWidth: '95hv',
+    maxWidth: '680px',
     minWidth: '340px',
     maxHeight: '95vh',
     [theme.breakpoints.down('xs')]: {
