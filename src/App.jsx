@@ -122,6 +122,7 @@ class App extends Component {
 
     const { lsInfo, step } = this.state;
     const { classes } = this.props;
+
     return (
       <>
         <Router>

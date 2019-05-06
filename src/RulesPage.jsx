@@ -11,6 +11,10 @@ class RulesPage extends Component {
     this.state = {};
   }
 
+  componentDidUpdate() {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     const { classes, sectionName } = this.props;
     const rulings = rules[sectionName];
