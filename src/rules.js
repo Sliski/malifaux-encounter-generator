@@ -78,6 +78,32 @@ const conditions = {
   ],
 };
 
-const rules = { generalActions, conditions };
+const triggersTiming = {
+  sectionName: 'Trigger Timing',
+  items: [
+    {
+      name: 'Immediately',
+      desc: 'These Triggers resolve in the Declare Triggers step. They often modify the duel itself in some way.',
+    },
+    {
+      name: 'When resolving',
+      desc: 'These Triggers resolve with the Action’s effects (Step 5 of Action timing). These Triggers, depending on effect, may modify the effects of the Action as listed or add a new effect, so they only occur if the Action was successful. Any new effects are resolved last, unless the Trigger specifies otherwise.',
+    },
+    {
+      name: 'After killing',
+      desc: 'These Triggers happen after killing the target of the Action, as part of resolving damage timing.',
+    },
+    {
+      name: 'After resolving',
+      desc: 'These Triggers happen after the Action is complete, regardless of success or failure, but only if the model that declared the Trigger is still in play. If the Trigger has a target and that target is no longer in play, the Trigger has no effect.',
+    },
+    {
+      name: 'After succeeding',
+      desc: 'These Triggers happen after the Action is complete, but only if the model declaring the Trigger was successful in the duel and is still in play. If the Trigger has a target and that target is no longer in play, the Trigger has no effect. If a Trigger does not list a timing, it is treated as an After succeeding Trigger.',
+    },
+  ],
+};
+
+const rules = { conditions, generalActions, triggersTiming };
 
 export default rules;

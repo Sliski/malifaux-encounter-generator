@@ -17,7 +17,7 @@ class RulesPage extends Component {
 
     return (
       <Paper className={classes.paperWithPadding}>
-        <Typography variant="h6">{rulings.sectionName}</Typography>
+        <Typography gutterBottom variant="h6">{rulings.sectionName}</Typography>
         {rulings.items.map(item => [
           <Typography key={`${item.name}-name`} gutterBottom variant="button">{item.name}</Typography>,
           <Typography key={`${item.name}-desc`} paragraph align="justify">{item.desc}</Typography>,
