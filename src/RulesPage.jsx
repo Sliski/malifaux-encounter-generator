@@ -9,6 +9,7 @@ class RulesPage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    window.scrollTo(0, 0);
   }
 
   componentDidUpdate() {
