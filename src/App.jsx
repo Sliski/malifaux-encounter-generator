@@ -146,7 +146,9 @@ class App extends Component {
           onClose={this.closeLsInfo}
         >
           <DialogContent className={classes.content}>
-            <DialogContentText>This App use local storage.</DialogContentText>
+            <DialogContentText>
+              {'This website use local storage and cookies to save data between sessions.'}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.closeLsInfo} color="primary">
