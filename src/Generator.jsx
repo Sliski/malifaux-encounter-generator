@@ -11,6 +11,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
+import { ENCOUNTER_STEPS } from './App.jsx';
 import styles from './styles.jsx';
 
 class Generator extends Component {
@@ -25,6 +26,7 @@ class Generator extends Component {
 
     this.generateEncounter = this.generateEncounter.bind(this);
     this.importEncounter = this.importEncounter.bind(this);
+    this.manuallyChooseEncounter = this.manuallyChooseEncounter.bind(this);
     this.updateEncounterId = this.updateEncounterId.bind(this);
 
     this.openDialog = this.openDialog.bind(this);
@@ -41,6 +43,11 @@ class Generator extends Component {
 
   updateEncounterId(event) {
     this.setState({ encounterId: event.target.value });
+  }
+
+  manuallyChooseEncounter() {
+    const { updateAppState } = this.props;
+    updateAppState({ step: ENCOUNTER_STEPS.MANUAL_CHOICE });
   }
 
   generateEncounter() {
@@ -61,7 +68,7 @@ class Generator extends Component {
       deploymentId,
       strategyId,
       schemesIds,
-      step: 1,
+      step: ENCOUNTER_STEPS.CHOOSE,
     });
   }
 
@@ -83,7 +90,7 @@ class Generator extends Component {
           deploymentId,
           strategyId,
           schemesIds,
-          step: 1,
+          step: ENCOUNTER_STEPS.CHOOSE,
         });
         return;
       }
@@ -102,7 +109,12 @@ class Generator extends Component {
             <Button fullWidth color="primary" onClick={this.generateEncounter}>
               {'Generate encounter'}
             </Button>
-            <Button fullWidth color="primary" onClick={this.openDialog}>Import encounter</Button>
+            <Button fullWidth color="primary" onClick={this.openDialog}>
+              {'Import encounter'}
+            </Button>
+            <Button fullWidth color="primary" onClick={this.manuallyChooseEncounter}>
+              {'Choose encounter'}
+            </Button>
           </List>
         </Paper>
         <Dialog

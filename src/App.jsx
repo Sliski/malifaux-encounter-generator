@@ -12,12 +12,14 @@ import Grid from '@material-ui/core/Grid';
 import NavigationBar from './NavigationBar.jsx';
 import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
+import ChooseEncounter from './ChooseEncounter.jsx';
 import RulesPage from './RulesPage.jsx';
 import Score from './Score.jsx';
 import Copyrights from './Copyrights.jsx';
 import styles from './styles.jsx';
 
-const ENCOUNTER_STEPS = {
+export const ENCOUNTER_STEPS = {
+  MANUAL_CHOICE: -1,
   GENERATE: 0,
   CHOOSE: 1,
   SCORE: 2,
@@ -46,6 +48,7 @@ class App extends Component {
     this.clearAppState = this.clearAppState.bind(this);
 
     this.encounter = this.encounter.bind(this);
+    this.chooseEncounter = this.chooseEncounter.bind(this);
     this.generate = this.generate.bind(this);
     this.choose = this.choose.bind(this);
     this.score = this.score.bind(this);
@@ -72,6 +75,8 @@ class App extends Component {
         return this.choose;
       case ENCOUNTER_STEPS.SCORE:
         return this.score;
+      case ENCOUNTER_STEPS.MANUAL_CHOICE:
+        return this.chooseEncounter;
       default:
         return this.generate;
     }
@@ -79,6 +84,10 @@ class App extends Component {
 
   generate() {
     return <Generator updateAppState={this.updateAppState} />;
+  }
+
+  chooseEncounter() {
+    return <ChooseEncounter updateAppState={this.updateAppState} />;
   }
 
   choose() {

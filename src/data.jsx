@@ -353,13 +353,6 @@ const deploymentsBeta_22_03_19 = [
       'A player will deploy within 8" of a chosen table edge, with the opponent deploying within 8" of the opposite table edge.',
   },
   {
-    name: 'Corner Deployment',
-    suite: suites.crow,
-    picture: 'pictures/d-2.png',
-    desc:
-      'A player will deploy within 12" of a chosen table corner, with the opponent deploying within 12" of the opposite table corner.',
-  },
-  {
     name: 'Flank Deployment',
     suite: suites.tome,
     picture: 'pictures/d-3.png',
@@ -372,6 +365,13 @@ const deploymentsBeta_22_03_19 = [
     picture: 'pictures/d-4.png',
     desc:
       'A player will deploy in a wedge starting 12" from the edge and sweeping back to the corners, with the opponent deploying opposite.',
+  },
+  {
+    name: 'Corner Deployment',
+    suite: suites.crow,
+    picture: 'pictures/d-2.png',
+    desc:
+      'A player will deploy within 12" of a chosen table corner, with the opponent deploying within 12" of the opposite table corner.',
   },
 ];
 

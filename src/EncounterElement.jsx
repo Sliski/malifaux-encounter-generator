@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
 import EncounterElementDetails from './EncounterElementDetails.jsx';
 import styles from './styles.jsx';
 
@@ -48,8 +49,8 @@ class EncounterElement extends Component {
     }
 
     let secondaryAction = null;
-    if (type === eeType.scheme) {
-      secondaryAction = score ? (
+    if (type === eeType.scheme && score) {
+      secondaryAction = (
         <ListItemSecondaryAction>
           <Button
             disabled={!chosen || !chosen.revealed}
@@ -59,16 +60,8 @@ class EncounterElement extends Component {
             {chosen && chosen.revealed ? chosen.score : '-'}
           </Button>
         </ListItemSecondaryAction>
-      ) : (
-        <ListItemSecondaryAction>
-          <Checkbox
-            onChange={handleToggle(index)}
-            checked={checked}
-          />
-        </ListItemSecondaryAction>
       );
-    }
-    if (type === eeType.strategy && score) {
+    } else if (type === eeType.strategy && score) {
       secondaryAction = (
         <ListItemSecondaryAction>
           <Button
@@ -77,6 +70,24 @@ class EncounterElement extends Component {
           >
             {strategyScore}
           </Button>
+        </ListItemSecondaryAction>
+      );
+    } else if (handleToggle && type === eeType.scheme) {
+      secondaryAction = (
+        <ListItemSecondaryAction>
+          <Checkbox
+            onChange={handleToggle(index)}
+            checked={checked}
+          />
+        </ListItemSecondaryAction>
+      );
+    } else if (handleToggle) {
+      secondaryAction = (
+        <ListItemSecondaryAction>
+          <Radio
+            onChange={handleToggle(index)}
+            checked={checked}
+          />
         </ListItemSecondaryAction>
       );
     }

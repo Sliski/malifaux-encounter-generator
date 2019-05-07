@@ -48,7 +48,7 @@ class EncounterElementsList extends Component {
     }
 
     this.setState({
-      checked: newChecked.sort(),
+      checked: newChecked.sort((a, b) => a - b),
     });
   };
 
@@ -185,4 +185,3 @@ class EncounterElementsList extends Component {
 }
 
 export default withStyles(styles)(EncounterElementsList);
-export const ScoreList = withStyles(styles)(EncounterElementsList); // replace with buttons
