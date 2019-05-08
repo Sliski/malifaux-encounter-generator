@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ls from 'local-storage';
 import { withStyles } from '@material-ui/core/styles';
@@ -18,7 +19,11 @@ import Score from './Score.jsx';
 import Contact from './Contact.jsx';
 import Copyrights from './Copyrights.jsx';
 import CookiePolicy from './CookiePolicy.jsx';
+import LoginButton from './LoginButton.jsx';
 import styles from './styles.jsx';
+import { API_URL } from './config.js';
+
+const socket = io(API_URL);
 
 export const ENCOUNTER_STEPS = {
   MANUAL_CHOICE: -1,
@@ -149,6 +154,7 @@ class App extends Component {
                   <Route path="/contact" component={() => <Contact />} />
                   <Route path="/cookiepolicy" component={() => <CookiePolicy />} />
                   <Route path="/copyrights" component={() => <Copyrights />} />
+                  <Route path="/login" component={() => <LoginButton provider="google" socket={socket} />} />
                   <Route component={this.encounter()} />
                 </Switch>
               </Grid>
