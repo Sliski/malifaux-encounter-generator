@@ -15,7 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import styles from './styles.jsx';
 import EncounterElement, { eeType } from './EncounterElement';
-import { deployments, strategies, schemes } from './data';
+import { deployments, schemes, strategies } from './data';
 
 class Score extends Component {
   constructor(props) {
@@ -129,7 +129,11 @@ class Score extends Component {
           open={showSchemeDialog}
           onClose={this.closeRevealDialog}
         >
-          <DialogTitle onClose={this.closeRevealDialog} className={classes.dialogTitle} disableTypography>
+          <DialogTitle
+            onClose={this.closeRevealDialog}
+            className={classes.dialogTitle}
+            disableTypography
+          >
             <Typography variant="h6">Reveal Scheme</Typography>
             <IconButton className={classes.dialogCloseButton} onClick={this.closeRevealDialog}>
               <CloseIcon />

@@ -15,7 +15,9 @@ import EncounterElementsList from './EncounterElementsList.jsx';
 import ChooseEncounter from './ChooseEncounter.jsx';
 import RulesPage from './RulesPage.jsx';
 import Score from './Score.jsx';
+import Contact from './Contact.jsx';
 import Copyrights from './Copyrights.jsx';
+import CookiePolicy from './CookiePolicy.jsx';
 import styles from './styles.jsx';
 
 export const ENCOUNTER_STEPS = {
@@ -144,7 +146,10 @@ class App extends Component {
                 <Switch>
                   <Route path="/" exact component={this.encounter()} />
                   <Route path="/rules/:section" component={this.rules} />
+                  <Route path="/contact" component={() => <Contact />} />
+                  <Route path="/cookiepolicy" component={() => <CookiePolicy />} />
                   <Route path="/copyrights" component={() => <Copyrights />} />
+                  <Route component={this.encounter()} />
                 </Switch>
               </Grid>
             </main>
@@ -155,8 +160,8 @@ class App extends Component {
           onClose={this.closeLsInfo}
         >
           <DialogContent className={classes.content}>
-            <DialogContentText>
-              {'This website use local storage and cookies to save data between sessions. Anonymous data of user behavior is collected to improve the tool usability.'}
+            <DialogContentText align="justify">
+              {'This website use local storage and cookies to save data between sessions. Anonymous data of user behavior is collected to improve the tool usability. If you use our website, we assume that you accept our cookie policy. To find out more, read Cookie Policy section.'}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

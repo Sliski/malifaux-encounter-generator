@@ -18,13 +18,23 @@ class RulesPage extends Component {
 
   render() {
     const { classes, sectionName } = this.props;
-    const rulings = rules[sectionName];
+    const rulings = rules[sectionName.toLowerCase()];
+
+    if (!rulings) {
+      return null;
+    }
 
     return (
       <Paper className={classes.paperWithPadding}>
         <Typography gutterBottom variant="h6">{rulings.sectionName}</Typography>
         {rulings.items.map(item => [
-          <Typography key={`${item.name}-name`} gutterBottom variant="button">{item.name}</Typography>,
+          <Typography
+            key={`${item.name}-name`}
+            gutterBottom
+            variant="button"
+          >
+            {item.name}
+          </Typography>,
           <Typography key={`${item.name}-desc`} paragraph align="justify">{item.desc}</Typography>,
         ])}
       </Paper>

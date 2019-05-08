@@ -147,7 +147,11 @@ class Generator extends Component {
             <Button onClick={this.closeDialog} color="secondary">
               {'Cancel'}
             </Button>
-            <Button onClick={this.importEncounter} color="primary" disabled={encounterId.length !== 6}>
+            <Button
+              onClick={this.importEncounter}
+              color="primary"
+              disabled={encounterId.length !== 6}
+            >
               {'Import'}
             </Button>
           </DialogActions>

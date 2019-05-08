@@ -70,11 +70,23 @@ class NavigationBar extends Component {
           <Divider />
           <ListSubheader>Rules:</ListSubheader>
           {Object.keys(rules).map(ruleSection => (
-            <ListItem key={ruleSection} button component={Link} to={`/rules/${ruleSection}`} onClick={this.closeDrawer}>
+            <ListItem
+              key={ruleSection}
+              button
+              component={Link}
+              to={`/rules/${ruleSection}`}
+              onClick={this.closeDrawer}
+            >
               <ListItemText primary={rules[ruleSection].sectionName} />
             </ListItem>
           ))}
           <Divider />
+          <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
+            <ListItemText primary="Contact" />
+          </ListItem>
+          <ListItem button component={Link} to="/cookiepolicy" onClick={this.closeDrawer}>
+            <ListItemText primary="Cookie Policy" />
+          </ListItem>
           <ListItem button component={Link} to="/copyrights" onClick={this.closeDrawer}>
             <ListItemText primary="Copyrights" />
           </ListItem>
@@ -95,7 +107,7 @@ class NavigationBar extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
-              {'M3E Encounter Generator'}
+              {'M3E Helper'}
             </Typography>
             {/* <Button color="inherit" disabled>Login</Button> */}
           </Toolbar>

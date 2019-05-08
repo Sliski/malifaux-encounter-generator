@@ -142,7 +142,11 @@ class EncounterElementsList extends Component {
             open={showDialog}
             onClose={this.closeDialog}
           >
-            <DialogTitle onClose={this.closeDialog} className={classes.dialogTitle} disableTypography>
+            <DialogTitle
+              onClose={this.closeDialog}
+              className={classes.dialogTitle}
+              disableTypography
+            >
               <Typography variant="h6">Confirm schemes choice</Typography>
               <IconButton className={classes.dialogCloseButton} onClick={this.closeDialog}>
                 <CloseIcon />
