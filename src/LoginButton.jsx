@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Button from '@material-ui/core/Button';
 import styles from './styles.jsx';
 import { API_URL } from './config.js';
-
-const GOOGLE_BUTTON_ID = 'google-sign-in-button';
 
 const icons = {
   google: <path
@@ -16,62 +13,32 @@ const icons = {
   facebook: <path fill="#000000" d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z" />,
 };
 
-export const LOADING_STATUS = {
-  INITIAL: 'INITIAL',
-  LOADING: 'LOADING',
-  LOADED: 'LOADED',
-  FAILED: 'FAILED',
-};
-
-function initGoogle(func) {
-  window.gapi.load('auth2', () => {
-    window.gapi.auth2
-      .init({
-        client_id:
-        '364770672088-j91rtuel93ds5f2ro0tldh9cf14iof08.apps.googleusercontent.com',
-      })
-      .then(func);
-  });
-}
-
-const googleLoadTimer = setInterval(() => {
-  console.log(LOADING_STATUS.INITIAL);
-  if (window.gapi) {
-    console.log(LOADING_STATUS.LOADING);
-    initGoogle(() => {
-      clearInterval(googleLoadTimer);
-      console.log(LOADING_STATUS.LOADED);
-    });
-  }
-}, 90);
-
-
 class LoginButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      disabled: '',
+      disabled: false,
     };
 
     this.startAuth = this.startAuth.bind(this);
+    this.signOut = this.signOut.bind(this);
   }
-  //
-  // componentDidMount() {
-  //   const { socket, provider } = this.props;
-  //
-  //   socket.on(provider, (user) => {
-  //     this.popup.close();
-  //     this.setState({ user });
-  //   });
-  // }
+
+  componentDidMount() {
+    const { socket, provider } = this.props;
+    socket.on(provider, (user) => {
+      this.popup.close();
+      this.setState({ user });
+    });
+  }
 
   checkPopup() {
     const check = setInterval(() => {
       const { popup } = this;
       if (!popup || popup.closed || popup.closed === undefined) {
         clearInterval(check);
-        this.setState({ disabled: '' });
+        this.setState({ disabled: false });
       }
     }, 1000);
   }
@@ -95,71 +62,41 @@ class LoginButton extends Component {
       e.preventDefault();
       this.popup = this.openPopup();
       this.checkPopup();
-      this.setState({ disabled: 'disabled' });
+      this.setState({ disabled: true });
     }
   }
 
-  closeCard() {
+  signOut() {
     this.setState({ user: {} });
   }
 
-  componentDidMount() {
-    window.gapi.signin2.render(
-      GOOGLE_BUTTON_ID,
-      {
-        width: 200,
-        height: 50,
-        onsuccess: this.onSuccess,
-      },
-    );
-  }
-
-  onSuccess(googleUser) {
-    const profile = googleUser.getBasicProfile();
-    console.log(`Name: ${profile.getName()}`);
-  }
-
-  onSignIn(googleUser) {
-    console.log(googleUser.getBasicProfile());
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  }
-
-
   render() {
     const { name, photo } = this.state.user;
-    const { provider } = this.props;
+    const { provider, classes } = this.props;
     const { disabled } = this.state;
-    const { classes } = this.props;
 
     return (
-      <Paper className={classes.paperWithPadding}>
-        <div id={GOOGLE_BUTTON_ID} />
+      <>
         {name
           ? (
             <div className="card">
               <img src={photo} alt={name} />
               <h4>{name}</h4>
+              <Button onClick={this.signOut}>SO</Button>
             </div>
           )
           : (
-            <div className="button-wrapper fadein-fast">
-              <Button
-                onClick={this.startAuth}
-                className={`${provider} ${disabled} button`}
-                fullWidth
-              >
-                <SvgIcon fontSize="small">{icons[provider]}</SvgIcon>
-                {provider}
-              </Button>
-            </div>
+            <Button
+              onClick={this.startAuth}
+              className={`${provider} ${disabled} button`}
+              fullWidth
+            >
+              <SvgIcon fontSize="small">{icons[provider]}</SvgIcon>
+              {provider}
+            </Button>
           )
         }
-        <div className="g-signin2" data-onsuccess={this.onSignIn}></div>
-      </Paper>
+      </>
     );
   }
 }
