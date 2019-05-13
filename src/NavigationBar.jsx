@@ -81,6 +81,10 @@ class NavigationBar extends Component {
             </ListItem>
           ))}
           <Divider />
+          <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="Builder" secondary="M3E Beta Analyzer" />
+          </ListItem>
+          <Divider />
           <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
             <ListItemText primary="Contact" />
           </ListItem>
