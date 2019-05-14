@@ -79,7 +79,8 @@ const styles = theme => ({
   },
   // Score
   dialogContentWoPadding: {
-    padding: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
     margin: 0,
   },
 });

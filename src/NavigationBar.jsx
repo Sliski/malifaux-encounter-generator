@@ -1,24 +1,15 @@
 import React, { Component } from 'react';
+import ls from 'local-storage';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import {
+  AppBar, Button, Dialog, DialogContent, DialogActions, Divider, Drawer, Hidden, IconButton, List, ListItem,
+  ListItemText, ListSubheader, Toolbar, Typography,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import rules from './rules.js';
 import styles from './styles.jsx';
+import SignIn from './SignIn.jsx';
 
 class NavigationBar extends Component {
   constructor(props) {
@@ -26,6 +17,7 @@ class NavigationBar extends Component {
     this.state = {
       mobileOpen: false,
       showConfirmationDialog: false,
+      loginEnabled: ls.get('loginEnabled'),
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -51,10 +43,9 @@ class NavigationBar extends Component {
     this.setState({ showConfirmationDialog: false });
   }
 
-
   render() {
     const { classes, handleEndEncounter, step } = this.props;
-    const { showConfirmationDialog } = this.state;
+    const { showConfirmationDialog, loginEnabled } = this.state;
 
     const drawer = (
       <div>
@@ -69,17 +60,18 @@ class NavigationBar extends Component {
           </ListItem>
           <Divider />
           <ListSubheader>Rules:</ListSubheader>
-          {Object.keys(rules).map(ruleSection => (
-            <ListItem
-              key={ruleSection}
-              button
-              component={Link}
-              to={`/rules/${ruleSection}`}
-              onClick={this.closeDrawer}
-            >
-              <ListItemText primary={rules[ruleSection].sectionName} />
-            </ListItem>
-          ))}
+          {Object.keys(rules)
+            .map(ruleSection => (
+              <ListItem
+                key={ruleSection}
+                button
+                component={Link}
+                to={`/rules/${ruleSection}`}
+                onClick={this.closeDrawer}
+              >
+                <ListItemText primary={rules[ruleSection].sectionName} />
+              </ListItem>
+            ))}
           <Divider />
           <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="Crew Builder" secondary="M3E Beta Analyzer" />
@@ -113,7 +105,7 @@ class NavigationBar extends Component {
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
               {'M3E Helper'}
             </Typography>
-            {/* <Button color="inherit" disabled>Login</Button> */}
+            {loginEnabled && <SignIn />}
           </Toolbar>
         </AppBar>
         <nav className={classes.menuDrawer}>

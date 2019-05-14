@@ -3,13 +3,9 @@ import io from 'socket.io-client';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ls from 'local-storage';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button, CssBaseline, Dialog, DialogContent, DialogActions, DialogContentText, Grid,
+} from '@material-ui/core';
 import NavigationBar from './NavigationBar.jsx';
 import Generator from './Generator.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
@@ -19,11 +15,11 @@ import Score from './Score.jsx';
 import Contact from './Contact.jsx';
 import Copyrights from './Copyrights.jsx';
 import CookiePolicy from './CookiePolicy.jsx';
-import LoginButton from './LoginButton.jsx';
+import EnableLogin from './EnableLogin.jsx';
 import styles from './styles.jsx';
 import { API_URL } from './config.js';
 
-const socket = io(API_URL);
+export const socket = io(API_URL);
 
 export const ENCOUNTER_STEPS = {
   MANUAL_CHOICE: -1,
@@ -154,7 +150,8 @@ class App extends Component {
                   <Route path="/contact" component={() => <Contact />} />
                   <Route path="/cookiepolicy" component={() => <CookiePolicy />} />
                   <Route path="/copyrights" component={() => <Copyrights />} />
-                  <Route path="/login" component={() => <LoginButton provider="google" socket={socket} />} />
+                  {/* temporary way to enable login */}
+                  <Route path="/enable-login" component={() => <EnableLogin />} />
                   <Route component={this.encounter()} />
                 </Switch>
               </Grid>
