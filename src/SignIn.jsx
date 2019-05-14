@@ -157,11 +157,16 @@ class SignIn extends Component {
               { name: 'google', disabled: false },
               { name: 'facebook', disabled: true },
             ].map(provider => (
-              <ListItem button onClick={e => this.startAuth(e, provider.name)} disabled={provider.disabled}>
+              <ListItem
+                key={provider.name}
+                button
+                onClick={e => this.startAuth(e, provider.name)}
+                disabled={provider.disabled}
+              >
                 <ListItemIcon>
                   <SvgIcon fontSize="small">{providerIcons[provider.name]}</SvgIcon>
                 </ListItemIcon>
-                <ListItemText primary={`Login with ${provider.name.charAt(0).toUpperCase()}${provider.name.slice(1)}`} />
+                <ListItemText primary={`Sign in with ${provider.name.charAt(0).toUpperCase()}${provider.name.slice(1)}`} />
               </ListItem>
             ))}
           </DialogContent>
