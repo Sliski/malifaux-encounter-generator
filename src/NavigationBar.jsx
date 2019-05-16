@@ -73,8 +73,12 @@ class NavigationBar extends Component {
               </ListItem>
             ))}
           <Divider />
+          <ListSubheader>Crew Builders:</ListSubheader>
+          <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="M3E Crew Builder" />
+          </ListItem>
           <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
-            <ListItemText primary="Crew Builder" secondary="M3E Beta Analyzer" />
+            <ListItemText primary="M3E Beta Analyzer" />
           </ListItem>
           <Divider />
           <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
