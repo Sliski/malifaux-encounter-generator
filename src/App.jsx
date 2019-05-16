@@ -58,6 +58,12 @@ class App extends Component {
     this.closeLsInfo = this.closeLsInfo.bind(this);
   }
 
+  componentDidMount() {
+    socket.on('connect', () => {
+      fetch(`${API_URL}/set-socket/${socket.id}`, { credentials: 'include' });
+    });
+  }
+
   closeLsInfo() {
     ls.set('ls-info', true);
     this.setState({ lsInfo: true });
