@@ -155,7 +155,7 @@ class SignIn extends Component {
           <DialogContent className={classes.dialogContentWoPadding}>
             {[
               { name: 'google', disabled: false },
-              { name: 'facebook', disabled: true },
+              { name: 'facebook', disabled: false },
             ].map(provider => (
               <ListItem
                 key={provider.name}

@@ -59,9 +59,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    socket.on('connect', () => {
-      fetch(`${API_URL}/set-socket/${socket.id}`, { credentials: 'include' });
-    });
+    if (ls.get('loginEnabled')) {
+      socket.on('connect', () => {
+        fetch(`${API_URL}/set-socket/${socket.id}`, { credentials: 'include' });
+      });
+    }
   }
 
   closeLsInfo() {
