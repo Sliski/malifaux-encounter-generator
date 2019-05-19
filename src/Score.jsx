@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  Button, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton, Typography,
+  List, ListItem, ListItemText, Paper,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
 import styles from './styles.jsx';
 import EncounterElement, { eeType } from './EncounterElement';
-import { deployments, schemes, strategies } from './data';
+import { schemes, strategies } from './data';
 
 class Score extends Component {
   constructor(props) {
@@ -25,6 +17,8 @@ class Score extends Component {
       schemeIndex: 0,
       showSchemeDialog: false,
       showConfirmationDialog: false,
+      showNewRoundDialog: false,
+      nextRound: props.round + 1,
     };
 
     this.changeStrategyScore = this.changeStrategyScore.bind(this);
@@ -32,7 +26,10 @@ class Score extends Component {
     this.closeRevealDialog = this.closeRevealDialog.bind(this);
     this.openConfirmationDialog = this.openConfirmationDialog.bind(this);
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
+    this.openNewRoundDialog = this.openNewRoundDialog.bind(this);
+    this.closeNewRoundDialog = this.closeNewRoundDialog.bind(this);
     this.revealScheme = this.revealScheme.bind(this);
+    this.nextRound = this.nextRound.bind(this);
   }
 
   changeStrategyScore() {
@@ -68,6 +65,15 @@ class Score extends Component {
     this.setState({ showConfirmationDialog: false });
   }
 
+  openNewRoundDialog() {
+    const { round } = this.props;
+    this.setState({ nextRound: round + 1, showNewRoundDialog: true });
+  }
+
+  closeNewRoundDialog() {
+    this.setState({ showNewRoundDialog: false });
+  }
+
   revealScheme() {
     const { chosenSchemes, updateAppState } = this.props;
     const { schemeIndex } = this.state;
@@ -83,25 +89,55 @@ class Score extends Component {
     });
   }
 
+  nextRound() {
+    this.closeNewRoundDialog();
+    const { round, updateAppState } = this.props;
+    updateAppState({ round: round + 1 });
+  }
+
   render() {
-    // TODO add round counter
     const {
-      showSchemeDialog, showConfirmationDialog, schemeIndex,
+      showSchemeDialog, showConfirmationDialog, showNewRoundDialog, schemeIndex, nextRound,
     } = this.state;
     const {
-      classes, deploymentId, strategyId, schemesIds, strategyScore, chosenSchemes, round,
+      classes, strategyId, schemesIds, strategyScore, chosenSchemes, round,
     } = this.props;
 
     return (
       <>
         <Paper className={classes.paper}>
           <List>
-            <EncounterElement
-              type={eeType.deployment}
-              details={deployments[deploymentId]}
-              score
-            />
+            <ListItem button={round < 5} onClick={round < 5 ? this.openNewRoundDialog : undefined}>
+              <ListItemText primary="Round" />
+              <Typography
+                color="default"
+                align="center"
+                variant="button"
+                className={classes.myScore}
+              >
+                {round}
+              </Typography>
+            </ListItem>
             <Divider />
+            <ListItem divider>
+              <ListItemText
+                primaryTypographyProps={{
+                  color: 'default',
+                  variant: 'button',
+                }}
+                className={classes.noMarginNoPadding}
+              >
+                {'Total Score'}
+              </ListItemText>
+              <Typography
+                color="default"
+                align="center"
+                variant="button"
+                className={classes.myScore}
+              >
+                {strategyScore[0] + chosenSchemes[0].score + chosenSchemes[1].score}
+              </Typography>
+            </ListItem>
             <EncounterElement
               type={eeType.strategy}
               details={strategies[strategyId]}
@@ -139,7 +175,7 @@ class Score extends Component {
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          <DialogContent className={classes.dialogContentWoPadding}>
+          <DialogContent className={classes.noMarginNoPadding}>
             <List>
               {chosenSchemes.map((chosenScheme, index) => (
                 <ListItem
@@ -172,6 +208,23 @@ class Score extends Component {
             </Button>
             <Button onClick={this.revealScheme} color="primary" autoFocus>
               {'Reveal'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          classes={{ paper: classes.dialogPaper }}
+          open={showNewRoundDialog}
+          onClose={this.closeNewRoundDialog}
+        >
+          <DialogContent className={classes.dialogContent}>
+            <Typography>{`Do you want to start round ${nextRound}?`}</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeNewRoundDialog} color="secondary">
+              {'Cancel'}
+            </Button>
+            <Button onClick={this.nextRound} color="primary" autoFocus>
+              {'Start'}
             </Button>
           </DialogActions>
         </Dialog>

@@ -12,7 +12,7 @@ class EnableLogin extends Component {
   }
 
   componentDidMount() {
-    ls.set('loginEnabled', true);
+    ls.set('betaUser', true);
   }
 
   render() {

@@ -19,19 +19,27 @@ import EnableLogin from './EnableLogin.jsx';
 import styles from './styles.jsx';
 import { API_URL } from './config.js';
 
-export const socket = io(API_URL);
+export const socket = ls.get('betaUser') ? io(API_URL) : undefined;
 
 export const ENCOUNTER_STEPS = {
-  MANUAL_CHOICE: -1,
-  GENERATE: 0,
-  CHOOSE: 1,
-  SCORE: 2,
+  MANUAL_CHOICE: 0,
+  GENERATE: 1,
+  CHOOSE: 2,
+  SCORE: 3,
+};
+
+export const ENCOUNTER_MAIN_LINK_TEXT = {
+  0: 'Choose Encounter',
+  1: 'Generate',
+  2: 'Choose Schemes',
+  3: 'Score',
 };
 
 const emptyState = {
   deploymentId: null,
   strategyId: null,
   schemesIds: null,
+  round: 1,
   chosenSchemes: [],
   strategyScore: [0, 0],
   step: ENCOUNTER_STEPS.GENERATE,
@@ -59,7 +67,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (ls.get('loginEnabled')) {
+    if (ls.get('betaUser')) {
       socket.on('connect', () => {
         fetch(`${API_URL}/set-socket/${socket.id}`, { credentials: 'include' });
       });
@@ -118,11 +126,10 @@ class App extends Component {
 
   score() {
     const {
-      chosenSchemes, deploymentId, strategyId, schemesIds, strategyScore, round,
+      chosenSchemes, strategyId, schemesIds, strategyScore, round,
     } = this.state;
     return (
       <Score
-        deploymentId={deploymentId}
         strategyId={strategyId}
         schemesIds={schemesIds}
         chosenSchemes={chosenSchemes}
@@ -140,7 +147,7 @@ class App extends Component {
   render() {
     ls.set('state', this.state);
 
-    const { lsInfo, step } = this.state;
+    const { lsInfo, step, deploymentId } = this.state;
     const { classes } = this.props;
 
     return (
@@ -148,7 +155,7 @@ class App extends Component {
         <Router>
           <CssBaseline />
           <div className={classes.appContent}>
-            <NavigationBar handleEndEncounter={this.clearAppState} step={step} />
+            <NavigationBar handleEndEncounter={this.clearAppState} step={step} deploymentId={deploymentId} />
             <main className={classes.main}>
               <div className={classes.toolbar} />
               <Grid container justify="center">

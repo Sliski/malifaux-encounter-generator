@@ -78,10 +78,21 @@ const styles = theme => ({
     flexGrow: 1,
   },
   // Score
-  dialogContentWoPadding: {
+  noMarginNoPadding: {
     paddingLeft: 0,
     paddingRight: 0,
     margin: 0,
+  },
+  opponentScore: {
+    paddingLeft: theme.spacing.unit * 1,
+    paddingRight: theme.spacing.unit * 0,
+  },
+  myScore: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+  },
+  llPadding: {
+    paddingLeft: theme.spacing.unit * 6,
   },
 });
 

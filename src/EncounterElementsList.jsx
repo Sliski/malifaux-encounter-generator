@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import EncounterElement, { eeType } from './EncounterElement.jsx';
 import { deployments, schemes, strategies } from './data.jsx';
 import styles from './styles.jsx';
+import { ENCOUNTER_STEPS } from './App';
 
 class EncounterElementsList extends Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class EncounterElementsList extends Component {
         revealed: false,
         score: 0,
       })),
-      step: 2,
+      step: ENCOUNTER_STEPS.SCORE,
     });
   }
 

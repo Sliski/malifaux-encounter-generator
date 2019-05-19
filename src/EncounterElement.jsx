@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Dialog from '@material-ui/core/Dialog';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
+import {
+  Button, Checkbox, Dialog, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Radio, Typography,
+} from '@material-ui/core';
 import EncounterElementDetails from './EncounterElementDetails.jsx';
 import styles from './styles.jsx';
 
@@ -38,9 +33,13 @@ class EncounterElement extends Component {
   render() {
     const {
       type, details, classes, handleToggle, checked, score, index, chosenSchemes, strategyScore, scoreHandler,
+      multiplayer, menu,
     } = this.props;
     const { showDetails } = this.state;
 
+    let primaryText = type === eeType.scheme && !score
+      ? `${details.number}. ${details.name}`
+      : details.name;
     let secondaryText = '';
     let chosen = null;
     if (score && type === eeType.scheme) {
@@ -50,22 +49,35 @@ class EncounterElement extends Component {
 
     let secondaryAction = null;
     if (type === eeType.scheme && score) {
-      secondaryAction = (
-        <ListItemSecondaryAction>
-          <Button
-            disabled={!chosen || !chosen.revealed}
-            color="default"
-            onClick={scoreHandler}
+      if (chosen && chosen.revealed) {
+        secondaryAction = (
+          <ListItemSecondaryAction>
+            <Button
+              disabled={!chosen || !chosen.revealed}
+              color="primary"
+              onClick={scoreHandler}
+            >
+              {chosen && chosen.revealed ? chosen.score : '-'}
+            </Button>
+          </ListItemSecondaryAction>
+        );
+      } else {
+        secondaryAction = (
+          <Typography
+            color="primary"
+            align="center"
+            variant="button"
+            className={classes.myScore}
           >
-            {chosen && chosen.revealed ? chosen.score : '-'}
-          </Button>
-        </ListItemSecondaryAction>
-      );
+            {'-'}
+          </Typography>
+        );
+      }
     } else if (type === eeType.strategy && score) {
       secondaryAction = (
         <ListItemSecondaryAction>
           <Button
-            color="default"
+            color="primary"
             onClick={scoreHandler}
           >
             {strategyScore}
@@ -92,20 +104,35 @@ class EncounterElement extends Component {
       );
     }
 
+    let opponentScore = null;
+
+    if (score && multiplayer && (type === eeType.strategy || type === eeType.scheme)) {
+      opponentScore = (
+        <Typography
+          color="secondary"
+          align="center"
+          variant="button"
+          className={classes.opponentScore}
+        >
+          {index ? (index < 2 ? index : '-') : '0'}
+        </Typography>
+      );
+    }
+
+    // menu
+    if (menu) {
+      secondaryText = details.name;
+      primaryText = 'Deployment';
+    }
+
     return (
       <>
         <ListItem button onClick={this.handleOpen}>
+          {opponentScore}
           {type !== eeType.scheme && !score && (
             <ListItemIcon>{details.suite.icon}</ListItemIcon>
           )}
-          <ListItemText
-            primary={
-              type === eeType.scheme && !score
-                ? `${details.number}. ${details.name}`
-                : details.name
-            }
-            secondary={secondaryText}
-          />
+          <ListItemText primary={primaryText} secondary={secondaryText} />
           {secondaryAction}
         </ListItem>
         <Dialog

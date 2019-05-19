@@ -32,6 +32,7 @@ class SignIn extends Component {
     this.openUserDialog = this.openUserDialog.bind(this);
     this.closeUserDialog = this.closeUserDialog.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.startAuth = this.startAuth.bind(this);
   }
 
   componentDidMount() {
@@ -68,9 +69,16 @@ class SignIn extends Component {
   startAuth(e, provider) {
     e.preventDefault();
     this.closeSignInDialog();
-    socket.on(provider, () => {
+    socket.on(provider, (response) => {
       this.popup.close();
-      this.getCurrentUser();
+      if (response && response.name && response.photo) {
+        this.setState({
+          name: response.name,
+          photo: response.photo,
+        });
+      } else {
+        this.getCurrentUser();
+      }
     });
     this.popup = this.openPopup(provider);
     this.checkPopup();
@@ -152,7 +160,7 @@ class SignIn extends Component {
           onClose={this.closeSignInDialog}
         >
           {signInDialog && (
-          <DialogContent className={classes.dialogContentWoPadding}>
+          <DialogContent className={classes.noMarginNoPadding}>
             {[
               { name: 'google', disabled: false },
               { name: 'facebook', disabled: false },

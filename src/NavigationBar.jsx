@@ -10,6 +10,9 @@ import { Link } from 'react-router-dom';
 import rules from './rules.js';
 import styles from './styles.jsx';
 import SignIn from './SignIn.jsx';
+import EncounterElement, { eeType } from './EncounterElement';
+import { deployments } from './data';
+import { ENCOUNTER_STEPS, ENCOUNTER_MAIN_LINK_TEXT } from './App';
 
 class NavigationBar extends Component {
   constructor(props) {
@@ -17,7 +20,7 @@ class NavigationBar extends Component {
     this.state = {
       mobileOpen: false,
       showConfirmationDialog: false,
-      loginEnabled: ls.get('loginEnabled'),
+      loginEnabled: ls.get('betaUser'),
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -44,7 +47,9 @@ class NavigationBar extends Component {
   }
 
   render() {
-    const { classes, handleEndEncounter, step } = this.props;
+    const {
+      classes, handleEndEncounter, step, deploymentId,
+    } = this.props;
     const { showConfirmationDialog, loginEnabled } = this.state;
 
     const drawer = (
@@ -52,12 +57,23 @@ class NavigationBar extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
+          <ListSubheader>Encounter:</ListSubheader>
           <ListItem button component={Link} to="/" onClick={this.closeDrawer}>
-            <ListItemText primary="Encounter" />
+            <ListItemText primary={ENCOUNTER_MAIN_LINK_TEXT[step]} />
           </ListItem>
-          <ListItem button onClick={this.openConfirmationDialog} disabled={step === 0}>
-            <ListItemText primary="End Encounter" />
-          </ListItem>
+          {step === ENCOUNTER_STEPS.SCORE && (
+            <EncounterElement
+              type={eeType.deployment}
+              details={deployments[deploymentId]}
+              score
+              menu
+            />
+          )}
+          {step !== ENCOUNTER_STEPS.GENERATE && (
+            <ListItem button onClick={this.openConfirmationDialog}>
+              <ListItemText primary="End" />
+            </ListItem>
+          )}
           <Divider />
           <ListSubheader>Rules:</ListSubheader>
           {Object.keys(rules)
