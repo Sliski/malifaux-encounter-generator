@@ -57,7 +57,7 @@ class NavigationBar extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListSubheader>Encounter:</ListSubheader>
+          <ListSubheader disableSticky>Encounter:</ListSubheader>
           <ListItem button component={Link} to="/" onClick={this.closeDrawer}>
             <ListItemText primary={ENCOUNTER_MAIN_LINK_TEXT[step]} />
           </ListItem>
@@ -75,7 +75,7 @@ class NavigationBar extends Component {
             </ListItem>
           )}
           <Divider />
-          <ListSubheader>Rules:</ListSubheader>
+          <ListSubheader disableSticky>Rules:</ListSubheader>
           {Object.keys(rules)
             .map(ruleSection => (
               <ListItem
@@ -89,7 +89,7 @@ class NavigationBar extends Component {
               </ListItem>
             ))}
           <Divider />
-          <ListSubheader>Crew Builders:</ListSubheader>
+          <ListSubheader disableSticky>Crew Builders:</ListSubheader>
           <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="M3E Crew Builder" />
           </ListItem>
