@@ -24,6 +24,14 @@ class Contact extends Component {
           </Link>
           {'.'}
         </Typography>
+        <Typography gutterBottom variant="h6">Donates</Typography>
+        <Typography gutterBottom align="justify">
+          {'If you would like to support covering the hosting fees, you can do it by using this link: '}
+          <Link href="https://www.paypal.me/m3ehelper" target="_blank">
+            {'https://www.paypal.me/m3ehelper'}
+          </Link>
+          {'.'}
+        </Typography>
       </Paper>
     );
   }

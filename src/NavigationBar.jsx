@@ -48,7 +48,7 @@ class NavigationBar extends Component {
 
   render() {
     const {
-      classes, handleEndEncounter, step, deploymentId,
+      classes, handleEndEncounter, step, deploymentId, updateAppState, signed,
     } = this.props;
     const { showConfirmationDialog, loginEnabled } = this.state;
 
@@ -98,14 +98,20 @@ class NavigationBar extends Component {
           </ListItem>
           <Divider />
           <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
-            <ListItemText primary="Contact" />
+            <ListItemText primary="Contact and Donates" />
           </ListItem>
           <ListItem button component={Link} to="/cookiepolicy" onClick={this.closeDrawer}>
-            <ListItemText primary="Cookie Policy" />
+            <ListItemText primary="Cookies and Privacy" />
           </ListItem>
           <ListItem button component={Link} to="/copyrights" onClick={this.closeDrawer}>
             <ListItemText primary="Copyrights" />
           </ListItem>
+          {loginEnabled
+            && (
+            <ListItem button component={Link} to="/enable-login" onClick={this.closeDrawer}>
+              <ListItemText primary="Beta Tests" />
+            </ListItem>
+            )}
         </List>
       </div>
     );
@@ -123,9 +129,9 @@ class NavigationBar extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
-              {'M3E Helper'}
+              {`M3E Helper ${signed}`}
             </Typography>
-            {loginEnabled && <SignIn />}
+            {loginEnabled && <SignIn updateAppState={updateAppState} />}
           </Toolbar>
         </AppBar>
         <nav className={classes.menuDrawer}>

@@ -1,23 +1,17 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, List, ListItem, ListItemText,
+  Paper, TextField, Typography,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import TextField from '@material-ui/core/TextField';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import EncounterElement, { eeType } from './EncounterElement.jsx';
 import { deployments, schemes, strategies } from './data.jsx';
 import styles from './styles.jsx';
-import { ENCOUNTER_STEPS } from './App';
+import { ENCOUNTER_STEPS } from './App.jsx';
+import { calculateEncounterId } from './Generator.jsx';
+import { URL } from './config.js';
 
 class EncounterElementsList extends Component {
   constructor(props) {
@@ -35,6 +29,11 @@ class EncounterElementsList extends Component {
     this.closeDialog = this.closeDialog.bind(this);
     this.updateNote = this.updateNote.bind(this);
     this.chooseSchemes = this.chooseSchemes.bind(this);
+  }
+
+  componentDidMount() {
+    console.log('Score mounts.');
+    this.props.getAppStateFromDb();
   }
 
   handleToggle = value => () => {
@@ -84,27 +83,45 @@ class EncounterElementsList extends Component {
     });
   }
 
-  encounterId() {
-    const {
-      deploymentId, strategyId, schemesIds,
-    } = this.props;
-
-    return `${(deploymentId * 4 + strategyId).toString(16)}${schemesIds.reduce((out, current) => out + current.toString(16))}`;
-  }
-
   render() {
     const {
-      classes, deploymentId, strategyId, schemesIds, chosenSchemes,
+      classes, deploymentId, strategyId, schemesIds, chosenSchemes, multiplayer, gameId, opponentStep,
     } = this.props;
     const { checked, showDialog } = this.state;
+
+    let header = null;
+    if (multiplayer && !opponentStep) {
+      header = (
+        <CopyToClipboard text={`${URL}/join/${gameId}`}>
+          <ListItem button>
+            <ListItemText
+              primaryTypographyProps={{ color: 'primary' }}
+              primary="Click here to copy link for opponent."
+            />
+          </ListItem>
+        </CopyToClipboard>
+      );
+    } else if (multiplayer) {
+      header = (
+        <ListItem>
+          <ListItemText primary={opponentStep === ENCOUNTER_STEPS.CHOOSE
+            ? 'Opponent is choosing schemes.' : 'Opponent choosed schemes.'}
+          />
+        </ListItem>
+      );
+    } else {
+      header = (
+        <ListItem>
+          <ListItemText primary={`Encounter ID: ${calculateEncounterId(deploymentId, strategyId, schemesIds)}`} />
+        </ListItem>
+      );
+    }
 
     return (
       <>
         <Paper className={classes.paper}>
           <List>
-            <ListItem>
-              <ListItemText primary={`Encounter ID: ${this.encounterId()}`} />
-            </ListItem>
+            {header}
             <Divider />
             <EncounterElement
               type={eeType.deployment}

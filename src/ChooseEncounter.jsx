@@ -8,6 +8,8 @@ import EncounterElement, { eeType } from './EncounterElement.jsx';
 import { ENCOUNTER_STEPS } from './App.jsx';
 import { deployments, schemes, strategies } from './data.jsx';
 import styles from './styles.jsx';
+import { calculateEncounterId } from './Generator.jsx';
+import { createGame } from './backEndConnector.js';
 
 class ChooseEncounter extends Component {
   constructor(props) {
@@ -51,7 +53,15 @@ class ChooseEncounter extends Component {
 
   confirmChoice() {
     const { checkedDeployment, checkedStrategy, checked } = this.state;
-    const { updateAppState } = this.props;
+    const { updateAppState, signed, multiplayer } = this.props;
+
+    if (signed) {
+      createGame(calculateEncounterId(checkedDeployment, checkedStrategy, checked), multiplayer, (response) => {
+        if (response && response.status === 'OK' && response.id) {
+          updateAppState({ gameId: response.id });
+        }
+      });
+    }
 
     updateAppState({
       deploymentId: checkedDeployment,
