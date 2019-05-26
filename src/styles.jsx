@@ -94,6 +94,11 @@ const styles = theme => ({
   llPadding: {
     paddingLeft: theme.spacing.unit * 6,
   },
+  // MultiplayerLinkButton
+  fullWidth: {
+    width: 100,
+    padding: 0,
+  },
 });
 
 export default styles;

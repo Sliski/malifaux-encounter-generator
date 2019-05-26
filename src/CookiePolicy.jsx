@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import styles from './styles.jsx';
+import { URL } from './config.js';
 
 class CookiePolicy extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class CookiePolicy extends Component {
           {'Cookie Policy for M3E Helper'}
         </Typography>
         <Typography gutterBottom align="justify">
-          {'This is the Cookie Policy for M3E Helper, accessible from https://m3e.nazwa.pl'}
+          {`This is the Cookie Policy for M3E Helper, accessible from ${URL}`}
         </Typography>
         <Typography variant="subtitle2" gutterBottom align="justify">
           {'What Are Cookies'}
@@ -64,7 +65,7 @@ class CookiePolicy extends Component {
           {'Privacy Policy of M3E Helper'}
         </Typography>
         <Typography gutterBottom align="justify">
-          {'M3E Helper operates the https://m3e.nazwa.pl website, which provides the SERVICE.'}
+          {`M3E Helper operates the ${URL} website, which provides the SERVICE.`}
         </Typography>
         <Typography gutterBottom align="justify">
           {'This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service, the M3E Helper website.'}
@@ -73,7 +74,7 @@ class CookiePolicy extends Component {
           {'If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.'}
         </Typography>
         <Typography gutterBottom align="justify">
-          {'The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at https://m3e.nazwa.pl, unless otherwise defined in this Privacy Policy. Our Privacy Policy was created with the help of the Privacy Policy Template.'}
+          {`The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at ${URL}, unless otherwise defined in this Privacy Policy. Our Privacy Policy was created with the help of the Privacy Policy Template.`}
         </Typography>
         <Typography variant="subtitle2" gutterBottom align="justify">
           {'Information Collection and Use'}
@@ -131,7 +132,7 @@ class CookiePolicy extends Component {
         </Typography>
         <Typography gutterBottom align="justify">
           {'However if you are still looking for more information then you can contact us By visiting this link: '}
-          <a href="/contact">https://m3e.nazwa.pl/contact</a>
+          <a href="/contact">{`${URL}/contact`}</a>
           {'.'}
         </Typography>
       </Paper>

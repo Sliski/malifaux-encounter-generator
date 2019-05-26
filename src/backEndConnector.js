@@ -54,7 +54,7 @@ export function chooseSchemes(gameId, schemes, onSuccess) {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify({ gameId, schemes }),
+    body: JSON.stringify({ gameId, schemes: JSON.stringify(schemes) }),
   })
     .then(response => response.json()).then(onSuccess);
 }
@@ -86,5 +86,11 @@ export function scoreScheme(gameId, schemeId, score, onSuccess) {
 export function loadAppState(gameId, onSuccess) {
   if (!beta) return;
   fetch(`${API_URL}/load-app-state/${gameId}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function endGame(gameId, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/end-game/${gameId}`, { credentials: 'include' })
     .then(response => response.json()).then(onSuccess);
 }

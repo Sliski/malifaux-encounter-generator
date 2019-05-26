@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ls from 'local-storage';
 import { ENCOUNTER_STEPS } from './App.jsx';
 import styles from './styles.jsx';
-import { createGame } from './backEndConnector.js';
+import { createGame, joinRoom } from './backEndConnector.js';
 
 export function calculateEncounterId(deploymentId, strategyId, schemesIds) {
   return `${(deploymentId * 4 + strategyId).toString(16)}${schemesIds.reduce((out, current) => out + current.toString(16))}`;
@@ -77,7 +77,7 @@ class Generator extends Component {
   }
 
   generateEncounter() {
-    const { updateAppState, signed } = this.props;
+    const { updateAppState, signed, addNewAppStateListener } = this.props;
     const { multiplayerChecked } = this.state;
 
     const allSchemesIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -93,7 +93,11 @@ class Generator extends Component {
 
     if (signed) {
       createGame(calculateEncounterId(deploymentId, strategyId, schemesIds), multiplayerChecked, (response) => {
-        if (response && response.status === 'OK' && response.id) updateAppState({ gameId: response.id });
+        if (response && response.status === 'OK' && response.id) {
+          updateAppState({ gameId: response.id });
+          joinRoom(response.id);
+          addNewAppStateListener();
+        }
       });
     }
 
@@ -107,16 +111,20 @@ class Generator extends Component {
   }
 
   importEncounter() {
-    const { updateAppState, signed } = this.props;
+    const { updateAppState, signed, addNewAppStateListener } = this.props;
     const { encounterId, multiplayerChecked } = this.state;
     const decodedEncounter = decodeEncounterId(encounterId);
-    if (decodedEncounter) return this.setState({ error: 'Incorrect encounter ID.' });
+    if (!decodedEncounter) return this.setState({ error: 'Incorrect encounter ID.' });
 
     this.closeDialog();
 
     if (signed) {
       createGame(encounterId, multiplayerChecked, (response) => {
-        if (response && response.status === 'OK' && response.id) updateAppState({ gameId: response.id });
+        if (response && response.status === 'OK' && response.id) {
+          updateAppState({ gameId: response.id });
+          joinRoom(response.id);
+          addNewAppStateListener();
+        }
       });
     }
 

@@ -48,7 +48,7 @@ class NavigationBar extends Component {
 
   render() {
     const {
-      classes, handleEndEncounter, step, deploymentId, updateAppState, signed,
+      classes, handleEndEncounter, step, deploymentId, updateAppState,
     } = this.props;
     const { showConfirmationDialog, loginEnabled } = this.state;
 
@@ -129,7 +129,7 @@ class NavigationBar extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
-              {`M3E Helper ${signed}`}
+              {'M3E Helper'}
             </Typography>
             {loginEnabled && <SignIn updateAppState={updateAppState} />}
           </Toolbar>

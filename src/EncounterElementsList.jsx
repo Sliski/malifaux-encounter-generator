@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, List, ListItem, ListItemText,
   Paper, TextField, Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import EncounterElement, { eeType } from './EncounterElement.jsx';
-import { deployments, schemes, strategies } from './data.jsx';
+import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
 import { ENCOUNTER_STEPS } from './App.jsx';
+import MultiplayerLinkButton from './MultiplayerLinkButton.jsx';
+import EncounterElement, { eeType } from './EncounterElement.jsx';
+import { deployments, schemes, strategies } from './data.jsx';
+import { chooseSchemes } from './backEndConnector.js';
 import { calculateEncounterId } from './Generator.jsx';
-import { URL } from './config.js';
 
 class EncounterElementsList extends Component {
   constructor(props) {
@@ -32,7 +32,6 @@ class EncounterElementsList extends Component {
   }
 
   componentDidMount() {
-    console.log('Score mounts.');
     this.props.getAppStateFromDb();
   }
 
@@ -70,15 +69,23 @@ class EncounterElementsList extends Component {
 
   chooseSchemes() {
     const { checked, noteA, noteB } = this.state;
-    const { updateAppState, schemesIds } = this.props;
+    const {
+      updateAppState, schemesIds, signed, gameId,
+    } = this.props;
+
+    const chosenSchemes = checked.map((checkId, index) => ({
+      id: schemesIds[checkId],
+      note: index ? noteB : noteA,
+      revealed: false,
+      score: 0,
+    }));
+
+    if (signed && gameId) {
+      chooseSchemes(gameId, chosenSchemes);
+    }
 
     updateAppState({
-      chosenSchemes: checked.map((checkId, index) => ({
-        id: schemesIds[checkId],
-        note: index ? noteB : noteA,
-        revealed: false,
-        score: 0,
-      })),
+      chosenSchemes,
       step: ENCOUNTER_STEPS.SCORE,
     });
   }
@@ -91,21 +98,12 @@ class EncounterElementsList extends Component {
 
     let header = null;
     if (multiplayer && !opponentStep) {
-      header = (
-        <CopyToClipboard text={`${URL}/join/${gameId}`}>
-          <ListItem button>
-            <ListItemText
-              primaryTypographyProps={{ color: 'primary' }}
-              primary="Click here to copy link for opponent."
-            />
-          </ListItem>
-        </CopyToClipboard>
-      );
+      header = <MultiplayerLinkButton gameId={gameId} />;
     } else if (multiplayer) {
       header = (
         <ListItem>
           <ListItemText primary={opponentStep === ENCOUNTER_STEPS.CHOOSE
-            ? 'Opponent is choosing schemes.' : 'Opponent choosed schemes.'}
+            ? 'Opponent is choosing schemes.' : 'Opponent chose schemes.'}
           />
         </ListItem>
       );
@@ -171,7 +169,9 @@ class EncounterElementsList extends Component {
               </IconButton>
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>
-              <Typography align="justify">You can add notes to chosen schemes.</Typography>
+              <Typography align="justify">
+                {'You can add notes to chosen schemes. It will be shown to your opponent after revealing scheme.'}
+              </Typography>
               <TextField
                 margin="dense"
                 id="note-a"

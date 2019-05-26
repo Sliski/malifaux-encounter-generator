@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import {
   Button, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton, Typography,
   List, ListItem, ListItemText, Paper,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
 import EncounterElement, { eeType } from './EncounterElement';
 import { schemes, strategies } from './data';
@@ -33,13 +33,12 @@ class Score extends Component {
   }
 
   componentDidMount() {
-    console.log('Score mounts.');
     this.props.getAppStateFromDb();
   }
 
   changeStrategyScore() {
     const { strategyScore, updateAppState } = this.props;
-    updateAppState({ strategyScore: [(strategyScore[0] + 1) % 5, strategyScore] });
+    updateAppState({ strategyScore: [(strategyScore[0] + 1) % 5, strategyScore[1]] });
   }
 
   changeSchemeScore(schemeId) {
@@ -146,7 +145,7 @@ class Score extends Component {
             <EncounterElement
               type={eeType.strategy}
               details={strategies[strategyId]}
-              strategyScore={strategyScore[0]}
+              strategyScore={strategyScore}
               scoreHandler={this.changeStrategyScore}
               score
             />

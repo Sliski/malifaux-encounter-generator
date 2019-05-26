@@ -6,6 +6,7 @@ import Generator from './Generator.jsx';
 import ChooseEncounter from './ChooseEncounter.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
 import Score from './Score.jsx';
+import MultiplayerScore from './MultiplayerScore.jsx';
 import { socket, loadAppState, joinRoom } from './backEndConnector.js';
 
 class Encounter extends Component {
@@ -18,6 +19,7 @@ class Encounter extends Component {
     this.choose = this.choose.bind(this);
     this.score = this.score.bind(this);
     this.getAppStateFromDb = this.getAppStateFromDb.bind(this);
+    this.addNewAppStateListener = this.addNewAppStateListener.bind(this);
   }
 
   componentDidMount() {
@@ -25,7 +27,6 @@ class Encounter extends Component {
   }
 
   getAppStateFromDb() {
-    console.log('Load state from DB.');
     const { signed, gameId, updateAppState } = this.props;
     if (!signed || !gameId) return;
     try {
@@ -33,12 +34,7 @@ class Encounter extends Component {
         if (response && response.status === 'OK' && response.appState) {
           updateAppState(response.appState);
           joinRoom(gameId);
-          if (socket.listeners('newAppState').length === 0) {
-            socket.on('newAppState', (message) => {
-              // console.log('newAppState');
-              console.log(message);
-            });
-          }
+          this.addNewAppStateListener();
         }
       });
     } catch (error) {
@@ -46,9 +42,24 @@ class Encounter extends Component {
     }
   }
 
+  addNewAppStateListener() {
+    const { userRole } = this.props;
+    if (socket.listeners('newAppState').length === 0) {
+      socket.on('newAppState', (message) => {
+        if (userRole !== message) this.getAppStateFromDb();
+      });
+    }
+  }
+
   generate() {
     const { updateAppState, signed } = this.props;
-    return <Generator updateAppState={updateAppState} signed={signed} />;
+    return (
+      <Generator
+        updateAppState={updateAppState}
+        signed={signed}
+        addNewAppStateListener={this.addNewAppStateListener}
+      />
+    );
   }
 
   chooseEncounter() {
@@ -58,7 +69,7 @@ class Encounter extends Component {
 
   choose() {
     const {
-      updateAppState, deploymentId, strategyId, schemesIds, multiplayer, gameId, opponentStep,
+      updateAppState, deploymentId, strategyId, schemesIds, multiplayer, gameId, opponentStep, signed,
     } = this.props;
     return (
       <EncounterElementsList
@@ -71,21 +82,40 @@ class Encounter extends Component {
         gameId={gameId}
         opponentStep={opponentStep}
         getAppStateFromDb={this.getAppStateFromDb}
+        signed={signed}
       />
     );
   }
 
   score() {
     const {
-      updateAppState, chosenSchemes, strategyId, schemesIds, strategyScore, round,
+      updateAppState, chosenSchemes, opponentSchemes, opponentStep, strategyId, schemesIds, strategyScore, round,
+      multiplayer, gameId, signed,
     } = this.props;
+    if (!multiplayer || !signed) {
+      return (
+        <Score
+          strategyId={strategyId}
+          schemesIds={schemesIds}
+          round={round}
+          chosenSchemes={chosenSchemes}
+          strategyScore={strategyScore}
+          updateAppState={updateAppState}
+          getAppStateFromDb={this.getAppStateFromDb}
+        />
+      );
+    }
     return (
-      <Score
+      <MultiplayerScore
+        signed={signed}
+        gameId={gameId}
         strategyId={strategyId}
         schemesIds={schemesIds}
-        chosenSchemes={chosenSchemes}
-        strategyScore={strategyScore}
         round={round}
+        chosenSchemes={chosenSchemes}
+        opponentSchemes={opponentSchemes}
+        strategyScore={strategyScore}
+        opponentStep={opponentStep}
         updateAppState={updateAppState}
         getAppStateFromDb={this.getAppStateFromDb}
       />

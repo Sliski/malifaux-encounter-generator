@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import ls from 'local-storage';
-import { withStyles } from '@material-ui/core/styles';
 import {
   Button, CssBaseline, Dialog, DialogContent, DialogActions, DialogContentText, Grid,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import styles from './styles.jsx';
 import NavigationBar from './NavigationBar.jsx';
 import Encounter from './Encounter.jsx';
 import RulesPage from './RulesPage.jsx';
@@ -14,8 +15,9 @@ import Copyrights from './Copyrights.jsx';
 import CookiePolicy from './CookiePolicy.jsx';
 import EnableLogin from './EnableLogin.jsx';
 import Join from './Join.jsx';
-import styles from './styles.jsx';
-import { socket, setSocket } from './backEndConnector.js';
+import {
+  socket, setSocket, leaveRoom, endGame,
+} from './backEndConnector.js';
 
 export const ENCOUNTER_STEPS = {
   MANUAL_CHOICE: 0,
@@ -42,8 +44,8 @@ const emptyState = {
   opponentSchemes: [],
   strategyScore: [0, 0],
   step: ENCOUNTER_STEPS.GENERATE,
-  multiplayer: false,
   opponentStep: null,
+  multiplayer: false,
   gameId: '',
 };
 
@@ -58,7 +60,7 @@ class App extends Component {
     }
 
     this.updateAppState = this.updateAppState.bind(this);
-    this.clearAppState = this.clearAppState.bind(this);
+    this.handleEndEncounter = this.handleEndEncounter.bind(this);
 
     this.encounter = this.encounter.bind(this);
     this.join = this.join.bind(this);
@@ -79,11 +81,15 @@ class App extends Component {
   }
 
   updateAppState(state) {
-    console.log(`updateappstate${JSON.stringify(state)}`);
     this.setState(state);
   }
 
-  clearAppState() {
+  handleEndEncounter() {
+    const { gameId, signed } = this.state;
+    if (gameId && signed) {
+      endGame(gameId);
+      leaveRoom(gameId);
+    }
     this.setState({ ...emptyState, lsInfo: ls.get('ls-info') });
   }
 
@@ -121,7 +127,7 @@ class App extends Component {
           <CssBaseline />
           <div className={classes.appContent}>
             <NavigationBar
-              handleEndEncounter={this.clearAppState}
+              handleEndEncounter={this.handleEndEncounter}
               step={step}
               deploymentId={deploymentId}
               updateAppState={this.updateAppState}
