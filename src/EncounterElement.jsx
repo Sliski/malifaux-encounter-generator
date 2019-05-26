@@ -33,7 +33,7 @@ class EncounterElement extends Component {
   render() {
     const {
       type, details, classes, handleToggle, checked, score, index, chosenSchemes, strategyScore, scoreHandler,
-      multiplayer, menu,
+      multiplayer, menu, opponentScheme,
     } = this.props;
     const { showDetails } = this.state;
 
@@ -44,7 +44,12 @@ class EncounterElement extends Component {
     let chosen = null;
     if (score && type === eeType.scheme) {
       chosen = chosenSchemes.find(scheme => scheme.id === details.number - 1);
-      secondaryText = chosen && chosen.revealed ? chosen.note : '';
+      if (multiplayer) {
+        secondaryText += chosen && chosen.revealed && chosen.note ? `My note: ${chosen.note} ` : '';
+        secondaryText += opponentScheme && opponentScheme.revealed && opponentScheme.note ? `Opponent's note: ${opponentScheme.note}` : '';
+      } else {
+        secondaryText = chosen && chosen.revealed ? chosen.note : '';
+      }
     }
 
     let secondaryAction = null;
@@ -80,7 +85,7 @@ class EncounterElement extends Component {
             color="primary"
             onClick={scoreHandler}
           >
-            {strategyScore}
+            {strategyScore[0]}
           </Button>
         </ListItemSecondaryAction>
       );
@@ -107,6 +112,12 @@ class EncounterElement extends Component {
     let opponentScore = null;
 
     if (score && multiplayer && (type === eeType.strategy || type === eeType.scheme)) {
+      let opponentScoreValue = '-';
+      if (type === eeType.strategy) {
+        opponentScoreValue = strategyScore[1]; // eslint-disable-line prefer-destructuring
+      } else if (opponentScheme && opponentScheme.revealed) {
+        opponentScoreValue = opponentScheme.score;
+      }
       opponentScore = (
         <Typography
           color="secondary"
@@ -114,12 +125,12 @@ class EncounterElement extends Component {
           variant="button"
           className={classes.opponentScore}
         >
-          {index ? (index < 2 ? index : '-') : '0'}
+          {opponentScoreValue}
         </Typography>
       );
     }
 
-    // menu
+    // deployment in menu
     if (menu) {
       secondaryText = details.name;
       primaryText = 'Deployment';

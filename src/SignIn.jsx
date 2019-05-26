@@ -6,7 +6,7 @@ import {
 import DialogActions from '@material-ui/core/DialogActions';
 import styles from './styles.jsx';
 import { API_URL } from './config.js';
-import { socket } from './App.jsx';
+import { socket, currentUser, signOut } from './backEndConnector.js';
 
 const providerIcons = {
   google: <path
@@ -40,14 +40,15 @@ class SignIn extends Component {
   }
 
   getCurrentUser() {
-    fetch(`${API_URL}/current-user`, { credentials: 'include' })
-      .then(response => response.json())
-      .then((json) => {
-        this.setState({
-          name: json.name || '',
-          photo: json.photo || '',
-        });
+    currentUser((json) => {
+      this.props.updateAppState({
+        signed: !!(json.name && json.photo),
       });
+      this.setState({
+        name: json.name || '',
+        photo: json.photo || '',
+      });
+    });
   }
 
   openSignInDialog() {
@@ -72,6 +73,9 @@ class SignIn extends Component {
     socket.on(provider, (response) => {
       this.popup.close();
       if (response && response.name && response.photo) {
+        this.props.updateAppState({
+          signed: !!(response.name && response.photo),
+        });
         this.setState({
           name: response.name,
           photo: response.photo,
@@ -107,15 +111,16 @@ class SignIn extends Component {
   }
 
   signOut() {
-    fetch(`${API_URL}/sign-out`, { credentials: 'include' })
-      .then(response => response.text())
-      .then(() => {
-        this.setState({
-          name: '',
-          photo: '',
-        });
-        this.closeUserDialog();
+    signOut(() => {
+      this.props.updateAppState({
+        signed: false,
       });
+      this.setState({
+        name: '',
+        photo: '',
+      });
+      this.closeUserDialog();
+    });
   }
 
   render() {

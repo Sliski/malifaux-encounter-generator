@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { eeType } from './EncounterElement';
 import styles from './styles.jsx';
+import { URL } from './config';
 
 
 class DeploymentDetails extends Component {
@@ -24,7 +25,7 @@ class DeploymentDetails extends Component {
       dialogContent = (
         <DialogContent className={classes.dialogContent}>
           <Grid container justify="center">
-            <img src={picture} alt="deployment" className={classes.deploymentImg} />
+            <img src={`${URL}/${picture}`} alt="deployment" className={classes.deploymentImg} />
           </Grid>
           <Typography align="justify">
             {desc}
