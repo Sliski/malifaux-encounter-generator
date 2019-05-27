@@ -30,6 +30,7 @@ class Encounter extends Component {
     const { signed, gameId, updateAppState } = this.props;
     if (!signed || !gameId) return;
     try {
+      console.log('loadAppStateFromDb');
       loadAppState(gameId, (response) => {
         if (response && response.status === 'OK' && response.appState) {
           updateAppState(response.appState);
@@ -63,13 +64,23 @@ class Encounter extends Component {
   }
 
   chooseEncounter() {
-    const { updateAppState, signed, multiplater } = this.props;
-    return <ChooseEncounter updateAppState={updateAppState} signed={signed} multiplayer={multiplater} />;
+    const {
+      updateAppState, signed, multiplater, chooseCrew,
+    } = this.props;
+    return (
+      <ChooseEncounter
+        updateAppState={updateAppState}
+        signed={signed}
+        multiplayer={multiplater}
+        chooseCrew={chooseCrew}
+      />
+    );
   }
 
   choose() {
     const {
-      updateAppState, deploymentId, strategyId, schemesIds, multiplayer, gameId, opponentStep, signed,
+      updateAppState, deploymentId, strategyId, schemesIds, multiplayer, gameId, opponentStep, signed, chooseStep,
+      chooseCrew, crew, opponentCrew, opponentChooseStep,
     } = this.props;
     return (
       <EncounterElementsList
@@ -83,6 +94,11 @@ class Encounter extends Component {
         opponentStep={opponentStep}
         getAppStateFromDb={this.getAppStateFromDb}
         signed={signed}
+        chooseStep={chooseStep}
+        chooseCrew={chooseCrew}
+        crew={crew}
+        opponentCrew={opponentCrew}
+        opponentChooseStep={opponentChooseStep}
       />
     );
   }

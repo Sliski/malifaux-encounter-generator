@@ -8,10 +8,18 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
 import { ENCOUNTER_STEPS } from './App.jsx';
 import MultiplayerLinkButton from './MultiplayerLinkButton.jsx';
+import ChooseCrew from './ChooseCrew.jsx';
 import EncounterElement, { eeType } from './EncounterElement.jsx';
 import { deployments, schemes, strategies } from './data.jsx';
 import { chooseSchemes } from './backEndConnector.js';
 import { calculateEncounterId } from './Generator.jsx';
+
+const OPPONENT_STEP_TEXTS = {
+  3: 'Opponent is choosing faction.',
+  2: 'Opponent is choosing leader.',
+  1: 'Opponent is choosing crew.',
+  0: 'Opponent is choosing schemes.',
+};
 
 class EncounterElementsList extends Component {
   constructor(props) {
@@ -93,6 +101,7 @@ class EncounterElementsList extends Component {
   render() {
     const {
       classes, deploymentId, strategyId, schemesIds, chosenSchemes, multiplayer, gameId, opponentStep,
+      opponentChooseStep, chooseCrew, chooseStep, crew, opponentCrew, updateAppState, signed,
     } = this.props;
     const { checked, showDialog } = this.state;
 
@@ -100,11 +109,15 @@ class EncounterElementsList extends Component {
     if (multiplayer && !opponentStep) {
       header = <MultiplayerLinkButton gameId={gameId} />;
     } else if (multiplayer) {
+      let opponentStepText;
+      if (opponentStep === ENCOUNTER_STEPS.CHOOSE) {
+        opponentStepText = OPPONENT_STEP_TEXTS[opponentChooseStep || 0];
+      } else {
+        opponentStepText = 'Opponent finished choosing schemes.';
+      }
       header = (
         <ListItem>
-          <ListItemText primary={opponentStep === ENCOUNTER_STEPS.CHOOSE
-            ? 'Opponent is choosing schemes.' : 'Opponent chose schemes.'}
-          />
+          <ListItemText primary={opponentStepText} />
         </ListItem>
       );
     } else {
@@ -121,6 +134,15 @@ class EncounterElementsList extends Component {
           <List>
             {header}
             <Divider />
+            {chooseCrew ? (
+              <ChooseCrew
+                crew={crew}
+                opponentCrew={opponentCrew}
+                updateAppState={updateAppState}
+                signed={signed}
+                gameId={gameId}
+              />
+            ) : null}
             <EncounterElement
               type={eeType.deployment}
               details={deployments[deploymentId]}
@@ -145,14 +167,13 @@ class EncounterElementsList extends Component {
             <Button
               fullWidth
               onClick={this.openDialog}
-              disabled={checked.length !== 2}
+              disabled={!!(checked.length !== 2 || chooseStep)}
               color="primary"
             >
               {'choose schemes'}
             </Button>
           </List>
-        </Paper>
-        {checked.length === 2 && (
+          {checked.length === 2 && (
           <Dialog
             classes={{ paper: classes.dialogPaper }}
             open={showDialog}
@@ -200,7 +221,8 @@ class EncounterElementsList extends Component {
               </Button>
             </DialogActions>
           </Dialog>
-        )}
+          )}
+        </Paper>
       </>
     );
   }

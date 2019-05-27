@@ -89,14 +89,6 @@ class NavigationBar extends Component {
               </ListItem>
             ))}
           <Divider />
-          <ListSubheader disableSticky>Crew Builders:</ListSubheader>
-          <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
-            <ListItemText primary="M3E Crew Builder" />
-          </ListItem>
-          <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
-            <ListItemText primary="M3E Beta Analyzer" />
-          </ListItem>
-          <Divider />
           <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
             <ListItemText primary="Contact and Donates" />
           </ListItem>
@@ -112,6 +104,14 @@ class NavigationBar extends Component {
               <ListItemText primary="Beta Tests" />
             </ListItem>
             )}
+          <Divider />
+          <ListSubheader disableSticky>External Crew Builders:</ListSubheader>
+          <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="M3E Crew Builder" />
+          </ListItem>
+          <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="M3E Beta Analyzer" />
+          </ListItem>
         </List>
       </div>
     );

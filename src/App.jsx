@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Redirect } from 'react-router';
 import ls from 'local-storage';
 import {
   Button, CssBaseline, Dialog, DialogContent, DialogActions, DialogContentText, Grid,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
+import ErrorPage from './ErrorPage.jsx';
 import NavigationBar from './NavigationBar.jsx';
 import Encounter from './Encounter.jsx';
 import RulesPage from './RulesPage.jsx';
@@ -27,6 +27,13 @@ export const ENCOUNTER_STEPS = {
   FINISHED_GAME: 4,
 };
 
+export const CHOOSE_STEPS = {
+  FACTION: 3,
+  LEADER: 2,
+  CREW: 1,
+  SCHEMES: 0,
+};
+
 export const ENCOUNTER_MAIN_LINK_TEXT = {
   0: 'Choose Encounter',
   1: 'Create New',
@@ -42,10 +49,23 @@ const emptyState = {
   round: 1,
   chosenSchemes: [],
   opponentSchemes: [],
+  crew: {
+    faction: null,
+    leader: null,
+    list: null,
+  },
+  opponentCrew: {
+    faction: null,
+    leader: null,
+    list: null,
+  },
   strategyScore: [0, 0],
   step: ENCOUNTER_STEPS.GENERATE,
+  chooseStep: null,
   opponentStep: null,
+  opponentChooseStep: null,
   multiplayer: false,
+  chooseCrew: false,
   gameId: '',
 };
 
@@ -73,6 +93,10 @@ class App extends Component {
         setSocket();
       });
     }
+  }
+
+  componentDidCatch() {
+    this.setState({ errorCatch: true });
   }
 
   closeLsInfo() {
@@ -117,9 +141,17 @@ class App extends Component {
     ls.set('state', this.state);
 
     const {
-      lsInfo, step, deploymentId, signed,
+      lsInfo, step, deploymentId, signed, errorCatch,
     } = this.state;
     const { classes } = this.props;
+
+    if (errorCatch) {
+      return ErrorPage(() => this.setState({ errorCatch: false }),
+        () => {
+          ls.clear();
+          window.location.reload();
+        });
+    }
 
     return (
       <>
@@ -145,7 +177,6 @@ class App extends Component {
                   <Route path="/join/:gameId" component={this.join} />
                   {/* temporary way to enable login */}
                   <Route path="/enable-login" component={() => <EnableLogin ua={this.updateAppState} />} />
-                  <Route component={() => <Redirect to="/" />} />
                 </Switch>
               </Grid>
             </main>
