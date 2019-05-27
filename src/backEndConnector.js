@@ -33,15 +33,41 @@ export function signOut(onSuccess) {
     .then(response => response.text()).then(onSuccess);
 }
 
-export function createGame(encounterId, multiplayer, onSuccess) {
+export function createGame(encounterId, multiplayer, addChooseSteps, onSuccess) {
   if (!beta) return;
-  fetch(`${API_URL}/create-game/${encounterId}/${multiplayer}`, { credentials: 'include' })
+  fetch(`${API_URL}/create-game/${encounterId}/${multiplayer ? '1' : '0'}${addChooseSteps ? '1' : '0'}`, { credentials: 'include' })
     .then(response => response.json()).then(onSuccess);
 }
 
 export function joinGame(gameId, onSuccess) {
   if (!beta) return;
   fetch(`${API_URL}/join-game/${gameId}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function chooseFaction(gameId, faction, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/choose-faction/${gameId}/${faction}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function chooseLeader(gameId, leader, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/choose-leader/${gameId}/${leader}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function chooseCrew(gameId, crewText, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/choose-crew`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ gameId, chosenList: JSON.stringify({ text: crewText }) }),
+  })
     .then(response => response.json()).then(onSuccess);
 }
 

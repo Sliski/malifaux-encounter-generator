@@ -5,7 +5,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import EncounterElement, { eeType } from './EncounterElement.jsx';
-import { ENCOUNTER_STEPS } from './App.jsx';
+import { ENCOUNTER_STEPS, CHOOSE_STEPS } from './App.jsx';
 import { deployments, schemes, strategies } from './data.jsx';
 import styles from './styles.jsx';
 import { calculateEncounterId } from './Generator.jsx';
@@ -53,14 +53,17 @@ class ChooseEncounter extends Component {
 
   confirmChoice() {
     const { checkedDeployment, checkedStrategy, checked } = this.state;
-    const { updateAppState, signed, multiplayer } = this.props;
+    const {
+      updateAppState, signed, multiplayer, chooseCrew,
+    } = this.props;
 
     if (signed) {
-      createGame(calculateEncounterId(checkedDeployment, checkedStrategy, checked), multiplayer, (response) => {
-        if (response && response.status === 'OK' && response.id) {
-          updateAppState({ gameId: response.id });
-        }
-      });
+      createGame(calculateEncounterId(checkedDeployment, checkedStrategy, checked), multiplayer, chooseCrew,
+        (response) => {
+          if (response && response.status === 'OK' && response.id) {
+            updateAppState({ gameId: response.id });
+          }
+        });
     }
 
     updateAppState({
@@ -68,6 +71,7 @@ class ChooseEncounter extends Component {
       strategyId: checkedStrategy,
       schemesIds: checked,
       step: ENCOUNTER_STEPS.CHOOSE,
+      chooseStep: chooseCrew ? CHOOSE_STEPS.FACTION : CHOOSE_STEPS.SCHEMES,
     });
   }
 

@@ -96,8 +96,22 @@ const styles = theme => ({
   },
   // MultiplayerLinkButton
   fullWidth: {
-    width: 100,
+    width: '100%',
     padding: 0,
+  },
+  // ChooseCrew
+  halfWidth: {
+    width: '50%',
+    padding: 0,
+  },
+  widthOhp: {
+    width: '100%',
+  },
+  noVerticalPadding: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  black: {
   },
 });
 
