@@ -59,6 +59,9 @@ const styles = theme => ({
       flexShrink: 0,
     },
   },
+  nestedListItem: {
+    paddingLeft: theme.spacing.unit * 4,
+  },
   appBar: {
     marginLeft: menuDrawerWidth,
     [theme.breakpoints.up('sm')]: {

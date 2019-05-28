@@ -3,9 +3,9 @@ import ls from 'local-storage';
 import { withStyles } from '@material-ui/core/styles';
 import {
   AppBar, Button, Dialog, DialogContent, DialogActions, Divider, Drawer, Hidden, IconButton, List, ListItem,
-  ListItemText, ListSubheader, Toolbar, Typography,
+  ListItemText, ListSubheader, Toolbar, Typography, Collapse,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { ExpandLess, ExpandMore, Menu } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import rules from './rules.js';
 import styles from './styles.jsx';
@@ -20,12 +20,14 @@ class NavigationBar extends Component {
     this.state = {
       mobileOpen: false,
       showConfirmationDialog: false,
+      expandedRules: false,
       loginEnabled: ls.get('betaUser'),
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.openConfirmationDialog = this.openConfirmationDialog.bind(this);
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
+    this.toggleExpandedRules = this.toggleExpandedRules.bind(this);
   }
 
   handleDrawerToggle() {
@@ -46,11 +48,15 @@ class NavigationBar extends Component {
     this.setState({ showConfirmationDialog: false });
   }
 
+  toggleExpandedRules() {
+    this.setState(prevState => ({ expandedRules: !prevState.expandedRules }));
+  }
+
   render() {
     const {
       classes, handleEndEncounter, step, deploymentId, updateAppState,
     } = this.props;
-    const { showConfirmationDialog, loginEnabled } = this.state;
+    const { showConfirmationDialog, loginEnabled, expandedRules } = this.state;
 
     const drawer = (
       <div>
@@ -75,19 +81,27 @@ class NavigationBar extends Component {
             </ListItem>
           )}
           <Divider />
-          <ListSubheader disableSticky>Rules:</ListSubheader>
-          {Object.keys(rules)
-            .map(ruleSection => (
-              <ListItem
-                key={ruleSection}
-                button
-                component={Link}
-                to={`/rules/${ruleSection}`}
-                onClick={this.closeDrawer}
-              >
-                <ListItemText primary={rules[ruleSection].sectionName} />
-              </ListItem>
-            ))}
+          <ListItem button onClick={this.toggleExpandedRules}>
+            <ListItemText primary="Rules" />
+            {expandedRules ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={expandedRules} timeout="auto" unmountOnExit>
+            <List disablePadding>
+              {Object.keys(rules)
+                .map(ruleSection => (
+                  <ListItem
+                    key={ruleSection}
+                    className={classes.nestedListItem}
+                    button
+                    component={Link}
+                    to={`/rules/${ruleSection}`}
+                    onClick={this.closeDrawer}
+                  >
+                    <ListItemText primary={rules[ruleSection].sectionName} />
+                  </ListItem>
+                ))}
+            </List>
+          </Collapse>
           <Divider />
           <ListItem button component={Link} to="/contact" onClick={this.closeDrawer}>
             <ListItemText primary="Contact and Donates" />
@@ -126,7 +140,7 @@ class NavigationBar extends Component {
               aria-label="Open drawer"
               onClick={this.handleDrawerToggle}
             >
-              <MenuIcon />
+              <Menu />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
               {'M3E Helper'}
