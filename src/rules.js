@@ -139,11 +139,46 @@ const coverAndConcealment = {
   ],
 };
 
+const terrainTraits = {
+  sectionName: 'Terrain Traits',
+  items: [
+    {
+      name: 'Blocking',
+      desc: 'Terrain with the Blocking Trait cannot be seen through, and therefore it blocks LoS if the Height of the terrain is equal to or greater than the Size of the models attempting to draw sight lines through it. Terrain with the Blocking and Height Traits generates a Shadow (pg. @@). ',
+    }, {
+      name: 'Climbable',
+      desc: 'Models may not move through Climbable Terrain, but they may move across its top (often a roof) and may move vertically up and down along its sides. ',
+    }, {
+      name: 'Concealing',
+      desc: 'If a sight line drawn to a model passes through Concealing Terrain, that model has Concealment. When drawing sight lines, a model in Concealing Terrain may ignore that terrain’s Concealing trait if any single sight line drawn between the two objects passes through 1" or less of that terrain. Most fog banks count as Concealing Terrain. ',
+    }, {
+      name: 'Dense',
+      desc: 'Line of Sight can be drawn into or out of Dense Terrain but not through it. Most woods count as Dense Terrain. ',
+    }, {
+      name: 'Destructible',
+      desc: 'Models within 1" of a piece of Destructible Terrain may take an Action to destroy that Destructible Terrain and remove it from the table. If a model is standing on Destructible Terrain when it is destroyed, that model falls. ',
+    }, {
+      name: 'Hazardous Terrain',
+      desc: 'After a model moves through or resolves one of its Actions while in Hazardous Terrain, it suffers the effects of the Hazardous Terrain after the current Action or Ability is resolved (to a maximum of once per Action or Ability). Most of the time, Hazardous Terrain will give a Condition to a model, such as Hazardous Terrain (Burning +1) or Hazardous Terrain (Poison +1). If the Hazardous Terrain does not mention a Condition in its description, the model simply suffers 1 damage. If a Hazardous Terrain Marker is moved, all models the Marker came into base contact with during the move, suffer the effects of the Hazardous Terrain. The model moving the Marker may choose to ignore the Hazardous effects of the moved Marker. ',
+    }, {
+      name: 'Height X (or Ht X)',
+      desc: 'Terrain with the Height Trait has a vertical component that is relevant to the game. Height primarily comes into play when determining Line of Sight. Terrain with the Height and Blocking Traits generates a Shadow. ',
+    }, {
+      name: 'Impassable',
+      desc: 'Models and Markers cannot move through Impassable Terrain, which often includes solid objects, such as Ice Pillars. Objects cannot be Dropped or placed overlapping Impassible Terrain. ',
+    }, {
+      name: 'Severe',
+      desc: 'Non-Place movement effects are reduced by half while any part of a model’s base is in Severe Terrain. If a model moves out of Severe Terrain, it continues the rest of its movement at its normal (non-halved) rate.',
+    },
+  ],
+};
+
 const rules = {
   conditions,
   coverandconcealment: coverAndConcealment,
   generalactions: generalActions,
   shadow,
+  terraintraits: terrainTraits,
   triggerstiming: triggersTiming,
 };
 
