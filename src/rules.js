@@ -41,7 +41,7 @@ const conditions = {
     },
     {
       name: 'Distracted +X',
-      desc: 'This model\'s Actions that target an enemy model suffer a - to their duel. After resolving such an Action, the value of this Condition is lowered by one.',
+      desc: 'This model’s Actions that target an enemy model suffer a - to their duel. After resolving such an Action, the value of this Condition is lowered by one.',
     },
     {
       name: 'Fast',
@@ -73,7 +73,7 @@ const conditions = {
     },
     {
       name: 'Stunned',
-      desc: 'This model cannot declare Triggers and its Bonus Actions (F) count against its Action limit. End this Condition at the end of this model’s Activation.',
+      desc: 'This model cannot declare Triggers and its Bonus Actions count against its Action limit. End this Condition at the end of this model’s Activation.',
     },
   ],
 };
@@ -104,6 +104,47 @@ const triggersTiming = {
   ],
 };
 
-const rules = { conditions, generalactions: generalActions, triggerstiming: triggersTiming };
+const shadow = {
+  sectionName: 'Shadow',
+  items: [
+    {
+      desc: 'Terrain that has both the Height and Blocking Traits casts a "Shadow" which is a catch-all term used to represent overhangs, sight angles, and places where models can crouch down to avoid being seen.',
+    },
+    {
+      desc: 'A terrain’s Shadow extends out from the terrain a distance equal to the terrain’s Height, to a maximum of 3".',
+    },
+    {
+      desc: 'When drawing sight lines from one model to another, if either model is in the Shadow of terrain with Height equal to or greater than the Size of that model (even partially), any sight lines that pass through the terrain generating that Shadow are blocked (even if the terrain is being ignored due to its Height, as per the Line of Sight and Size rules).',
+    },
+    {
+      desc: 'When drawing sight lines, a model standing on terrain that is casting a Shadow ignores that terrain (and its Shadow) if any single sight line drawn between the two objects passes through 1" or less of that terrain.',
+    },
+    {
+      desc: 'Models within a terrain’s Shadow (even partially) have Cover against any z Range Actions that can draw one or more sight lines through that terrain.',
+    },
+  ],
+};
+
+const coverAndConcealment = {
+  sectionName: 'Cover & Concealment',
+  items: [
+    {
+      name: 'Cover',
+      desc: 'When a model with Cover is the target of a Range Action, it gains +1 Df and imposes a - on any damage flips against it.',
+    },
+    {
+      name: 'Concealment',
+      desc: 'When a model with Concealment is targeted by a non-Meele Attack Action, the Action’s duel gains a -.',
+    },
+  ],
+};
+
+const rules = {
+  conditions,
+  coverandconcealment: coverAndConcealment,
+  generalactions: generalActions,
+  shadow,
+  triggerstiming: triggersTiming,
+};
 
 export default rules;
