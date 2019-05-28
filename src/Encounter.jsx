@@ -42,7 +42,7 @@ class Encounter extends Component {
         }
       });
     } catch (error) {
-      console.log(`Load App State from DB Error: `${error});
+      console.log(`Load App State from DB Error: ${error}`);
     }
   }
 
