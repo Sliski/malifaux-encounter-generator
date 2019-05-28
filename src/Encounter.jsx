@@ -65,13 +65,13 @@ class Encounter extends Component {
 
   chooseEncounter() {
     const {
-      updateAppState, signed, multiplater, chooseCrew,
+      updateAppState, signed, multiplayer, chooseCrew,
     } = this.props;
     return (
       <ChooseEncounter
         updateAppState={updateAppState}
         signed={signed}
-        multiplayer={multiplater}
+        multiplayer={multiplayer}
         chooseCrew={chooseCrew}
       />
     );

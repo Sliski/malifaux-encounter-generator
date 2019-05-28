@@ -97,6 +97,9 @@ const styles = theme => ({
   llPadding: {
     paddingLeft: theme.spacing.unit * 6,
   },
+  listItemButtonConstHeight: {
+    height: 46,
+  },
   // MultiplayerLinkButton
   fullWidth: {
     width: '100%',
@@ -113,8 +116,6 @@ const styles = theme => ({
   noVerticalPadding: {
     paddingTop: 0,
     paddingBottom: 0,
-  },
-  black: {
   },
 });
 

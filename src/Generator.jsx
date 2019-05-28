@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ls from 'local-storage';
 import { ENCOUNTER_STEPS, CHOOSE_STEPS } from './App.jsx';
 import styles from './styles.jsx';
-import { createGame, joinRoom } from './backEndConnector.js';
+import { createGame } from './backEndConnector.js';
 
 export function calculateEncounterId(deploymentId, strategyId, schemesIds) {
   return `${(deploymentId * 4 + strategyId).toString(16)}${schemesIds.reduce((out, current) => out + current.toString(16))}`;
@@ -42,7 +42,7 @@ class Generator extends Component {
       encounterId: '',
       error: '',
       multiplayerChecked: false,
-      skipCrewChoice: true,
+      chooseCrewChecked: false,
     };
 
     this.generateEncounter = this.generateEncounter.bind(this);
@@ -67,14 +67,14 @@ class Generator extends Component {
   toggleMultiplayer() {
     this.setState((prevState) => {
       if (prevState.multiplayerChecked) {
-        return { multiplayerChecked: false, skipCrewChoice: true };
+        return { multiplayerChecked: false, chooseCrewChecked: false };
       }
       return { multiplayerChecked: true };
     });
   }
 
   toggleCrewChoice() {
-    this.setState(prevState => ({ skipCrewChoice: !prevState.skipCrewChoice }));
+    this.setState(prevState => ({ chooseCrewChecked: !prevState.chooseCrewChecked }));
   }
 
   updateEncounterId(event) {
@@ -83,17 +83,17 @@ class Generator extends Component {
 
   manuallyChooseEncounter() {
     const { updateAppState } = this.props;
-    const { multiplayerChecked, skipCrewChoice } = this.state;
+    const { multiplayerChecked, chooseCrewChecked } = this.state;
     updateAppState({
       step: ENCOUNTER_STEPS.MANUAL_CHOICE,
       multiplayer: multiplayerChecked,
-      chooseCrew: !skipCrewChoice,
+      chooseCrew: chooseCrewChecked,
     });
   }
 
   generateEncounter() {
-    const { updateAppState, signed, addNewAppStateListener } = this.props;
-    const { multiplayerChecked, skipCrewChoice } = this.state;
+    const { updateAppState, signed } = this.props;
+    const { multiplayerChecked, chooseCrewChecked } = this.state;
 
     const allSchemesIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     const schemesIds = [];
@@ -106,62 +106,65 @@ class Generator extends Component {
     const deploymentId = Math.floor((Math.random() * 4));
     const strategyId = Math.floor((Math.random() * 4));
 
-    if (signed) {
-      createGame(calculateEncounterId(deploymentId, strategyId, schemesIds), multiplayerChecked, !skipCrewChoice,
-        (response) => {
-          if (response && response.status === 'OK' && response.id) {
-            updateAppState({ gameId: response.id });
-            joinRoom(response.id);
-            addNewAppStateListener();
-          }
-        });
-    }
-
-    updateAppState({
+    const newAppState = {
       deploymentId,
       strategyId,
       schemesIds,
       step: ENCOUNTER_STEPS.CHOOSE,
       multiplayer: multiplayerChecked,
-      chooseStep: skipCrewChoice ? CHOOSE_STEPS.SCHEMES : CHOOSE_STEPS.FACTION,
-      chooseCrew: !skipCrewChoice,
-    });
+      chooseStep: chooseCrewChecked ? CHOOSE_STEPS.FACTION : CHOOSE_STEPS.SCHEMES,
+      chooseCrew: chooseCrewChecked,
+    };
+
+    if (signed) {
+      createGame(calculateEncounterId(deploymentId, strategyId, schemesIds), multiplayerChecked, chooseCrewChecked,
+        (response) => {
+          if (response && response.status === 'OK' && response.id) {
+            updateAppState({ ...newAppState, gameId: response.id });
+          }
+        });
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   importEncounter() {
-    const { updateAppState, signed, addNewAppStateListener } = this.props;
-    const { encounterId, multiplayerChecked, skipCrewChoice } = this.state;
+    const { updateAppState, signed } = this.props;
+    const { encounterId, multiplayerChecked, chooseCrewChecked } = this.state;
     const decodedEncounter = decodeEncounterId(encounterId);
-    if (!decodedEncounter) return this.setState({ error: 'Incorrect encounter ID.' });
+    if (!decodedEncounter) {
+      this.setState({ error: 'Incorrect encounter ID.' });
+      return;
+    }
 
     this.closeDialog();
 
-    if (signed) {
-      createGame(encounterId, multiplayerChecked, skipCrewChoice,
-        (response) => {
-          if (response && response.status === 'OK' && response.id) {
-            updateAppState({ gameId: response.id });
-            joinRoom(response.id);
-            addNewAppStateListener();
-          }
-        });
-    }
-
-    return updateAppState({
+    const newAppState = {
       deploymentId: decodedEncounter.deploymentId,
       strategyId: decodedEncounter.strategyId,
       schemesIds: decodedEncounter.schemesIds,
       step: ENCOUNTER_STEPS.CHOOSE,
       multiplayer: multiplayerChecked,
-      chooseStep: skipCrewChoice ? CHOOSE_STEPS.SCHEMES : CHOOSE_STEPS.FACTION,
-      chooseCrew: !skipCrewChoice,
-    });
+      chooseStep: chooseCrewChecked ? CHOOSE_STEPS.FACTION : CHOOSE_STEPS.SCHEMES,
+      chooseCrew: chooseCrewChecked,
+    };
+
+    if (signed) {
+      createGame(encounterId, multiplayerChecked, chooseCrewChecked,
+        (response) => {
+          if (response && response.status === 'OK' && response.id) {
+            updateAppState({ ...newAppState, gameId: response.id });
+          }
+        });
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   render() {
     const { classes, signed } = this.props;
     const {
-      showDialog, encounterId, error, multiplayerChecked, skipCrewChoice,
+      showDialog, encounterId, error, multiplayerChecked, chooseCrewChecked,
     } = this.state;
 
     return (
@@ -181,7 +184,7 @@ class Generator extends Component {
             <>
               <Divider />
               <ListItem>
-                <ListItemText primary="Two Players" secondary={signed ? '' : 'Enabled only for signed users.'} />
+                <ListItemText primary="Two Players" secondary={signed ? '' : 'Sign In to use this feature.'} />
                 <ListItemSecondaryAction>
                   <Checkbox
                     disabled={!signed}
@@ -191,12 +194,12 @@ class Generator extends Component {
                 </ListItemSecondaryAction>
               </ListItem>
               <ListItem>
-                <ListItemText primary="Skip choosing faction, leaders and crew" />
+                <ListItemText primary="Require crew choice" />
                 <ListItemSecondaryAction>
                   <Checkbox
                     disabled={!multiplayerChecked}
                     onChange={this.toggleCrewChoice}
-                    checked={skipCrewChoice}
+                    checked={chooseCrewChecked}
                   />
                 </ListItemSecondaryAction>
               </ListItem>

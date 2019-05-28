@@ -112,11 +112,15 @@ class App extends Component {
 
   handleEndEncounter() {
     const { gameId, signed } = this.state;
+    const updateState = () => {
+      this.setState({ ...emptyState, lsInfo: ls.get('ls-info') });
+    };
     if (gameId && signed) {
-      endGame(gameId);
+      endGame(gameId, updateState);
       leaveRoom(gameId);
+    } else {
+      updateState();
     }
-    this.setState({ ...emptyState, lsInfo: ls.get('ls-info') });
   }
 
   encounter() {
@@ -129,23 +133,25 @@ class App extends Component {
   }
 
   join({ match }) {
-    const { signed } = this.state;
+    const { signed, gameId } = this.state;
     return (
       <Join
         updateAppState={this.updateAppState}
         signed={signed}
-        gameId={match.params.gameId}
+        gameId={gameId}
+        newGameId={match.params.gameId}
       />
     );
   }
 
   load({ match }) {
-    const { signed } = this.state;
+    const { signed, gameId } = this.state;
     return (
       <Load
         updateAppState={this.updateAppState}
         signed={signed}
-        gameId={match.params.gameId}
+        gameId={gameId}
+        newGameId={match.params.gameId}
       />
     );
   }

@@ -15,7 +15,7 @@ class MultiplayerLinkButton extends Component {
     const { gameId, classes } = this.props;
     return (
       <CopyToClipboard text={`${URL}/join/${gameId}`}>
-        <ListItem button disableGutters>
+        <ListItem className={classes.listItemButtonConstHeight} button disableGutters>
           <ListItemText
             className={classes.fullWidth}
             primaryTypographyProps={{ color: 'primary', variant: 'button', align: 'center' }}

@@ -46,10 +46,12 @@ class MultiplayerScore extends Component {
       strategyScore, updateAppState, gameId, signed,
     } = this.props;
     const newScore = (strategyScore[0] + 1) % 5;
+    const newAppState = { strategyScore: [newScore, strategyScore[1]] };
     if (signed && gameId) {
-      scoreStrategy(gameId, newScore);
+      scoreStrategy(gameId, newScore, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
     }
-    updateAppState({ strategyScore: [newScore, strategyScore[1]] });
   }
 
   changeSchemeScore(schemeId) {
@@ -57,17 +59,23 @@ class MultiplayerScore extends Component {
       chosenSchemes, updateAppState, gameId, signed,
     } = this.props;
     const newScore = (chosenSchemes.find(scheme => scheme.id === schemeId).score + 1) % 3;
+
+    const updateState = () => {
+      updateAppState({
+        chosenSchemes: chosenSchemes.map(chosenScheme => (
+          chosenScheme.id === schemeId ? {
+            ...chosenScheme,
+            score: newScore,
+          } : chosenScheme
+        )),
+      });
+    };
+
     if (signed && gameId) {
-      scoreScheme(gameId, schemeId, newScore);
+      scoreScheme(gameId, schemeId, newScore, updateState);
+    } else {
+      updateState();
     }
-    updateAppState({
-      chosenSchemes: chosenSchemes.map(chosenScheme => (
-        chosenScheme.id === schemeId ? {
-          ...chosenScheme,
-          score: newScore,
-        } : chosenScheme
-      )),
-    });
   }
 
   openRevealDialog() {
@@ -101,18 +109,21 @@ class MultiplayerScore extends Component {
     } = this.props;
     const { schemeIndex } = this.state;
 
-    if (signed && gameId) {
-      revealScheme(gameId, chosenSchemes[schemeIndex].id);
-    }
-    this.closeRevealDialog();
-    this.closeConfirmationDialog();
-
-    updateAppState({
+    const newAppState = {
       chosenSchemes: [
         { ...chosenSchemes[schemeIndex], revealed: true },
         chosenSchemes[(schemeIndex + 1) % 2],
       ].sort((a, b) => a.id - b.id),
-    });
+    };
+
+    if (signed && gameId) {
+      revealScheme(gameId, chosenSchemes[schemeIndex].id, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
+
+    this.closeRevealDialog();
+    this.closeConfirmationDialog();
   }
 
   nextRound() {
@@ -122,9 +133,10 @@ class MultiplayerScore extends Component {
     const { nextRound } = this.state;
     this.closeNewRoundDialog();
     if (signed && gameId) {
-      startRound(gameId, nextRound);
+      startRound(gameId, nextRound, () => updateAppState({ round: nextRound }));
+    } else {
+      updateAppState({ round: nextRound });
     }
-    updateAppState({ round: nextRound });
   }
 
   render() {
@@ -172,7 +184,7 @@ class MultiplayerScore extends Component {
           <List>
             {header}
             <Divider />
-            <ListItem divider>
+            <ListItem className={classes.listItemButtonConstHeight} divider>
               <Typography
                 color="secondary"
                 align="center"

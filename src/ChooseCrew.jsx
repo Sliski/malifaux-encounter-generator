@@ -39,16 +39,18 @@ class ChooseCrew extends Component {
     } = this.props;
     const { chosenFaction } = this.state;
 
-    if (signed && gameId) {
-      chooseFaction(gameId, chosenFaction);
-    }
-
-    updateAppState({
+    const newAppState = {
       crew: {
         ...crew,
         faction: chosenFaction,
       },
-    });
+    };
+
+    if (signed && gameId) {
+      chooseFaction(gameId, chosenFaction, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   lockLeader() {
@@ -57,16 +59,18 @@ class ChooseCrew extends Component {
     } = this.props;
     const { chosenLeader } = this.state;
 
-    if (signed && gameId) {
-      chooseLeader(gameId, chosenLeader);
-    }
-
-    updateAppState({
+    const newAppState = {
       crew: {
         ...crew,
         leader: chosenLeader,
       },
-    });
+    };
+
+    if (signed && gameId) {
+      chooseLeader(gameId, chosenLeader, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   openDialog() {
@@ -85,16 +89,18 @@ class ChooseCrew extends Component {
     const { crewList } = this.state;
     this.setState({ showDialog: false });
 
-    if (signed && gameId) {
-      chooseCrew(gameId, crewList);
-    }
-
-    updateAppState({
+    const newAppState = {
       crew: {
         ...crew,
         list: crewList,
       },
-    });
+    };
+
+    if (signed && gameId) {
+      chooseCrew(gameId, crewList, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   render() {

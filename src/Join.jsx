@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import styles from './styles';
-import { joinGame } from './backEndConnector.js';
+import { joinGame, leaveRoom } from './backEndConnector.js';
 
 const joinGameFailedText = 'Unable to join the game';
 
@@ -31,13 +31,14 @@ class Join extends Component {
   }
 
   joinGame() {
-    const { gameId, updateAppState } = this.props;
-    joinGame(gameId, (response) => {
+    const { newGameId, gameId, updateAppState } = this.props;
+    joinGame(newGameId, (response) => {
       if (response.status === 'rejected' && response.info) {
         return this.setState({ error: response.info });
       }
       if (response.status === 'OK') {
-        updateAppState({ gameId });
+        if (gameId) leaveRoom(gameId);
+        updateAppState({ newGameId });
         return this.setState({ redirect: true });
       }
       return this.setState({ error: joinGameFailedText });
@@ -45,12 +46,12 @@ class Join extends Component {
   }
 
   render() {
-    const { gameId, signed, classes } = this.props;
+    const { signed, classes } = this.props;
     const { error, redirect } = this.state;
 
     if (redirect) return <Redirect to="/" />;
 
-    let text = `Joining the game... ${gameId}`;
+    let text = 'Joining the game...';
     if (!signed) {
       text = 'Sign in before joining the game.';
     } else if (error) {

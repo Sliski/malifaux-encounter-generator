@@ -88,14 +88,16 @@ class EncounterElementsList extends Component {
       score: 0,
     }));
 
-    if (signed && gameId) {
-      chooseSchemes(gameId, chosenSchemes);
-    }
-
-    updateAppState({
+    const newAppState = {
       chosenSchemes,
       step: ENCOUNTER_STEPS.SCORE,
-    });
+    };
+
+    if (signed && gameId) {
+      chooseSchemes(gameId, chosenSchemes, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   render() {

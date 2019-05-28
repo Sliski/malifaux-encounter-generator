@@ -57,22 +57,24 @@ class ChooseEncounter extends Component {
       updateAppState, signed, multiplayer, chooseCrew,
     } = this.props;
 
-    if (signed) {
-      createGame(calculateEncounterId(checkedDeployment, checkedStrategy, checked), multiplayer, chooseCrew,
-        (response) => {
-          if (response && response.status === 'OK' && response.id) {
-            updateAppState({ gameId: response.id });
-          }
-        });
-    }
-
-    updateAppState({
+    const newAppState = {
       deploymentId: checkedDeployment,
       strategyId: checkedStrategy,
       schemesIds: checked,
       step: ENCOUNTER_STEPS.CHOOSE,
       chooseStep: chooseCrew ? CHOOSE_STEPS.FACTION : CHOOSE_STEPS.SCHEMES,
-    });
+    };
+
+    if (signed) {
+      createGame(calculateEncounterId(checkedDeployment, checkedStrategy, checked), multiplayer, chooseCrew,
+        (response) => {
+          if (response && response.status === 'OK' && response.id) {
+            updateAppState({ ...newAppState, gameId: response.id });
+          }
+        });
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   render() {

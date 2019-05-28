@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import styles from './styles';
-import { loadAppState } from './backEndConnector.js';
+import { loadAppState, leaveRoom } from './backEndConnector.js';
 
 const loadGameFailedText = 'Unable to load the game';
 
@@ -31,13 +31,16 @@ class Load extends Component {
   }
 
   loadGame() {
-    const { gameId, updateAppState, signed } = this.props;
+    const {
+      newGameId, gameId, updateAppState, signed,
+    } = this.props;
     if (signed) {
-      loadAppState(gameId, (response) => {
+      loadAppState(newGameId, (response) => {
         if (response.status === 'rejected' && response.info) {
           return this.setState({ error: response.info });
         }
         if (response && response.status === 'OK' && response.appState) {
+          if (gameId) leaveRoom(gameId);
           updateAppState(response.appState);
           return this.setState({
             redirect: true,
@@ -52,12 +55,12 @@ class Load extends Component {
   }
 
   render() {
-    const { gameId, signed, classes } = this.props;
+    const { signed, classes } = this.props;
     const { error, redirect } = this.state;
 
     if (redirect) return <Redirect to="/" />;
 
-    let text = `Loading the game... ${gameId}`;
+    let text = 'Loading the game...';
     if (!signed) {
       text = 'Sign in before loading the game.';
     } else if (error) {
