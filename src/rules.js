@@ -120,7 +120,7 @@ const shadow = {
       desc: 'When drawing sight lines, a model standing on terrain that is casting a Shadow ignores that terrain (and its Shadow) if any single sight line drawn between the two objects passes through 1" or less of that terrain.',
     },
     {
-      desc: 'Models within a terrain’s Shadow (even partially) have Cover against any z Range Actions that can draw one or more sight lines through that terrain.',
+      desc: 'Models within a terrain’s Shadow (even partially) have Cover against any Range Actions that can draw one or more sight lines through that terrain.',
     },
   ],
 };
