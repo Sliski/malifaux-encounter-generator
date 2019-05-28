@@ -164,15 +164,15 @@ class ChooseCrew extends Component {
               </IconButton>
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>
-              <Typography>My list:</Typography>
-              <Typography>{crew.list}</Typography>
+              <Typography variant="subtitle2">My list:</Typography>
+              <Typography gutterBottom>{crew.list}</Typography>
               {opponentCrew.list ? (
                 <>
-                  <Typography>{'Opponent\'s list:'}</Typography>
+                  <Typography variant="subtitle2">{'Opponent\'s list:'}</Typography>
                   <Typography>{opponentCrew.list}</Typography>
                 </>
               ) : (
-                <Typography>
+                <Typography variant="subtitle2">
                   {'Opponent didn\'t choose list yet'}
                 </Typography>
               )}

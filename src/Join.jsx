@@ -15,9 +15,22 @@ class Join extends Component {
       redirect: false,
       error: null,
     };
+
+    this.joinGame = this.joinGame.bind(this);
   }
 
   componentDidMount() {
+    this.joinGame();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { signed } = this.props;
+    if (!signed && nextProps.signed) {
+      this.joinGame();
+    }
+  }
+
+  joinGame() {
     const { gameId, updateAppState } = this.props;
     joinGame(gameId, (response) => {
       if (response.status === 'rejected' && response.info) {
@@ -38,11 +51,15 @@ class Join extends Component {
     if (redirect) return <Redirect to="/" />;
 
     let text = `Joining the game... ${gameId}`;
-    if (!signed) text = 'Sign in before joining the game.';
-    if (error) text = `Error: ${error}`;
+    if (!signed) {
+      text = 'Sign in before joining the game.';
+    } else if (error) {
+      text = `Error: ${error}`;
+    }
+
     return (
       <Paper className={classes.paperWithPadding}>
-        <Typography align="justify">
+        <Typography align="justify" color={error ? 'error' : 'default'}>
           {text}
         </Typography>
       </Paper>

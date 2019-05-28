@@ -15,6 +15,7 @@ import Copyrights from './Copyrights.jsx';
 import CookiePolicy from './CookiePolicy.jsx';
 import EnableLogin from './EnableLogin.jsx';
 import Join from './Join.jsx';
+import Load from './Load.jsx';
 import {
   socket, setSocket, leaveRoom, endGame,
 } from './backEndConnector.js';
@@ -84,6 +85,7 @@ class App extends Component {
 
     this.encounter = this.encounter.bind(this);
     this.join = this.join.bind(this);
+    this.load = this.load.bind(this);
     this.closeLsInfo = this.closeLsInfo.bind(this);
   }
 
@@ -137,6 +139,17 @@ class App extends Component {
     );
   }
 
+  load({ match }) {
+    const { signed } = this.state;
+    return (
+      <Load
+        updateAppState={this.updateAppState}
+        signed={signed}
+        gameId={match.params.gameId}
+      />
+    );
+  }
+
   render() {
     ls.set('state', this.state);
 
@@ -175,6 +188,7 @@ class App extends Component {
                   <Route path="/cookiepolicy" component={() => <CookiePolicy />} />
                   <Route path="/copyrights" component={() => <Copyrights />} />
                   <Route path="/join/:gameId" component={this.join} />
+                  <Route path="/load/:gameId" component={this.load} />
                   {/* temporary way to enable login */}
                   <Route path="/enable-login" component={() => <EnableLogin ua={this.updateAppState} />} />
                 </Switch>
