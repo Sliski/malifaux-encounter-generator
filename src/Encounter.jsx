@@ -26,10 +26,13 @@ class Encounter extends Component {
     this.getAppStateFromDb();
   }
 
-  getAppStateFromDb() {
-    const { signed, gameId, updateAppState } = this.props;
-    if (!signed || !gameId) return;
+  getAppStateFromDb(message) {
+    const {
+      signed, gameId, updateAppState, userRole,
+    } = this.props;
+    if (!signed || !gameId || (userRole && userRole === message)) return;
     try {
+      //TODO remove log
       console.log('loadAppStateFromDb');
       loadAppState(gameId, (response) => {
         if (response && response.status === 'OK' && response.appState) {
@@ -39,15 +42,14 @@ class Encounter extends Component {
         }
       });
     } catch (error) {
-      console.log(error);
+      console.log(`Load App State from DB Error: `${error});
     }
   }
 
   addNewAppStateListener() {
-    const { userRole } = this.props;
     if (socket.listeners('newAppState').length === 0) {
       socket.on('newAppState', (message) => {
-        if (userRole !== message) this.getAppStateFromDb();
+        this.getAppStateFromDb(message);
       });
     }
   }

@@ -6,8 +6,9 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
+import { CHOOSE_STEPS } from './App.jsx';
 import { factions, leaders, factionNames } from './data.jsx';
-import { chooseFaction, chooseLeader, chooseCrew } from './backEndConnector';
+import { chooseFaction, chooseLeader, chooseCrew } from './backEndConnector.js';
 
 class ChooseCrew extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class ChooseCrew extends Component {
         ...crew,
         faction: chosenFaction,
       },
+      chooseStep: CHOOSE_STEPS.LEADER,
     };
 
     if (signed && gameId) {
@@ -64,6 +66,7 @@ class ChooseCrew extends Component {
         ...crew,
         leader: chosenLeader,
       },
+      chooseStep: CHOOSE_STEPS.CREW,
     };
 
     if (signed && gameId) {
@@ -94,6 +97,7 @@ class ChooseCrew extends Component {
         ...crew,
         list: crewList,
       },
+      chooseStep: CHOOSE_STEPS.SCHEMES,
     };
 
     if (signed && gameId) {
@@ -235,7 +239,7 @@ class ChooseCrew extends Component {
               <Button onClick={this.closeDialog} color="secondary">
                 {'Cancel'}
               </Button>
-              <Button onClick={this.lockCrew} color="primary">
+              <Button disabled={!crewList} onClick={this.lockCrew} color="primary">
                 {'Choose'}
               </Button>
             </DialogActions>

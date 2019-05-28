@@ -114,8 +114,10 @@ class EncounterElementsList extends Component {
       let opponentStepText;
       if (opponentStep === ENCOUNTER_STEPS.CHOOSE) {
         opponentStepText = OPPONENT_STEP_TEXTS[opponentChooseStep || 0];
-      } else {
+      } else if (opponentStep === ENCOUNTER_STEPS.SCORE) {
         opponentStepText = 'Opponent finished choosing schemes.';
+      } else {
+        opponentStepText = 'Opponent marked game as finished.';
       }
       header = (
         <ListItem>
