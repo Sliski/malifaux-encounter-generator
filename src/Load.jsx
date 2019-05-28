@@ -41,7 +41,7 @@ class Load extends Component {
         }
         if (response && response.status === 'OK' && response.appState) {
           if (gameId) leaveRoom(gameId);
-          updateAppState(response.appState);
+          updateAppState({ gameId: newGameId, ...response.appState });
           return this.setState({
             redirect: true,
             error: null,

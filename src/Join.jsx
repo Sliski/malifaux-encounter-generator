@@ -38,7 +38,7 @@ class Join extends Component {
       }
       if (response.status === 'OK') {
         if (gameId) leaveRoom(gameId);
-        updateAppState({ newGameId });
+        updateAppState({ gameId: newGameId });
         return this.setState({ redirect: true });
       }
       return this.setState({ error: joinGameFailedText });

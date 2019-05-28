@@ -42,7 +42,7 @@ export const ENCOUNTER_MAIN_LINK_TEXT = {
   3: 'Score',
 };
 
-const emptyState = {
+const EMPTY_STATE = {
   userRole: '',
   deploymentId: null,
   strategyId: null,
@@ -77,7 +77,7 @@ class App extends Component {
     if (ls.get('state')) {
       this.state = ls.get('state');
     } else {
-      this.state = { ...emptyState };
+      this.state = { ...EMPTY_STATE };
     }
 
     this.updateAppState = this.updateAppState.bind(this);
@@ -113,7 +113,7 @@ class App extends Component {
   handleEndEncounter() {
     const { gameId, signed } = this.state;
     const updateState = () => {
-      this.setState({ ...emptyState, lsInfo: ls.get('ls-info') });
+      this.setState({ ...EMPTY_STATE, lsInfo: ls.get('ls-info') });
     };
     if (gameId && signed) {
       endGame(gameId, updateState);

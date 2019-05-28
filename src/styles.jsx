@@ -117,6 +117,9 @@ const styles = theme => ({
     paddingTop: 0,
     paddingBottom: 0,
   },
+  leftMargin: {
+    marginLeft: theme.spacing.unit * 1,
+  },
 });
 
 export default styles;

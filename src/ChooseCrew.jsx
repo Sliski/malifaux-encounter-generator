@@ -123,7 +123,14 @@ class ChooseCrew extends Component {
               <MenuItem key={faction.id} value={faction.id}>{faction.name}</MenuItem>
             ))}
           </Select>
-          <Button color="primary" disabled={!!(!chosenFaction || crew.faction)} onClick={this.lockFaction}>choose</Button>
+          <Button
+            className={classes.leftMargin}
+            color="primary"
+            disabled={!!(!chosenFaction || crew.faction)}
+            onClick={this.lockFaction}
+          >
+            {'Choose'}
+          </Button>
         </ListItem>
         <ListItem className={classes.noVerticalPadding}>
           <ListItemText primary={`vs ${(crew.faction && factionNames[opponentCrew.faction]) || '...'}`} />
@@ -140,7 +147,14 @@ class ChooseCrew extends Component {
               <MenuItem key={leader} value={leader}>{leader}</MenuItem>
             ))}
           </Select>
-          <Button color="primary" disabled={!!(!crew.faction || !chosenLeader || crew.leader)} onClick={this.lockLeader}>choose</Button>
+          <Button
+            className={classes.leftMargin}
+            color="primary"
+            disabled={!!(!crew.faction || !chosenLeader || crew.leader)}
+            onClick={this.lockLeader}
+          >
+            {'Choose'}
+          </Button>
         </ListItem>
         <ListItem className={classes.noVerticalPadding}>
           <ListItemText primary={`vs ${(crew.leader && opponentCrew.leader) || '...'}`} />
