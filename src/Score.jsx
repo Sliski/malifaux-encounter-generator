@@ -6,14 +6,18 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles.jsx';
-import EncounterElement, { eeType } from './EncounterElement';
-import { schemes, strategies } from './data';
+import { ENCOUNTER_STEPS } from './App.jsx';
+import EncounterElement, { eeType } from './EncounterElement.jsx';
+import MultiplayerLinkButton from './MultiplayerLinkButton.jsx';
+import { schemes, strategies } from './data.jsx';
+import {
+  revealScheme, scoreScheme, scoreStrategy, startRound,
+} from './backEndConnector.js';
 
 class Score extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      log: '',
       schemeIndex: 0,
       showSchemeDialog: false,
       showConfirmationDialog: false,
@@ -37,20 +41,40 @@ class Score extends Component {
   }
 
   changeStrategyScore() {
-    const { strategyScore, updateAppState } = this.props;
-    updateAppState({ strategyScore: [(strategyScore[0] + 1) % 5, strategyScore[1]] });
+    const {
+      strategyScore, updateAppState, gameId, signed,
+    } = this.props;
+    const newScore = (strategyScore[0] + 1) % 5;
+    const newAppState = { strategyScore: [newScore, strategyScore[1]] };
+    if (signed && gameId) {
+      scoreStrategy(gameId, newScore, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   changeSchemeScore(schemeId) {
-    const { chosenSchemes, updateAppState } = this.props;
-    updateAppState({
-      chosenSchemes: chosenSchemes.map(chosenScheme => (
-        chosenScheme.id === schemeId ? {
-          ...chosenScheme,
-          score: (chosenScheme.score + 1) % 3,
-        } : chosenScheme
-      )),
-    });
+    const {
+      chosenSchemes, updateAppState, gameId, signed,
+    } = this.props;
+    const newScore = (chosenSchemes.find(scheme => scheme.id === schemeId).score + 1) % 3;
+
+    const updateState = () => {
+      updateAppState({
+        chosenSchemes: chosenSchemes.map(chosenScheme => (
+          chosenScheme.id === schemeId ? {
+            ...chosenScheme,
+            score: newScore,
+          } : chosenScheme
+        )),
+      });
+    };
+
+    if (signed && gameId) {
+      scoreScheme(gameId, schemeId, newScore, updateState);
+    } else {
+      updateState();
+    }
   }
 
   openRevealDialog() {
@@ -79,24 +103,39 @@ class Score extends Component {
   }
 
   revealScheme() {
-    const { chosenSchemes, updateAppState } = this.props;
+    const {
+      chosenSchemes, updateAppState, gameId, signed,
+    } = this.props;
     const { schemeIndex } = this.state;
 
-    this.closeRevealDialog();
-    this.closeConfirmationDialog();
-
-    updateAppState({
+    const newAppState = {
       chosenSchemes: [
         { ...chosenSchemes[schemeIndex], revealed: true },
         chosenSchemes[(schemeIndex + 1) % 2],
       ].sort((a, b) => a.id - b.id),
-    });
+    };
+
+    this.closeConfirmationDialog();
+    this.closeRevealDialog();
+
+    if (signed && gameId) {
+      revealScheme(gameId, chosenSchemes[schemeIndex].id, () => updateAppState({ ...newAppState }));
+    } else {
+      updateAppState({ ...newAppState });
+    }
   }
 
   nextRound() {
+    const {
+      updateAppState, signed, gameId,
+    } = this.props;
+    const { nextRound } = this.state;
     this.closeNewRoundDialog();
-    const { round, updateAppState } = this.props;
-    updateAppState({ round: round + 1 });
+    if (signed && gameId) {
+      startRound(gameId, nextRound, () => updateAppState({ round: nextRound }));
+    } else {
+      updateAppState({ round: nextRound });
+    }
   }
 
   render() {
@@ -104,50 +143,122 @@ class Score extends Component {
       showSchemeDialog, showConfirmationDialog, showNewRoundDialog, schemeIndex, nextRound,
     } = this.state;
     const {
-      classes, strategyId, schemesIds, strategyScore, chosenSchemes, round,
+      classes, strategyId, schemesIds, strategyScore, chosenSchemes, round, opponentStep, gameId,
+      opponentSchemes, multiplayer, signed,
     } = this.props;
+
+    let header = null;
+    if (signed && gameId && multiplayer && !opponentStep) {
+      header = <MultiplayerLinkButton gameId={gameId} />;
+    } else if (signed && gameId && multiplayer && opponentStep && opponentStep !== ENCOUNTER_STEPS.SCORE) {
+      header = (
+        <ListItem className={classes.llPadding}>
+          <ListItemText primary={opponentStep === ENCOUNTER_STEPS.FINISHED_GAME
+            ? 'Opponent marked game as finished.' : 'Opponent is choosing schemes.'}
+          />
+        </ListItem>
+      );
+    } else {
+      header = (
+        <ListItem
+          className={multiplayer ? classes.llPadding : null}
+          button={round < 5}
+          onClick={round < 5 ? this.openNewRoundDialog : undefined}
+        >
+          <ListItemText primary="Round" />
+          <Typography
+            color="primary"
+            align="center"
+            variant="button"
+            className={classes.myScore}
+          >
+            {round}
+          </Typography>
+        </ListItem>
+      );
+    }
+
+    let totalScoreRow = null;
+    if (signed && gameId && multiplayer) {
+      totalScoreRow = (
+        <ListItem className={classes.listItemButtonConstHeight}>
+          <Typography
+            color="secondary"
+            align="center"
+            variant="button"
+            className={classes.opponentScore}
+          >
+            {strategyScore[1] + (opponentSchemes ? opponentSchemes
+              .reduce((out, current) => out + (current.revealed ? current.score : 0), 0) : 0)}
+          </Typography>
+          <ListItemText primaryTypographyProps={{
+            align: 'left',
+            color: 'secondary',
+            variant: 'button',
+          }}
+          >
+            {'Opponent\'s Score'}
+          </ListItemText>
+          <ListItemText
+            primaryTypographyProps={{
+              align: 'right',
+              color: 'primary',
+              variant: 'button',
+            }}
+            className={classes.noMarginNoPadding}
+          >
+            {'My Score'}
+          </ListItemText>
+          <Typography
+            color="primary"
+            align="center"
+            variant="button"
+            className={classes.myScore}
+          >
+            {strategyScore[0] + chosenSchemes
+              .reduce((out, current) => out + (current.revealed ? current.score : 0), 0)}
+          </Typography>
+        </ListItem>
+      );
+    } else {
+      totalScoreRow = (
+        <ListItem>
+          <ListItemText
+            primaryTypographyProps={{
+              color: 'default',
+              variant: 'button',
+            }}
+            className={classes.noMarginNoPadding}
+          >
+            {'Total Score'}
+          </ListItemText>
+          <Typography
+            color="default"
+            align="center"
+            variant="button"
+            className={classes.myScore}
+          >
+            {strategyScore[0] + chosenSchemes[0].score + chosenSchemes[1].score}
+          </Typography>
+        </ListItem>
+      );
+    }
 
     return (
       <>
         <Paper className={classes.paper}>
           <List>
-            <ListItem button={round < 5} onClick={round < 5 ? this.openNewRoundDialog : undefined}>
-              <ListItemText primary="Round" />
-              <Typography
-                color="default"
-                align="center"
-                variant="button"
-                className={classes.myScore}
-              >
-                {round}
-              </Typography>
-            </ListItem>
+            {header}
             <Divider />
-            <ListItem divider>
-              <ListItemText
-                primaryTypographyProps={{
-                  color: 'default',
-                  variant: 'button',
-                }}
-                className={classes.noMarginNoPadding}
-              >
-                {'Total Score'}
-              </ListItemText>
-              <Typography
-                color="default"
-                align="center"
-                variant="button"
-                className={classes.myScore}
-              >
-                {strategyScore[0] + chosenSchemes[0].score + chosenSchemes[1].score}
-              </Typography>
-            </ListItem>
+            {totalScoreRow}
+            <Divider />
             <EncounterElement
               type={eeType.strategy}
               details={strategies[strategyId]}
               strategyScore={strategyScore}
               scoreHandler={this.changeStrategyScore}
               score
+              multiplayer={multiplayer}
             />
             <Divider />
             {schemesIds.map((schemeId, index) => (
@@ -157,8 +268,11 @@ class Score extends Component {
                 details={schemes[schemeId]}
                 index={index}
                 chosenSchemes={chosenSchemes}
+                opponentScheme={opponentSchemes
+                && opponentSchemes.find(scheme => scheme.id === schemeId && scheme.revealed === true)}
                 scoreHandler={() => this.changeSchemeScore(schemeId)}
                 score
+                multiplayer={multiplayer}
               />
             ))}
             <Button fullWidth color="primary" onClick={this.openRevealDialog}>Reveal scheme</Button>

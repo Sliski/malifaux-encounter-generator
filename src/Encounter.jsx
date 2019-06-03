@@ -6,7 +6,6 @@ import Generator from './Generator.jsx';
 import ChooseEncounter from './ChooseEncounter.jsx';
 import EncounterElementsList from './EncounterElementsList.jsx';
 import Score from './Score.jsx';
-import MultiplayerScore from './MultiplayerScore.jsx';
 import { socket, loadAppState, joinRoom } from './backEndConnector.js';
 
 class Encounter extends Component {
@@ -105,23 +104,11 @@ class Encounter extends Component {
       updateAppState, chosenSchemes, opponentSchemes, opponentStep, strategyId, schemesIds, strategyScore, round,
       multiplayer, gameId, signed,
     } = this.props;
-    if (!multiplayer || !signed) {
-      return (
-        <Score
-          strategyId={strategyId}
-          schemesIds={schemesIds}
-          round={round}
-          chosenSchemes={chosenSchemes}
-          strategyScore={strategyScore}
-          updateAppState={updateAppState}
-          getAppStateFromDb={this.getAppStateFromDb}
-        />
-      );
-    }
     return (
-      <MultiplayerScore
+      <Score
         signed={signed}
         gameId={gameId}
+        multiplayer={multiplayer}
         strategyId={strategyId}
         schemesIds={schemesIds}
         round={round}
