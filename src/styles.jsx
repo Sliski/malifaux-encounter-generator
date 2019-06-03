@@ -120,6 +120,22 @@ const styles = theme => ({
   leftMargin: {
     marginLeft: theme.spacing.unit * 1,
   },
+  // games history
+  headerRow: {
+    height: '40px',
+  },
+  cell: {
+    padding: theme.spacing.unit * 1,
+    '&:last-child': {
+      padding: theme.spacing.unit * 1,
+    },
+  },
+  deleteCell: {
+    padding: 0,
+    '&:last-child': {
+      padding: 0,
+    },
+  },
 });
 
 export default styles;

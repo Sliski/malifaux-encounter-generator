@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Avatar, Button, Dialog, DialogContent, ListItem, ListItemIcon, ListItemText, SvgIcon, Typography,
+  Avatar, Button, Dialog, DialogContent, ListItem, ListItemIcon, ListItemText, SvgIcon, Typography, Tooltip,
 } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import styles from './styles.jsx';
@@ -132,9 +132,11 @@ class SignIn extends Component {
     if (name) {
       return (
         <>
-          <Button color="inherit" onClick={this.openUserDialog}>
-            <Avatar alt={name} src={photo} />
-          </Button>
+          <Tooltip title={name}>
+            <Button color="inherit" onClick={this.openUserDialog}>
+              <Avatar alt={name} src={photo} />
+            </Button>
+          </Tooltip>
           <Dialog
             classes={{ paper: classes.dialogPaper }}
             open={userDialog}

@@ -18,7 +18,6 @@ class MultiplayerScore extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      log: '',
       schemeIndex: 0,
       showSchemeDialog: false,
       showConfirmationDialog: false,

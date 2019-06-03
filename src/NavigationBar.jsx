@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import ls from 'local-storage';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {
   AppBar, Button, Dialog, DialogContent, DialogActions, Divider, Drawer, Hidden, IconButton, List, ListItem,
   ListItemText, ListSubheader, Toolbar, Typography, Collapse,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Menu } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
 import rules from './rules.js';
 import styles from './styles.jsx';
 import SignIn from './SignIn.jsx';
@@ -20,6 +20,7 @@ class NavigationBar extends Component {
     this.state = {
       mobileOpen: false,
       showConfirmationDialog: false,
+      showSaveDialog: false,
       expandedRules: false,
       loginEnabled: ls.get('betaUser'),
     };
@@ -27,6 +28,8 @@ class NavigationBar extends Component {
     this.closeDrawer = this.closeDrawer.bind(this);
     this.openConfirmationDialog = this.openConfirmationDialog.bind(this);
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
+    this.openSaveDialog = this.openSaveDialog.bind(this);
+    this.closeSaveDialog = this.closeSaveDialog.bind(this);
     this.toggleExpandedRules = this.toggleExpandedRules.bind(this);
   }
 
@@ -48,15 +51,25 @@ class NavigationBar extends Component {
     this.setState({ showConfirmationDialog: false });
   }
 
+  openSaveDialog() {
+    this.setState({ showSaveDialog: true });
+  }
+
+  closeSaveDialog() {
+    this.setState({ showSaveDialog: false });
+  }
+
   toggleExpandedRules() {
     this.setState(prevState => ({ expandedRules: !prevState.expandedRules }));
   }
 
   render() {
     const {
-      classes, handleEndEncounter, step, deploymentId, updateAppState,
+      classes, handleEndEncounter, handleSaveEncounter, step, deploymentId, updateAppState, signed, gameId,
     } = this.props;
-    const { showConfirmationDialog, loginEnabled, expandedRules } = this.state;
+    const {
+      showConfirmationDialog, showSaveDialog, loginEnabled, expandedRules,
+    } = this.state;
 
     const drawer = (
       <div>
@@ -76,11 +89,27 @@ class NavigationBar extends Component {
             />
           )}
           {step !== ENCOUNTER_STEPS.GENERATE && (
-            <ListItem button onClick={this.openConfirmationDialog}>
-              <ListItemText primary="End" />
-            </ListItem>
+            <>
+              {(loginEnabled && gameId && signed) ? (
+                <ListItem button onClick={this.openSaveDialog}>
+                  <ListItemText primary="Save" />
+                </ListItem>
+              ) : null}
+              <ListItem button onClick={this.openConfirmationDialog}>
+                <ListItemText primary="End" />
+              </ListItem>
+            </>
           )}
           <Divider />
+          {loginEnabled && signed
+          && (
+            <>
+              <ListItem button component={Link} to="/games-history" onClick={this.closeDrawer}>
+                <ListItemText primary="My Games" />
+              </ListItem>
+              <Divider />
+            </>
+          )}
           <ListItem button onClick={this.toggleExpandedRules}>
             <ListItemText primary="Rules" />
             {expandedRules ? <ExpandLess /> : <ExpandMore />}
@@ -119,12 +148,15 @@ class NavigationBar extends Component {
             </ListItem>
             )}
           <Divider />
-          <ListSubheader disableSticky>External Crew Builders:</ListSubheader>
+          <ListSubheader disableSticky>Links:</ListSubheader>
           <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="M3E Crew Builder" />
           </ListItem>
           <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="M3E Beta Analyzer" />
+          </ListItem>
+          <ListItem button component="a" href="https://www.wyrd-games.net/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="Wyrd Games" />
           </ListItem>
         </List>
       </div>
@@ -182,7 +214,9 @@ class NavigationBar extends Component {
         >
           <DialogContent className={classes.dialogContent}>
             <Typography align="justify">
-              {'Do you want to end encounter? All encounter data will be lost.'}
+              {signed && gameId
+                ? 'Do you want to end encounter? Encounter results will be saved in your games history.'
+                : 'Do you want to end encounter? All encounter data will be lost.'}
             </Typography>
           </DialogContent>
           <DialogActions>
@@ -190,6 +224,8 @@ class NavigationBar extends Component {
               {'Cancel'}
             </Button>
             <Button
+              component={Link}
+              to="/"
               onClick={() => {
                 this.closeConfirmationDialog();
                 this.closeDrawer();
@@ -199,6 +235,35 @@ class NavigationBar extends Component {
               autoFocus
             >
               {'End'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          classes={{ paper: classes.dialogPaper }}
+          open={showSaveDialog}
+          onClose={this.closeSaveDialog}
+        >
+          <DialogContent className={classes.dialogContent}>
+            <Typography align="justify">
+              {'Do you want to save encounter? It will save and unload encounter. You will be able to continue the encounter after loading it from "My Games" section.'}
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeSaveDialog} color="secondary">
+              {'Cancel'}
+            </Button>
+            <Button
+              component={Link}
+              to="/"
+              onClick={() => {
+                this.closeSaveDialog();
+                this.closeDrawer();
+                handleSaveEncounter();
+              }}
+              color="primary"
+              autoFocus
+            >
+              {'Save'}
             </Button>
           </DialogActions>
         </Dialog>

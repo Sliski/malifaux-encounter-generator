@@ -120,3 +120,22 @@ export function endGame(gameId, onSuccess) {
   fetch(`${API_URL}/end-game/${gameId}`, { credentials: 'include' })
     .then(response => response.json()).then(onSuccess);
 }
+
+// games-history
+export function myGames(onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/my-games`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function deleteGame(gameId, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/delete-game/${gameId}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}
+
+export function gameReport(gameId, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/game-report/${gameId}`, { credentials: 'include' })
+    .then(response => response.json()).then(onSuccess);
+}

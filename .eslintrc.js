@@ -6,6 +6,7 @@ module.exports = {
     "react/prop-types": [0], // TODO: Add prop validation
     "react/destructuring-assignment": [0],
     "jsx-a11y/click-events-have-key-events": [0],
+    "class-methods-use-this": [0],
     "no-alert": [0],
     //new
     "max-len": [

@@ -31,26 +31,21 @@ class Encounter extends Component {
       signed, gameId, updateAppState, userRole,
     } = this.props;
     if (!signed || !gameId || (userRole && userRole === message)) return;
-    try {
-      //TODO remove log
-      console.log('loadAppStateFromDb');
-      loadAppState(gameId, (response) => {
-        if (response && response.status === 'OK' && response.appState) {
-          updateAppState(response.appState);
-          joinRoom(gameId);
-          this.addNewAppStateListener();
-        }
-      });
-    } catch (error) {
-      console.log(`Load App State from DB Error: ${error}`);
-    }
+    // TODO remove log
+    console.log('loadAppStateFromDb');
+    loadAppState(gameId, (response) => {
+      if (response && response.status === 'OK' && response.appState) {
+        updateAppState(response.appState);
+        joinRoom(gameId);
+        this.addNewAppStateListener();
+      }
+    });
   }
 
   addNewAppStateListener() {
-    if (socket.listeners('newAppState').length === 0) {
-      socket.on('newAppState', (message) => {
-        this.getAppStateFromDb(message);
-      });
+    socket.removeAllListeners();
+    if (this.props.multiplayer) {
+      socket.on('newAppState', this.getAppStateFromDb);
     }
   }
 

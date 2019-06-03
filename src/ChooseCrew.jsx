@@ -250,5 +250,4 @@ class ChooseCrew extends Component {
   }
 }
 
-
 export default withStyles(styles)(ChooseCrew);

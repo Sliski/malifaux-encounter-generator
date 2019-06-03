@@ -144,7 +144,7 @@ const terrainTraits = {
   items: [
     {
       name: 'Blocking',
-      desc: 'Terrain with the Blocking Trait cannot be seen through, and therefore it blocks LoS if the Height of the terrain is equal to or greater than the Size of the models attempting to draw sight lines through it. Terrain with the Blocking and Height Traits generates a Shadow (pg. @@). ',
+      desc: 'Terrain with the Blocking Trait cannot be seen through, and therefore it blocks LoS if the Height of the terrain is equal to or greater than the Size of the models attempting to draw sight lines through it. Terrain with the Blocking and Height Traits generates a Shadow. ',
     }, {
       name: 'Climbable',
       desc: 'Models may not move through Climbable Terrain, but they may move across its top (often a roof) and may move vertically up and down along its sides. ',
