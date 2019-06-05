@@ -42,7 +42,7 @@ export const ENCOUNTER_MAIN_LINK_TEXT = {
   3: 'Score',
 };
 
-const EMPTY_STATE = {
+export const EMPTY_STATE = {
   userRole: '',
   deploymentId: null,
   strategyId: null,

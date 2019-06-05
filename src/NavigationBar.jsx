@@ -149,14 +149,14 @@ class NavigationBar extends Component {
             )}
           <Divider />
           <ListSubheader disableSticky>Links:</ListSubheader>
+          <ListItem button component="a" href="https://www.wyrd-games.net/" onClick={this.closeDrawer} target="_blank">
+            <ListItemText primary="Wyrd Games" />
+          </ListItem>
           <ListItem button component="a" href="https://m3e-crew-builder.herokuapp.com/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="M3E Crew Builder" />
           </ListItem>
           <ListItem button component="a" href="https://m3e.hong-crewet.dk/" onClick={this.closeDrawer} target="_blank">
             <ListItemText primary="M3E Beta Analyzer" />
-          </ListItem>
-          <ListItem button component="a" href="https://www.wyrd-games.net/" onClick={this.closeDrawer} target="_blank">
-            <ListItemText primary="Wyrd Games" />
           </ListItem>
         </List>
       </div>

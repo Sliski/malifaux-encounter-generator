@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Avatar, Button, Dialog, DialogContent, ListItem, ListItemIcon, ListItemText, SvgIcon, Typography, Tooltip,
@@ -6,6 +7,7 @@ import {
 import DialogActions from '@material-ui/core/DialogActions';
 import styles from './styles.jsx';
 import { API_URL } from './config.js';
+import { EMPTY_STATE } from './App.jsx';
 import { socket, currentUser, signOut } from './backEndConnector.js';
 
 const providerIcons = {
@@ -113,6 +115,7 @@ class SignIn extends Component {
   signOut() {
     signOut(() => {
       this.props.updateAppState({
+        ...EMPTY_STATE,
         signed: false,
       });
       this.setState({
@@ -149,7 +152,7 @@ class SignIn extends Component {
               <Button onClick={this.closeUserDialog} color="secondary">
                 {'Cancel'}
               </Button>
-              <Button onClick={this.signOut} color="primary" autoFocus>
+              <Button component={Link} to="/" onClick={this.signOut} color="primary" autoFocus>
                 {'Sign Out'}
               </Button>
             </DialogActions>
