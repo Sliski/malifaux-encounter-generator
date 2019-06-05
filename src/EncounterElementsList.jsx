@@ -145,6 +145,7 @@ class EncounterElementsList extends Component {
                 updateAppState={updateAppState}
                 signed={signed}
                 gameId={gameId}
+                multiplayer={multiplayer}
               />
             ) : null}
             <EncounterElement

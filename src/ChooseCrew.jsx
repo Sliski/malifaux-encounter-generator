@@ -108,7 +108,9 @@ class ChooseCrew extends Component {
   }
 
   render() {
-    const { classes, crew, opponentCrew } = this.props;
+    const {
+      classes, crew, opponentCrew, multiplayer,
+    } = this.props;
     const {
       chosenFaction, chosenLeader, showDialog, crewList, showLists,
     } = this.state;
@@ -136,9 +138,11 @@ class ChooseCrew extends Component {
             {'Choose'}
           </Button>
         </ListItem>
+        {multiplayer && (
         <ListItem className={classes.noVerticalPadding}>
           <ListItemText primary={`vs ${(crew.faction && factionNames[opponentCrew.faction]) || '...'}`} />
         </ListItem>
+        )}
         <ListItem>
           <Select
             className={classes.widthOhp}
@@ -160,14 +164,18 @@ class ChooseCrew extends Component {
             {'Choose'}
           </Button>
         </ListItem>
+        {multiplayer && (
         <ListItem className={classes.noVerticalPadding}>
           <ListItemText primary={`vs ${(crew.leader && opponentCrew.leader) || '...'}`} />
         </ListItem>
+        )}
         <ListItem button disableGutters disabled={!crew.leader} onClick={this.openDialog}>
           <ListItemText
             className={classes.fullWidth}
             primaryTypographyProps={{ color: 'primary', variant: 'button', align: 'center' }}
-            primary={(crew.list !== null && crew.list !== undefined) ? 'Show Crew Lists' : 'Choose Crew List'}
+            primary={(crew.list !== null && crew.list !== undefined)
+              ? `Show Crew List${multiplayer ? 's' : ''}`
+              : 'Choose Crew List'}
           />
         </ListItem>
         <Divider />
@@ -190,7 +198,7 @@ class ChooseCrew extends Component {
             <DialogContent className={classes.dialogContent}>
               <Typography variant="subtitle2">My list:</Typography>
               <Typography gutterBottom>{crew.list}</Typography>
-              {opponentCrew.list ? (
+              {multiplayer && (opponentCrew.list ? (
                 <>
                   <Typography variant="subtitle2">{'Opponent\'s list:'}</Typography>
                   <Typography>{opponentCrew.list}</Typography>
@@ -199,7 +207,7 @@ class ChooseCrew extends Component {
                 <Typography variant="subtitle2">
                   {'Opponent didn\'t choose list yet'}
                 </Typography>
-              )}
+              ))}
             </DialogContent>
           </Dialog>
         ) : (

@@ -101,11 +101,10 @@ class NavigationBar extends Component {
             </>
           )}
           <Divider />
-          {loginEnabled && signed
-          && (
+          {loginEnabled && (
             <>
-              <ListItem button component={Link} to="/games-history" onClick={this.closeDrawer}>
-                <ListItemText primary="My Games" />
+              <ListItem disabled={!signed} button component={Link} to="/games-history" onClick={this.closeDrawer}>
+                <ListItemText primary="My Games" secondary={signed ? '' : 'Signed users only.'} />
               </ListItem>
               <Divider />
             </>

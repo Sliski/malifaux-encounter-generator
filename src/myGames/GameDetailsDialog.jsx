@@ -5,7 +5,9 @@ import {
 import Close from '@material-ui/icons/Close';
 import styles from '../styles.jsx';
 import { gameReport } from '../backEndConnector.js';
-import { deployments, strategies, schemes } from '../data.jsx';
+import {
+  deployments, strategies, schemes, factionNames,
+} from '../data.jsx';
 
 class GameDetailsDialog extends Component {
   constructor(props) {
@@ -40,6 +42,18 @@ class GameDetailsDialog extends Component {
     });
   }
 
+  showCrew(player, name) {
+    if (!player || !player.crew
+      || !player.crew.faction || !player.crew.leader || !player.crew.list) return null;
+    return (
+      <>
+        <Typography><strong>{`${name} crew:`}</strong></Typography>
+        <Typography>{`${factionNames[player.crew.faction]} lead by ${player.crew.leader}.`}</Typography>
+        <Typography>{player.crew.list}</Typography>
+      </>
+    );
+  }
+
   render() {
     const { report, error } = this.state;
     const {
@@ -52,26 +66,55 @@ class GameDetailsDialog extends Component {
     if (!error && report) {
       reportRender = (
         <>
-          <Typography>{`Deployment: ${deployments[report.deploymentId].name}`}</Typography>
-          <Typography>{`Strategy: ${strategies[report.strategyId].name}`}</Typography>
-          <Typography>Schemes:</Typography>
+          <Typography>
+            <strong>Deployment: </strong>
+            {deployments[report.deploymentId].name}
+          </Typography>
+          <Typography>
+            <strong>Strategy: </strong>
+            {strategies[report.strategyId].name}
+          </Typography>
+          <Typography><strong>Schemes:</strong></Typography>
           {report.schemesIds.map(schemeId => (
             <Typography key={`scheme-${schemeId}`}>
-              {`-${schemes[schemeId].name}`}
+              {`- ${schemes[schemeId].name}`}
             </Typography>
           ))}
-          <Typography>{`My score: ${report.currentPlayer.schemes[0].score + report.currentPlayer.schemes[1].score + report.currentPlayer.strategyScore}`}</Typography>
-          <Typography>{`Strategy: ${report.currentPlayer.strategyScore}`}</Typography>
-          <Typography>{`Schemes:${report.currentPlayer.schemes.map(scheme => ` ${schemes[scheme.id].name} ${scheme.score}`)}`}</Typography>
-          {report.secondPlayer && (
+          <Typography>
+            <strong>My total score: </strong>
+            {report.currentPlayer.schemes[0].score + report.currentPlayer.schemes[1].score
+              + report.currentPlayer.strategyScore}
+          </Typography>
+          <Typography>
+            <strong>- Strategy: </strong>
+            {report.currentPlayer.strategyScore}
+          </Typography>
+          <Typography>
+            <strong>- Schemes:</strong>
+            {report.currentPlayer.schemes.map(scheme => ` ${schemes[scheme.id].name} ${scheme.score}`).join(',')}
+          </Typography>
+          {report.secondPlayer && report.secondPlayer.schemes
+          && report.secondPlayer.schemes[0] && report.secondPlayer.schemes[1] && (
           <>
-            <Typography>{`Opponent core: ${report.secondPlayer.schemes[0].score + report.secondPlayer.schemes[1].score + report.secondPlayer.strategyScore}`}</Typography>
-            <Typography>{`Strategy: ${report.secondPlayer.strategyScore}`}</Typography>
-            <Typography>{`Schemes:${report.secondPlayer.schemes.map(scheme => ` ${schemes[scheme.id].name} ${scheme.score}`)}`}</Typography>
+            <Typography>
+              <strong>Opponent`s total score: </strong>
+              {report.secondPlayer.schemes[0].score + report.secondPlayer.schemes[1].score
+                + report.secondPlayer.strategyScore}
+            </Typography>
+            <Typography>
+              <strong>- Strategy: </strong>
+              {report.secondPlayer.strategyScore}
+            </Typography>
+            <Typography>
+              <strong>- Schemes:</strong>
+              {report.secondPlayer.schemes.map(scheme => ` ${schemes[scheme.id].name} ${scheme.score}`).join(',')}
+            </Typography>
           </>
           )}
+          {this.showCrew(report.currentPlayer, 'My')}
+          {this.showCrew(report.secondPlayer, 'Opponent`s')}
         </>
-      ); // TODO duplicated score, check for nullpointers
+      );
     }
 
     return (

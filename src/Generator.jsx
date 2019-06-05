@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Button, Checkbox, Divider, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, List, ListItem,
-  ListItemSecondaryAction, ListItemText, Paper, TextField, Typography,
+  ListItemSecondaryAction, ListSubheader, ListItemText, Paper, TextField, Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import ls from 'local-storage';
@@ -65,12 +65,7 @@ class Generator extends Component {
   }
 
   toggleMultiplayer() {
-    this.setState((prevState) => {
-      if (prevState.multiplayerChecked) {
-        return { multiplayerChecked: false, chooseCrewChecked: false };
-      }
-      return { multiplayerChecked: true };
-    });
+    this.setState(prevState => ({ multiplayerChecked: !prevState.multiplayerChecked }));
   }
 
   toggleCrewChoice() {
@@ -183,8 +178,13 @@ class Generator extends Component {
             {ls.get('betaUser') && (
             <>
               <Divider />
+              {!signed && (
+              <ListSubheader disableSticky>
+                {'Options below are available only for signed users.'}
+              </ListSubheader>
+              )}
               <ListItem>
-                <ListItemText primary="Two Players" secondary={signed ? '' : 'Sign In to use this feature.'} />
+                <ListItemText primary="Two Players" />
                 <ListItemSecondaryAction>
                   <Checkbox
                     disabled={!signed}
@@ -197,7 +197,7 @@ class Generator extends Component {
                 <ListItemText primary="Require crew choice" />
                 <ListItemSecondaryAction>
                   <Checkbox
-                    disabled={!multiplayerChecked}
+                    disabled={!signed}
                     onChange={this.toggleCrewChoice}
                     checked={chooseCrewChecked}
                   />
