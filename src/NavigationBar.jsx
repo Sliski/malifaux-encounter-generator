@@ -140,12 +140,6 @@ class NavigationBar extends Component {
           <ListItem button component={Link} to="/copyrights" onClick={this.closeDrawer}>
             <ListItemText primary="Copyrights" />
           </ListItem>
-          {loginEnabled
-            && (
-            <ListItem button component={Link} to="/enable-login" onClick={this.closeDrawer}>
-              <ListItemText primary="Beta Tests" />
-            </ListItem>
-            )}
           <Divider />
           <ListSubheader disableSticky>Links:</ListSubheader>
           <ListItem button component="a" href="https://www.wyrd-games.net/" onClick={this.closeDrawer} target="_blank">

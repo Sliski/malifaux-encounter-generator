@@ -120,6 +120,9 @@ const styles = theme => ({
   leftMargin: {
     marginLeft: theme.spacing.unit * 1,
   },
+  preLine: {
+    whiteSpace: 'pre-line',
+  },
   // games history
   headerRow: {
     height: '40px',

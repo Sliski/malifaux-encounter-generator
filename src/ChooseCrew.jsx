@@ -197,11 +197,11 @@ class ChooseCrew extends Component {
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>
               <Typography variant="subtitle2">My list:</Typography>
-              <Typography gutterBottom>{crew.list}</Typography>
+              <Typography className={classes.preLine} gutterBottom>{crew.list}</Typography>
               {multiplayer && (opponentCrew.list ? (
                 <>
                   <Typography variant="subtitle2">{'Opponent\'s list:'}</Typography>
-                  <Typography>{opponentCrew.list}</Typography>
+                  <Typography className={classes.preLine}>{opponentCrew.list}</Typography>
                 </>
               ) : (
                 <Typography variant="subtitle2">

@@ -19,6 +19,7 @@ class GameDetailsDialog extends Component {
     };
 
     this.loadGameReport = this.loadGameReport.bind(this);
+    this.showCrew = this.showCrew.bind(this);
   }
 
   componentDidMount() {
@@ -43,13 +44,14 @@ class GameDetailsDialog extends Component {
   }
 
   showCrew(player, name) {
+    const { classes } = this.props;
     if (!player || !player.crew
       || !player.crew.faction || !player.crew.leader || !player.crew.list) return null;
     return (
       <>
         <Typography><strong>{`${name} crew:`}</strong></Typography>
         <Typography>{`${factionNames[player.crew.faction]} lead by ${player.crew.leader}.`}</Typography>
-        <Typography>{player.crew.list}</Typography>
+        <Typography className={classes.preLine}>{player.crew.list}</Typography>
       </>
     );
   }
@@ -59,8 +61,6 @@ class GameDetailsDialog extends Component {
     const {
       classes, show, onClose,
     } = this.props;
-
-    console.log(report);
 
     let reportRender = null;
     if (!error && report) {
