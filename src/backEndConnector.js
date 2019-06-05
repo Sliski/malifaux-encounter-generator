@@ -139,3 +139,17 @@ export function gameReport(gameId, onSuccess) {
   fetch(`${API_URL}/game-report/${gameId}`, { credentials: 'include' })
     .then(response => response.json()).then(onSuccess);
 }
+
+export function reportCrash(appState, onSuccess) {
+  if (!beta) return;
+  fetch(`${API_URL}/report-crash`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ appState: JSON.stringify(appState) }),
+  })
+    .then(response => response.json()).then(onSuccess);
+}

@@ -17,7 +17,7 @@ import Join from './Join.jsx';
 import Load from './Load.jsx';
 import GamesHistory from './myGames/GamesHistory.jsx';
 import {
-  socket, setSocket, leaveRoom, endGame,
+  socket, setSocket, leaveRoom, endGame, reportCrash,
 } from './backEndConnector.js';
 
 export const ENCOUNTER_STEPS = {
@@ -100,6 +100,7 @@ class App extends Component {
   }
 
   componentDidCatch() {
+    reportCrash(this.state);
     this.setState({ errorCatch: true });
   }
 
