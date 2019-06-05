@@ -8,10 +8,10 @@ const ErrorPage = (resetError, clearAppState) => (
     <div>
       {'In any case I will appreciate sending the info about the issue to m3e.helper@gmail.com, it will help me fixing the issue.'}
     </div>
-    <button onClick={resetError}>
+    <button onClick={resetError} type="button">
       {'Try to fix problem'}
     </button>
-    <button onClick={clearAppState}>
+    <button onClick={clearAppState} type="button">
       {'Clear app state'}
     </button>
   </div>

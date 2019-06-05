@@ -22,7 +22,6 @@ class NavigationBar extends Component {
       showConfirmationDialog: false,
       showSaveDialog: false,
       expandedRules: false,
-      loginEnabled: ls.get('betaUser'),
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
@@ -68,7 +67,7 @@ class NavigationBar extends Component {
       classes, handleEndEncounter, handleSaveEncounter, step, deploymentId, updateAppState, signed, gameId,
     } = this.props;
     const {
-      showConfirmationDialog, showSaveDialog, loginEnabled, expandedRules,
+      showConfirmationDialog, showSaveDialog, expandedRules,
     } = this.state;
 
     const drawer = (
@@ -90,9 +89,9 @@ class NavigationBar extends Component {
           )}
           {step !== ENCOUNTER_STEPS.GENERATE && (
             <>
-              {(loginEnabled && gameId && signed) ? (
+              {(gameId && signed) ? (
                 <ListItem button onClick={this.openSaveDialog}>
-                  <ListItemText primary="Save" />
+                  <ListItemText primary="Suspend" />
                 </ListItem>
               ) : null}
               <ListItem button onClick={this.openConfirmationDialog}>
@@ -101,14 +100,10 @@ class NavigationBar extends Component {
             </>
           )}
           <Divider />
-          {loginEnabled && (
-            <>
-              <ListItem disabled={!signed} button component={Link} to="/games-history" onClick={this.closeDrawer}>
-                <ListItemText primary="My Games" secondary={signed ? '' : 'Signed users only.'} />
-              </ListItem>
-              <Divider />
-            </>
-          )}
+          <ListItem disabled={!signed} button component={Link} to="/games-history" onClick={this.closeDrawer}>
+            <ListItemText primary="My Games" secondary={signed ? '' : 'Signed users only.'} />
+          </ListItem>
+          <Divider />
           <ListItem button onClick={this.toggleExpandedRules}>
             <ListItemText primary="Rules" />
             {expandedRules ? <ExpandLess /> : <ExpandMore />}
@@ -170,7 +165,7 @@ class NavigationBar extends Component {
             <Typography variant="h6" color="inherit" noWrap className={classes.pageTitle}>
               {'M3E Helper'}
             </Typography>
-            {loginEnabled && <SignIn updateAppState={updateAppState} />}
+            <SignIn updateAppState={updateAppState} />
           </Toolbar>
         </AppBar>
         <nav className={classes.menuDrawer}>
@@ -238,7 +233,7 @@ class NavigationBar extends Component {
         >
           <DialogContent className={classes.dialogContent}>
             <Typography align="justify">
-              {'Do you want to save encounter? It will save and unload encounter. You will be able to continue the encounter after loading it from "My Games" section.'}
+              {'Do you want to suspend encounter? It will save and unload encounter. You will be able to continue the encounter after loading it from "My Games" section.'}
             </Typography>
           </DialogContent>
           <DialogActions>
@@ -256,7 +251,7 @@ class NavigationBar extends Component {
               color="primary"
               autoFocus
             >
-              {'Save'}
+              {'Suspend'}
             </Button>
           </DialogActions>
         </Dialog>

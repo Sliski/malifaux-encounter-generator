@@ -12,7 +12,6 @@ import RulesPage from './RulesPage.jsx';
 import Contact from './Contact.jsx';
 import Copyrights from './Copyrights.jsx';
 import CookiePolicy from './CookiePolicy.jsx';
-import EnableLogin from './EnableLogin.jsx';
 import Join from './Join.jsx';
 import Load from './Load.jsx';
 import GamesHistory from './myGames/GamesHistory.jsx';
@@ -92,11 +91,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (ls.get('betaUser')) {
-      socket.on('connect', () => {
-        setSocket();
-      });
-    }
+    socket.on('connect', () => {
+      setSocket();
+    });
   }
 
   componentDidCatch() {
@@ -218,8 +215,6 @@ class App extends Component {
                   <Route path="/copyrights" component={() => <Copyrights />} />
                   <Route path="/join/:gameId" component={this.join} />
                   <Route path="/load/:gameId" component={this.load} />
-                  {/* temporary way to enable login */}
-                  <Route path="/enable-login" component={() => <EnableLogin ua={this.updateAppState} />} />
                 </Switch>
               </Grid>
             </main>

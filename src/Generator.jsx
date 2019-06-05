@@ -175,36 +175,32 @@ class Generator extends Component {
             <ListItem button onClick={this.manuallyChooseEncounter}>
               <ListItemText primary="Choose Encounter" />
             </ListItem>
-            {ls.get('betaUser') && (
-            <>
-              <Divider />
-              {!signed && (
+            <Divider />
+            {!signed && (
               <ListSubheader disableSticky>
                 {'Options below are available only for signed users.'}
               </ListSubheader>
-              )}
-              <ListItem>
-                <ListItemText primary="Two Players" />
-                <ListItemSecondaryAction>
-                  <Checkbox
-                    disabled={!signed}
-                    onChange={this.toggleMultiplayer}
-                    checked={multiplayerChecked}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Require crew choice" />
-                <ListItemSecondaryAction>
-                  <Checkbox
-                    disabled={!signed}
-                    onChange={this.toggleCrewChoice}
-                    checked={chooseCrewChecked}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            </>
             )}
+            <ListItem>
+              <ListItemText primary="Two Players" />
+              <ListItemSecondaryAction>
+                <Checkbox
+                  disabled={!signed}
+                  onChange={this.toggleMultiplayer}
+                  checked={multiplayerChecked}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Require crew choice" />
+              <ListItemSecondaryAction>
+                <Checkbox
+                  disabled={!signed}
+                  onChange={this.toggleCrewChoice}
+                  checked={chooseCrewChecked}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
           </List>
         </Paper>
         <Dialog
