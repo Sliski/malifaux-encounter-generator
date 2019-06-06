@@ -120,7 +120,7 @@ export function gameReport(gameId, onSuccess) {
     .then(response => response.json()).then(onSuccess);
 }
 
-export function reportCrash(appState, onSuccess) {
+export function reportCrash(details, onSuccess) {
   fetch(`${API_URL}/report-crash`, {
     headers: {
       'Content-Type': 'application/json',
@@ -128,12 +128,6 @@ export function reportCrash(appState, onSuccess) {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify({
-      appState: JSON.stringify({
-        ...appState,
-        pathname: window.location.pathname,
-      }),
-    }),
-  })
-    .then(response => response.json()).then(onSuccess);
+    body: JSON.stringify(details),
+  }).then(response => response.json()).then(onSuccess);
 }

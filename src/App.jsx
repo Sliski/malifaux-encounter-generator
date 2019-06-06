@@ -96,8 +96,13 @@ class App extends Component {
     });
   }
 
-  componentDidCatch() {
-    reportCrash(this.state);
+  componentDidCatch(error, info) {
+    reportCrash({
+      state: this.state,
+      pathname: window.location.pathname,
+      stackTrace: error.stack,
+      errorInfo: info,
+    });
     this.setState({ errorCatch: true });
   }
 
