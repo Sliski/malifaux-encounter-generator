@@ -72,19 +72,9 @@ class SignIn extends Component {
   startAuth(e, provider) {
     e.preventDefault();
     this.closeSignInDialog();
-    socket.on(provider, (response) => {
+    socket.on(provider, () => {
       this.popup.close();
-      if (response && response.name && response.photo) {
-        this.props.updateAppState({
-          signed: !!(response.name && response.photo),
-        });
-        this.setState({
-          name: response.name,
-          photo: response.photo,
-        });
-      } else {
-        this.getCurrentUser();
-      }
+      this.getCurrentUser();
     });
     this.popup = this.openPopup(provider);
     this.checkPopup();
