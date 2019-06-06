@@ -30,8 +30,6 @@ class Encounter extends Component {
       signed, gameId, updateAppState, userRole,
     } = this.props;
     if (!signed || !gameId || (userRole && userRole === message)) return;
-    // TODO remove log
-    console.log('loadAppStateFromDb');
     loadAppState(gameId, (response) => {
       if (response && response.status === 'OK' && response.appState) {
         updateAppState(response.appState);

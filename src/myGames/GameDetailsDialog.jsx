@@ -63,7 +63,15 @@ class GameDetailsDialog extends Component {
     } = this.props;
 
     let reportRender = null;
-    if (!error && report) {
+
+    if (!error && (!report || !report.currentPlayer || !report.currentPlayer.schemes
+      || !report.currentPlayer.schemes[0] || !report.currentPlayer.schemes[1])) {
+      reportRender = (
+        <Typography>
+          {'Game was ended before choosing schemes. No report to display.'}
+        </Typography>
+      );
+    } else if (!error && report) {
       reportRender = (
         <>
           <Typography>
