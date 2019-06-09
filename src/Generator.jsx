@@ -5,8 +5,7 @@ import {
   ListItemSecondaryAction, ListSubheader, ListItemText, Paper, TextField, Typography,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import ls from 'local-storage';
-import { ENCOUNTER_STEPS, CHOOSE_STEPS } from './App.jsx';
+import { ENCOUNTER_STEPS, CHOOSE_STEPS, EMPTY_STATE } from './App.jsx';
 import styles from './styles.jsx';
 import { createGame } from './backEndConnector.js';
 
@@ -80,6 +79,8 @@ class Generator extends Component {
     const { updateAppState } = this.props;
     const { multiplayerChecked, chooseCrewChecked } = this.state;
     updateAppState({
+      ...EMPTY_STATE,
+      userRole: 'creator',
       step: ENCOUNTER_STEPS.MANUAL_CHOICE,
       multiplayer: multiplayerChecked,
       chooseCrew: chooseCrewChecked,
@@ -102,6 +103,8 @@ class Generator extends Component {
     const strategyId = Math.floor((Math.random() * 4));
 
     const newAppState = {
+      ...EMPTY_STATE,
+      userRole: 'creator',
       deploymentId,
       strategyId,
       schemesIds,
@@ -135,6 +138,8 @@ class Generator extends Component {
     this.closeDialog();
 
     const newAppState = {
+      ...EMPTY_STATE,
+      userRole: 'creator',
       deploymentId: decodedEncounter.deploymentId,
       strategyId: decodedEncounter.strategyId,
       schemesIds: decodedEncounter.schemesIds,
